@@ -65,11 +65,11 @@ const SectionTitle = ({ kicker, title, subtitle, className = '' }) => (
         {kicker}
       </motion.div>
     )}
-    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-gradient mb-4 text-balance">
+    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-gradient mb-4 text-balance letter-spacing-wide">
       {title}
     </h2>
     {subtitle && (
-      <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">{subtitle}</p>
+      <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance letter-spacing-wide">{subtitle}</p>
     )}
   </motion.div>
 )
@@ -202,7 +202,7 @@ function Hero() {
           </motion.div>
           
           <motion.h1 
-            className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-gradient mb-6 leading-tight text-balance"
+            className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-gradient mb-6 leading-tight text-balance letter-spacing-wide"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
@@ -211,7 +211,7 @@ function Hero() {
           </motion.h1>
           
           <motion.p 
-            className="text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed text-balance"
+            className="text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed text-balance letter-spacing-wide"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -549,10 +549,6 @@ function Studio() {
           </GlassCard>
           <GlassCard className="p-6">
             <h4 className="font-semibold text-slate-900">Lộ trình</h4>
-            <ol className="mt-2 list-decimal pl-5 text-sm text-slate-700 space-y-2">
-              <li>Học kỳ này: App (kiến thức – tương tác – đổi quà).</li>
-              <li>Học kỳ tới: Studio 360° (online & vật lý).</li>
-            </ol>
             <GlassButton href="#cta" className="mt-4">Nhận cập nhật</GlassButton>
           </GlassCard>
         </div>
@@ -595,8 +591,14 @@ function CTA() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('idle') // idle | loading | success | error
-  const ENDPOINT = import.meta.env.VITE_APPS_SCRIPT_URL || 'PASTE_APPS_SCRIPT_WEB_APP_URL_HERE'
+  const ENDPOINT = (import.meta.env.VITE_APPS_SCRIPT_URL ?? '').trim()
   const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+
+  // Cảnh báo nếu cấu hình sai URL Apps Script (dùng echo thay vì /exec)
+  const IS_ECHO = ENDPOINT.includes('script.googleusercontent.com/macros/echo')
+  if (IS_ECHO) {
+    console.warn('VITE_APPS_SCRIPT_URL đang trỏ tới googleusercontent/macros/echo. Hãy dùng URL Web App kết thúc bằng /exec từ Apps Script Deployments.')
+  }
 
   function loadRecaptcha() {
     return new Promise((resolve, reject) => {
@@ -625,6 +627,11 @@ function CTA() {
   async function onSubmit(e) {
     e.preventDefault()
     if (!email) return
+    if (!ENDPOINT) {
+      console.error('Thiếu cấu hình VITE_APPS_SCRIPT_URL. Thêm URL Web App (/exec) vào .env.local hoặc biến môi trường khi deploy.')
+      setStatus('error')
+      return
+    }
     try {
       setStatus('loading')
       let token = null
@@ -640,12 +647,18 @@ function CTA() {
             // Timeout if reCAPTCHA takes too long
             token = await Promise.race([
               tokenPromise,
-              new Promise((resolve) => setTimeout(() => resolve(null), 2000))
+              new Promise((resolve) => setTimeout(() => resolve(null), 6000))
             ])
           }
         } catch {
           // ignore reCAPTCHA errors; allow submission without token
         }
+      }
+      // Nếu có cấu hình reCAPTCHA nhưng không lấy được token → dừng submit để tránh lỗi invalid-input-response
+      if (SITE_KEY && !token) {
+        console.error('Không lấy được reCAPTCHA token (timeout/missing). Kiểm tra domain whitelist trên Admin Console và site key/secret.')
+        setStatus('error')
+        return
       }
       const ac = new AbortController()
       const to = setTimeout(() => ac.abort(), 8000)
@@ -691,7 +704,7 @@ function CTA() {
             ></motion.div>
             
             <motion.h3 
-              className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-gradient mb-6 text-balance"
+              className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-gradient mb-6 text-balance letter-spacing-wide"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -701,7 +714,7 @@ function CTA() {
             </motion.h3>
             
             <motion.p 
-              className="text-lg text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed text-balance"
+              className="text-lg text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed text-balance letter-spacing-wide"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
