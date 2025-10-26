@@ -1,8 +1,9 @@
-// EyeCare Quizzle – Modern Developer-Focused Landing Page
+// Vista Quizventure – Modern Developer-Focused Landing Page
 // Features: Bento Grid, Auto-scroll, Hover Expand, Cloudinary Ready
 import { useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion as Motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import VistaChatbot from './VistaChatbot'
 
 /* ================= CONFIG ================= */
 const CLOUDINARY_BASE = 'https://res.cloudinary.com/dvucotc8z/image/upload/'
@@ -24,7 +25,7 @@ const COMPANY_INFO = {
 /* ================= SHARED COMPONENTS ================= */
 const BentoCard = ({ children, className = '', span = 1, rowSpan = 1, hover = true }) => {
   return (
-    <motion.div
+    <Motion.div
       className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-white/10 ${className}`}
       style={{ 
         gridColumn: `span ${span}`,
@@ -40,7 +41,7 @@ const BentoCard = ({ children, className = '', span = 1, rowSpan = 1, hover = tr
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       {children}
-    </motion.div>
+    </Motion.div>
   )
 }
 
@@ -54,7 +55,7 @@ const GlowButton = ({ children, variant = 'primary', onClick, href, className = 
   const Comp = href ? 'a' : 'button'
   
   return (
-    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+    <Motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
       <Comp
         href={href}
         onClick={onClick}
@@ -62,14 +63,14 @@ const GlowButton = ({ children, variant = 'primary', onClick, href, className = 
       >
         {children}
       </Comp>
-    </motion.div>
+    </Motion.div>
   )
 }
 
 const ScrollingText = ({ items, speed = 20 }) => {
   return (
     <div className="relative overflow-hidden py-4">
-      <motion.div
+      <Motion.div
         className="flex gap-8 whitespace-nowrap"
         animate={{ x: [0, -1000] }}
         transition={{ 
@@ -84,7 +85,7 @@ const ScrollingText = ({ items, speed = 20 }) => {
             <span className="text-sky-400">✦</span>
           </span>
         ))}
-      </motion.div>
+      </Motion.div>
     </div>
   )
 }
@@ -94,7 +95,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
   
   return (
-    <motion.header 
+    <Motion.header 
       className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/10"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -102,7 +103,7 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <motion.a 
+        <Motion.a 
           href="#" 
           className="flex items-center gap-3"
           whileHover={{ scale: 1.05 }}
@@ -120,12 +121,12 @@ const Header = () => {
               Patient Journey
             </span>
           </div>
-        </motion.a>
+        </Motion.a>
         
         {/* Nav */}
         <nav className="hidden md:flex items-center gap-8">
           {['Tính năng', 'Demo', 'Kiến thức', 'Liên hệ'].map((item, i) => (
-            <motion.a
+            <Motion.a
               key={item}
               href={`#${item.toLowerCase()}`}
               className="text-slate-300 hover:text-sky-400 transition-colors"
@@ -134,7 +135,7 @@ const Header = () => {
               transition={{ delay: i * 0.1 }}
             >
               {item}
-            </motion.a>
+            </Motion.a>
           ))}
         </nav>
         
@@ -152,7 +153,7 @@ const Header = () => {
           </svg>
         </button>
       </div>
-    </motion.header>
+    </Motion.header>
   )
 }
 
@@ -165,7 +166,7 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-20">
       {/* Animated background */}
       <div className="absolute inset-0">
-        <motion.div 
+        <Motion.div 
           className="absolute top-20 left-20 w-96 h-96 bg-sky-500/30 rounded-full blur-3xl"
           animate={{ 
             scale: [1, 1.2, 1],
@@ -173,7 +174,7 @@ const HeroSection = () => {
           }}
           transition={{ duration: 8, repeat: Infinity }}
         />
-        <motion.div 
+        <Motion.div 
           className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl"
           animate={{ 
             scale: [1.2, 1, 1.2],
@@ -184,13 +185,13 @@ const HeroSection = () => {
       </div>
       
       <div className="relative max-w-7xl mx-auto px-6 text-center z-10">
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           {/* Badge */}
-          <motion.div 
+          <Motion.div 
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm font-medium mb-8"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -201,7 +202,7 @@ const HeroSection = () => {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
             </span>
             Y tế · Nhãn khoa · Gamification
-          </motion.div>
+          </Motion.div>
           
           {/* Main title */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
@@ -215,7 +216,7 @@ const HeroSection = () => {
           </h1>
           
           <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed letter-spacing-wide">
-            Chơi quiz <span className="text-sky-400 font-semibold">Quizzle</span>, nghe podcast, xem video, tích điểm đổi quà và đặt lịch khám — tất cả trong một ứng dụng.
+            Chinh phục <span className="text-sky-400 font-semibold">Vista Quizventure</span>, nghe podcast, xem video, tích điểm đổi quà và đặt lịch khám — tất cả trong một ứng dụng.
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 mb-16">
@@ -228,13 +229,13 @@ const HeroSection = () => {
           </div>
           
           {/* 3D Eye Animations */}
-          <motion.div 
+          <Motion.div 
             className="flex justify-center gap-8 mb-16"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8 }}
           >
-            <motion.div
+            <Motion.div
               className="relative group"
               whileHover={{ scale: 1.1, rotate: 5 }}
             >
@@ -245,9 +246,9 @@ const HeroSection = () => {
                 className="relative w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-2xl"
                 loading="lazy"
               />
-            </motion.div>
+            </Motion.div>
             
-            <motion.div
+            <Motion.div
               className="relative group"
               whileHover={{ scale: 1.1, rotate: -5 }}
             >
@@ -258,24 +259,24 @@ const HeroSection = () => {
                 className="relative w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-2xl"
                 loading="lazy"
               />
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </Motion.div>
+          </Motion.div>
+        </Motion.div>
         
         {/* Stats */}
-        <motion.div 
+        <Motion.div 
           className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
           {[
-            { value: '1000+', label: 'Câu hỏi quiz' },
+            { value: '1000+', label: 'Câu hỏi Quizventure' },
             { value: '50+', label: 'Video & Podcast' },
             { value: '100+', label: 'Phần quà' },
             { value: '24/7', label: 'Hỗ trợ' }
           ].map((stat, i) => (
-            <motion.div 
+            <Motion.div 
               key={stat.label}
               className="text-center"
               initial={{ opacity: 0, y: 20 }}
@@ -286,13 +287,13 @@ const HeroSection = () => {
                 {stat.value}
               </div>
               <div className="text-slate-400 text-sm">{stat.label}</div>
-            </motion.div>
+            </Motion.div>
           ))}
-        </motion.div>
+        </Motion.div>
       </div>
       
       {/* Scroll indicator */}
-      <motion.div 
+      <Motion.div 
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
@@ -300,7 +301,7 @@ const HeroSection = () => {
         <svg className="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
-      </motion.div>
+      </Motion.div>
     </section>
   )
 }
@@ -316,7 +317,7 @@ const EyeAnimationsSection = () => {
       </div>
       
       <div className="relative max-w-7xl mx-auto px-6">
-        <motion.div
+        <Motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -330,11 +331,11 @@ const EyeAnimationsSection = () => {
           <p className="text-slate-400 letter-spacing-wide">
             Tương tác trực quan với mô hình 3D chân thực
           </p>
-        </motion.div>
+        </Motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* GIF Animation 1 */}
-          <motion.div
+          <Motion.div
             className="relative group"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -346,7 +347,7 @@ const EyeAnimationsSection = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-sky-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               {/* GIF */}
-              <motion.div 
+              <Motion.div 
                 className="relative"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
@@ -361,7 +362,7 @@ const EyeAnimationsSection = () => {
                 <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-sky-500/20 backdrop-blur-sm border border-sky-500/30 text-sky-400 text-xs font-semibold">
                   3D Model
                 </div>
-              </motion.div>
+              </Motion.div>
               
               {/* Info */}
               <div className="relative mt-6 text-center">
@@ -373,10 +374,10 @@ const EyeAnimationsSection = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
           
           {/* GIF Animation 2 */}
-          <motion.div
+          <Motion.div
             className="relative group"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -388,7 +389,7 @@ const EyeAnimationsSection = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               {/* GIF */}
-              <motion.div 
+              <Motion.div 
                 className="relative"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
@@ -403,7 +404,7 @@ const EyeAnimationsSection = () => {
                 <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-purple-500/20 backdrop-blur-sm border border-purple-500/30 text-purple-400 text-xs font-semibold">
                   Interactive
                 </div>
-              </motion.div>
+              </Motion.div>
               
               {/* Info */}
               <div className="relative mt-6 text-center">
@@ -415,7 +416,7 @@ const EyeAnimationsSection = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
         </div>
       </div>
     </section>
@@ -426,14 +427,16 @@ const EyeAnimationsSection = () => {
 const BentoGridSection = () => {
   const features = [
     {
-      title: 'Quiz Tương Tác',
-      description: 'Hơn 1000 câu hỏi được thiết kế khoa học về nhãn khoa',
-      icon: '🎮',
+      title: 'Vista Quizventure',
+      description: 'Hơn 1000 thử thách nhãn khoa cá nhân hóa với hành trình gamified.',
+      icon: '🚀',
       image: 'v1761408612/unnamed_pzaiys.jpg',
       gradient: 'from-sky-500/30 via-blue-500/20 to-purple-500/30',
-      span: 1,
-      rowSpan: 2,
-      link: '/quiz' // Link to quiz page
+      wrapperClass: 'lg:col-span-2 lg:row-span-2 min-h-[420px]',
+      emphasis: true,
+      highlights: ['Lộ trình cá nhân hóa', 'Leaderboard thời gian thực'],
+      cta: 'Vào Vista Quizventure',
+      link: '/quiz'
     },
     {
       title: 'Podcast Y Tế',
@@ -441,8 +444,7 @@ const BentoGridSection = () => {
       icon: '🎧',
       image: 'v1761409108/unnamed_1_g44gjc.jpg',
       gradient: 'from-purple-500/30 via-pink-500/20 to-rose-500/30',
-      span: 1,
-      rowSpan: 1
+      wrapperClass: 'lg:col-span-1 min-h-[220px]'
     },
     {
       title: 'Video Giáo Dục',
@@ -450,34 +452,30 @@ const BentoGridSection = () => {
       icon: '📹',
       image: 'v1761410139/unnamed_2_inzt8g.jpg',
       gradient: 'from-emerald-500/30 via-teal-500/20 to-cyan-500/30',
-      span: 1,
-      rowSpan: 1
+      wrapperClass: 'lg:col-span-1 min-h-[220px]'
     },
     {
       title: 'Studio 360°',
       description: 'Trải nghiệm phòng mổ ảo chân thực',
       icon: '🏥',
       gradient: 'from-indigo-500/30 via-violet-500/20 to-purple-500/30',
-      span: 2,
-      rowSpan: 1,
-      link: '/studio360' // Link to Studio 360 page
+      wrapperClass: 'lg:col-span-2 min-h-[220px]',
+      link: '/studio360'
     },
     {
       title: 'Tích Điểm Đổi Quà',
       description: 'Học nhiều - Quà nhiều - Gắn bó lâu dài',
       icon: '🎁',
       gradient: 'from-rose-500/30 via-pink-500/20 to-fuchsia-500/30',
-      span: 2,
-      rowSpan: 1
+      wrapperClass: 'lg:col-span-2 min-h-[220px]'
     },
     {
       title: 'Kiến Thức Nhãn Khoa',
       description: 'Thư viện bài viết và tài liệu chuyên sâu',
       icon: '📚',
       gradient: 'from-amber-500/30 via-orange-500/20 to-red-500/30',
-      span: 1,
-      rowSpan: 1,
-      link: '/knowledge' // Link to Knowledge page
+      wrapperClass: 'lg:col-span-2 min-h-[220px]',
+      link: '/knowledge'
     }
   ]
   
@@ -490,14 +488,14 @@ const BentoGridSection = () => {
       </div>
       
       <div className="relative max-w-7xl mx-auto px-6">
-        <motion.div 
+        <Motion.div 
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -511,7 +509,7 @@ const BentoGridSection = () => {
               </span>
               Tính năng độc đáo
             </div>
-          </motion.div>
+          </Motion.div>
           
           <h2 className="text-4xl md:text-6xl font-bold mb-4">
             <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-purple-600 bg-clip-text text-transparent letter-spacing-wide">
@@ -521,147 +519,158 @@ const BentoGridSection = () => {
           <p className="text-slate-400 text-lg letter-spacing-wide max-w-2xl mx-auto">
             Trải nghiệm học tập toàn diện về chăm sóc mắt với công nghệ hiện đại
           </p>
-        </motion.div>
+        </Motion.div>
         
-        {/* Enhanced Bento Grid - Responsive 3 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[200px]">
+        {/* Enhanced Bento Grid - Responsive layout with highlighted quiz */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[220px] lg:auto-rows-[240px]">
           {features.map((feature, i) => {
             const CardWrapper = feature.link ? Link : 'div'
             const cardProps = feature.link ? { to: feature.link } : {}
-            
+            const isEmphasis = feature.emphasis
+            const ctaLabel = feature.cta || 'Khám phá'
+
             return (
               <CardWrapper
-                key={i}
+                key={feature.title}
                 {...cardProps}
-                className="block no-underline"
+                className={`block h-full no-underline ${feature.wrapperClass || ''}`}
               >
-                <motion.div
-                  className="relative overflow-hidden rounded-2xl group cursor-pointer h-full"
-                  style={{ 
-                    gridColumn: `span ${feature.span}`,
-                    gridRow: `span ${feature.rowSpan}`
-                  }}
+                <Motion.div
+                  className={`relative overflow-hidden rounded-2xl group cursor-pointer h-full ${feature.cardClass || ''}`}
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ 
-                    scale: 1.02,
+                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  whileHover={{
+                    scale: isEmphasis ? 1.03 : 1.02,
                     zIndex: 10,
                     transition: { duration: 0.3 }
                   }}
                 >
-              {/* Background image with parallax effect */}
-              {feature.image && (
-                <motion.div 
-                  className="absolute inset-0 overflow-hidden"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <img 
-                    src={`${CLOUDINARY_BASE}w_800,q_auto,f_auto/${feature.image}`}
-                    alt={feature.title}
-                    className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
-                    loading="lazy"
-                  />
-                  {/* Gradient overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient || 'from-sky-500/30 to-purple-500/30'}`} />
-                </motion.div>
-              )}
-              
-              {/* Glass card background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-white/10 group-hover:border-white/20 transition-all duration-300" />
-              
-              {/* Animated gradient border on hover */}
-              <motion.div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                  background: `linear-gradient(45deg, transparent, ${feature.gradient?.split(' ')[0].replace('from-', '')?.replace('/30', '') || 'rgba(59, 130, 246, 0.5)'}, transparent)`,
-                  backgroundSize: '200% 200%',
-                }}
-                animate={{
-                  backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-              
-              {/* Content */}
-              <div className="relative h-full p-6 flex flex-col justify-between z-10">
-                <div>
-                  {/* Icon with bounce animation */}
-                  <motion.div 
-                    className="text-5xl mb-4 inline-block"
-                    whileHover={{ 
-                      scale: 1.2,
-                      rotate: [0, -10, 10, -10, 0],
-                      transition: { duration: 0.5 }
-                    }}
-                  >
-                    {feature.icon}
-                  </motion.div>
-                  
-                  {/* Title */}
-                  <h3 className="text-2xl font-bold text-white mb-2 letter-spacing-wide group-hover:text-sky-300 transition-colors duration-300">
-                    {feature.title}
-                  </h3>
-                  
-                  {/* Description */}
-                  <p className="text-slate-400 letter-spacing-wide group-hover:text-slate-300 transition-colors duration-300">
-                    {feature.description}
-                  </p>
-                </div>
-                
-                {/* Hover arrow indicator */}
-                <motion.div 
-                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  initial={{ x: -10 }}
-                  whileHover={{ x: 0 }}
-                >
-                  <div className="flex items-center gap-2 text-sky-400 font-semibold">
-                    <span className="text-sm">Khám phá</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </motion.div>
-              </div>
-              
-              {/* Bottom glow bar */}
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-sky-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                animate={{
-                  x: ['-100%', '100%']
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              />
-              
-              {/* Particle effect on hover */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                {[...Array(6)].map((_, idx) => (
-                  <motion.div
-                    key={idx}
-                    className="absolute w-1 h-1 bg-sky-400 rounded-full"
+                  {/* Background image with parallax effect */}
+                  {feature.image && (
+                    <Motion.div 
+                      className="absolute inset-0 overflow-hidden"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <img 
+                        src={`${CLOUDINARY_BASE}w_900,q_auto,f_auto/${feature.image}`}
+                        alt={feature.title}
+                        className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
+                        loading="lazy"
+                      />
+                      {/* Gradient overlay */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient || 'from-sky-500/30 to-purple-500/30'}`} />
+                    </Motion.div>
+                  )}
+
+                  {/* Glass card background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-white/10 group-hover:border-white/20 transition-all duration-300" />
+
+                  {/* Animated gradient border on hover */}
+                  <Motion.div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
+                      background: `linear-gradient(45deg, transparent, ${feature.gradient?.split(' ')[0].replace('from-', '')?.replace('/30', '') || 'rgba(59, 130, 246, 0.5)'}, transparent)`,
+                      backgroundSize: '200% 200%',
                     }}
                     animate={{
-                      y: [0, -30, 0],
-                      opacity: [0, 1, 0],
-                      scale: [0, 1.5, 0]
+                      backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
                     }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      delay: idx * 0.2
-                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
                   />
-                ))}
-              </div>
-            </motion.div>
-          </CardWrapper>
-          )
-        })}
+
+                  {/* Content */}
+                  <div className={`relative h-full ${isEmphasis ? 'p-8 md:p-10 flex flex-col' : 'p-6 flex flex-col'} justify-between z-10`}>
+                    <div>
+                      {/* Icon with bounce animation */}
+                      <Motion.div 
+                        className={`${isEmphasis ? 'text-6xl md:text-7xl' : 'text-5xl'} mb-4 inline-block`}
+                        whileHover={{ 
+                          scale: 1.2,
+                          rotate: [0, -10, 10, -10, 0],
+                          transition: { duration: 0.5 }
+                        }}
+                      >
+                        {feature.icon}
+                      </Motion.div>
+
+                      {/* Title */}
+                      <h3 className={`${isEmphasis ? 'text-3xl md:text-4xl' : 'text-2xl'} font-bold text-white mb-3 letter-spacing-wide group-hover:text-sky-300 transition-colors duration-300`}>
+                        {feature.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className={`${isEmphasis ? 'text-slate-300 text-lg max-w-xl' : 'text-slate-400'} letter-spacing-wide group-hover:text-slate-300 transition-colors duration-300`}>
+                        {feature.description}
+                      </p>
+
+                      {isEmphasis && feature.highlights?.length ? (
+                        <div className="mt-6 flex flex-wrap gap-3">
+                          {feature.highlights.map((item) => (
+                            <span
+                              key={item}
+                              className="px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-200 text-xs font-semibold tracking-wide"
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+
+                    {/* Hover arrow indicator */}
+                    <Motion.div 
+                      className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      initial={{ x: -10 }}
+                      whileHover={{ x: 0 }}
+                    >
+                      <div className="flex items-center gap-3 text-sky-400 font-semibold">
+                        <span className="text-sm uppercase tracking-wide">{ctaLabel}</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </Motion.div>
+                  </div>
+
+                  {/* Bottom glow bar */}
+                  <Motion.div 
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-sky-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    animate={{
+                      x: ['-100%', '100%']
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  />
+
+                  {/* Particle effect on hover */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                    {[...Array(6)].map((_, idx) => (
+                      <Motion.div
+                        key={idx}
+                        className="absolute w-1 h-1 bg-sky-400 rounded-full"
+                        style={{
+                          left: `${Math.random() * 100}%`,
+                          top: `${Math.random() * 100}%`,
+                        }}
+                        animate={{
+                          y: [0, -30, 0],
+                          opacity: [0, 1, 0],
+                          scale: [0, 1.5, 0]
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: idx * 0.2
+                        }}
+                      />
+                    ))}
+                  </div>
+                </Motion.div>
+              </CardWrapper>
+            )
+          })}
         </div>
       </div>
     </section>
@@ -672,7 +681,7 @@ const BentoGridSection = () => {
 const JourneySection = () => {
   const steps = [
     { icon: '📱', title: 'Tải App', desc: 'Đăng ký tài khoản miễn phí' },
-    { icon: '🎮', title: 'Chơi Quiz', desc: 'Trả lời câu hỏi tích điểm' },
+    { icon: '🚀', title: 'Vào Quizventure', desc: 'Thử thách kiến thức và tích điểm' },
     { icon: '📚', title: 'Học Kiến Thức', desc: 'Podcast, video, bài viết' },
     { icon: '🎁', title: 'Đổi Quà', desc: 'Sử dụng điểm đổi phần thưởng' },
     { icon: '📅', title: 'Đặt Lịch', desc: 'Khám mắt định kỳ' },
@@ -682,7 +691,7 @@ const JourneySection = () => {
   return (
     <section className="py-24 bg-slate-900 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div 
+        <Motion.div 
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -696,11 +705,11 @@ const JourneySection = () => {
           <p className="text-slate-400 text-lg letter-spacing-wide">
             Từ chơi đến chăm sóc toàn diện
           </p>
-        </motion.div>
+        </Motion.div>
         
         {/* Auto-scrolling steps */}
         <div className="relative">
-          <motion.div 
+          <Motion.div 
             className="flex gap-6"
             animate={{ x: [0, -1920] }}
             transition={{ 
@@ -710,7 +719,7 @@ const JourneySection = () => {
             }}
           >
             {[...steps, ...steps, ...steps].map((step, i) => (
-              <motion.div
+              <Motion.div
                 key={i}
                 className="flex-shrink-0 w-80 p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10"
                 whileHover={{ scale: 1.05, y: -10 }}
@@ -720,9 +729,9 @@ const JourneySection = () => {
                   {step.title}
                 </h3>
                 <p className="text-slate-400 letter-spacing-wide">{step.desc}</p>
-              </motion.div>
+              </Motion.div>
             ))}
-          </motion.div>
+          </Motion.div>
         </div>
       </div>
     </section>
@@ -742,7 +751,7 @@ const RewardsSection = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-slate-800 to-slate-900">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div 
+        <Motion.div 
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -756,11 +765,11 @@ const RewardsSection = () => {
           <p className="text-slate-400 text-lg letter-spacing-wide">
             Học nhiều - Quà nhiều - Gắn bó lâu
           </p>
-        </motion.div>
+        </Motion.div>
         
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {rewards.map((reward, i) => (
-            <motion.div
+            <Motion.div
               key={i}
               className="p-6 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10 text-center group cursor-pointer"
               initial={{ opacity: 0, y: 30 }}
@@ -780,7 +789,7 @@ const RewardsSection = () => {
                 {reward.name}
               </h3>
               <div className="text-yellow-400 font-semibold">{reward.points}</div>
-            </motion.div>
+            </Motion.div>
           ))}
         </div>
       </div>
@@ -810,12 +819,12 @@ const CTASection = () => {
     <section id="cta" className="py-24 bg-slate-900 relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0">
-        <motion.div 
+        <Motion.div 
           className="absolute top-0 left-0 w-96 h-96 bg-sky-500/20 rounded-full blur-3xl"
           animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
-        <motion.div 
+        <Motion.div 
           className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
           animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
           transition={{ duration: 10, repeat: Infinity, delay: 1 }}
@@ -823,7 +832,7 @@ const CTASection = () => {
       </div>
       
       <div className="relative max-w-4xl mx-auto px-6">
-        <motion.div
+        <Motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -837,9 +846,9 @@ const CTASection = () => {
           <p className="text-slate-400 text-lg letter-spacing-wide">
             Trải nghiệm sớm và nhận ưu đãi đặc biệt
           </p>
-        </motion.div>
+        </Motion.div>
         
-        <motion.div
+        <Motion.div
           className="p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -887,7 +896,7 @@ const CTASection = () => {
             </button>
             
             {status.message && (
-              <motion.div
+              <Motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`p-4 rounded-xl ${
@@ -897,10 +906,10 @@ const CTASection = () => {
                 }`}
               >
                 {status.message}
-              </motion.div>
+              </Motion.div>
             )}
           </form>
-        </motion.div>
+        </Motion.div>
       </div>
     </section>
   )
@@ -951,7 +960,7 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold mb-4 letter-spacing-wide">Tính năng</h3>
             <ul className="space-y-2 text-slate-400">
-              <li><a href="#" className="hover:text-sky-400 transition-colors">Quiz</a></li>
+              <li><a href="#" className="hover:text-sky-400 transition-colors">Vista Quizventure</a></li>
               <li><a href="#" className="hover:text-sky-400 transition-colors">Podcast</a></li>
               <li><a href="#" className="hover:text-sky-400 transition-colors">Video</a></li>
               <li><a href="#" className="hover:text-sky-400 transition-colors">Đặt lịch</a></li>
@@ -1035,6 +1044,7 @@ function App() {
       <RewardsSection />
       <CTASection />
       <Footer />
+      <VistaChatbot />
     </div>
   )
 }
