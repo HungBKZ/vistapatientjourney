@@ -6,9 +6,10 @@ import faqData from './fallback/faq.json'
 
 // Suggested quick-reply questions
 const QUICK_SUGGESTIONS = [
-  'Đau mắt đỏ là gì?',
+  'Xin chào',
+  'Bạn là ai?',
+  'Bạn có thể giúp gì?',
   'Studio 360 là gì?',
-  'Cách chăm sóc mắt khi làm việc máy tính',
   'Đặt lịch khám mắt',
   'Quizventure hoạt động ra sao?'
 ]
@@ -42,6 +43,39 @@ const VistaChatbot = () => {
     setIsOpen((prev) => !prev)
   }
 
+  // Small-talk / greeting intents (checked before FAQ search)
+  const smallTalkAnswer = (text) => {
+    const t = (text || '').toLowerCase().trim()
+    const includesAny = (arr) => arr.some((k) => t.includes(k))
+
+    // Greetings
+    if (includesAny(['xin chào', 'chào', 'hello', 'hi', 'hey', 'chao'])) {
+      return 'Xin chào! 👋 Mình là Vista Care Buddy. Bạn muốn tìm hiểu về Quizventure, Studio 360°, kiến thức nhãn khoa hay đặt lịch khám không?'
+    }
+
+    // Who are you
+    if (includesAny(['bạn là ai', 'ai vậy', 'bot là ai', 'vista ai', 'care buddy là gì'])) {
+      return 'Mình là Vista Care Buddy – trợ lý ảo của Vista Patient Journey. Mình có thể trả lời câu hỏi thường gặp về mắt, hướng dẫn sử dụng app, Studio 360° và Vista Quizventure.'
+    }
+
+    // What can you do
+    if (includesAny(['giúp gì', 'làm gì được', 'chức năng', 'hỗ trợ gì'])) {
+      return 'Mình có thể: trả lời câu hỏi thường gặp, gợi ý nội dung học, giới thiệu Studio 360°, hướng dẫn chơi Quizventure và cách đặt lịch khám. Bạn hỏi mình bất cứ điều gì nhé!'
+    }
+
+    // Contact / social
+    if (includesAny(['liên hệ', 'facebook', 'fanpage'])) {
+      return 'Bạn có thể liên hệ Vista qua Facebook: https://www.facebook.com/profile.php?id=61581889931780 — đội ngũ sẽ phản hồi sớm nhất.'
+    }
+
+    // Address / location
+    if (includesAny(['địa chỉ', 'ở đâu', 'chỗ nào'])) {
+      return 'Địa chỉ Vista: 600 Nguyễn Văn Cừ nối dài, An Bình, Bình Thuỷ, Cần Thơ 900000. Bạn có thể đặt lịch trước để giảm thời gian chờ.'
+    }
+
+    return null
+  }
+
   const fallbackAnswer = (text) => {
     const normalized = text.trim().toLowerCase()
     const result = faqFuse.search(normalized)
@@ -61,8 +95,9 @@ const VistaChatbot = () => {
     setMessages((prev) => [...prev, userMessage])
     setInput('')
 
-    // Search FAQ
-    const faqResp = fallbackAnswer(userMessage.text)
+  // Small-talk first, then FAQ
+  const smallTalk = smallTalkAnswer(userMessage.text)
+  const faqResp = smallTalk || fallbackAnswer(userMessage.text)
     
     setTimeout(() => {
       if (faqResp) {

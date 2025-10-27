@@ -87,4 +87,25 @@
     "question": "vista có hỗ trợ tư vấn online không",
     "answer": "Vista cung cấp chatbot Care Buddy để trả lời nhanh các câu hỏi thường gặp. Để được tư vấn chuyên sâu, bạn nên đặt lịch khám trực tiếp với bác sĩ nhãn khoa."
   }
+  ,
+  {
+    "question": "xin chào",
+    "answer": "Xin chào! 👋 Mình là Vista Care Buddy. Bạn muốn hỏi về mắt, Studio 360°, Quizventure hay cách đặt lịch khám không?"
+  },
+  {
+    "question": "bạn là ai",
+    "answer": "Mình là Vista Care Buddy – trợ lý ảo của Vista Patient Journey. Mình cung cấp thông tin nhanh về nhãn khoa, Studio 360° và Vista Quizventure."
+  },
+  {
+    "question": "bạn có thể giúp gì",
+    "answer": "Mình có thể giải đáp câu hỏi thường gặp, gợi ý nội dung học, giới thiệu Quizventure/Studio 360° và hướng dẫn đặt lịch khám."
+  },
+  {
+    "question": "liên hệ vista",
+    "answer": "Bạn có thể liên hệ Vista qua Facebook: https://www.facebook.com/profile.php?id=61581889931780"
+  },
+  {
+    "question": "địa chỉ vista ở đâu",
+    "answer": "Địa chỉ: 600 Nguyễn Văn Cừ nối dài, An Bình, Bình Thuỷ, Cần Thơ 900000."
+  }
 ]

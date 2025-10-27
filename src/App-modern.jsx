@@ -55,11 +55,11 @@ const GlowButton = ({ children, variant = 'primary', onClick, href, className = 
   const Comp = href ? 'a' : 'button'
   
   return (
-    <Motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+    <Motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
       <Comp
         href={href}
         onClick={onClick}
-        className={`px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${variants[variant]} ${className}`}
+        className={`inline-block px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${variants[variant]} ${className}`}
       >
         {children}
       </Comp>
@@ -87,6 +87,52 @@ const ScrollingText = ({ items, speed = 20 }) => {
         ))}
       </Motion.div>
     </div>
+  )
+}
+
+/* ================= VIDEO MODAL ================= */
+const VideoModal = ({ isOpen, onClose, videoUrl }) => {
+  if (!isOpen) return null
+  
+  return (
+    <Motion.div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <Motion.div
+        className="relative w-full max-w-5xl mx-4"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ type: "spring", duration: 0.5 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute -top-12 right-0 text-white hover:text-sky-400 transition-colors duration-200"
+        >
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        
+        {/* Video Container */}
+        <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-sky-500/50">
+          <video
+            className="w-full h-auto"
+            controls
+            autoPlay
+            src={videoUrl}
+          >
+            Trình duyệt của bạn không hỗ trợ video.
+          </video>
+        </div>
+      </Motion.div>
+    </Motion.div>
   )
 }
 
@@ -125,18 +171,44 @@ const Header = () => {
         
         {/* Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {['Tính năng', 'Demo', 'Kiến thức', 'Liên hệ'].map((item, i) => (
-            <Motion.a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="text-slate-300 hover:text-sky-400 transition-colors"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              {item}
-            </Motion.a>
-          ))}
+          <Motion.a
+            href="#features"
+            className="text-slate-300 hover:text-sky-400 transition-colors"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0 }}
+          >
+            Tính năng
+          </Motion.a>
+          <Motion.a
+            href="/quiz"
+            className="text-slate-300 hover:text-sky-400 transition-colors"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            Quizventure
+          </Motion.a>
+          <Motion.a
+            href="/knowledge"
+            className="text-slate-300 hover:text-sky-400 transition-colors"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            Kiến thức
+          </Motion.a>
+          <Motion.a
+            href="https://www.facebook.com/profile.php?id=61581889931780"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-300 hover:text-sky-400 transition-colors"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            Liên hệ
+          </Motion.a>
         </nav>
         
         <div className="hidden md:block">
@@ -153,12 +225,58 @@ const Header = () => {
           </svg>
         </button>
       </div>
+      
+      {/* Mobile menu dropdown */}
+      {isOpen && (
+        <Motion.div
+          className="md:hidden absolute top-full left-0 right-0 bg-slate-900/95 backdrop-blur-xl border-b border-white/10"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+        >
+          <nav className="flex flex-col p-6 gap-4">
+            <a
+              href="#features"
+              className="text-slate-300 hover:text-sky-400 transition-colors py-2"
+              onClick={() => setIsOpen(false)}
+            >
+              Tính năng
+            </a>
+            <a
+              href="/quiz"
+              className="text-slate-300 hover:text-sky-400 transition-colors py-2"
+              onClick={() => setIsOpen(false)}
+            >
+              Quizventure
+            </a>
+            <a
+              href="/knowledge"
+              className="text-slate-300 hover:text-sky-400 transition-colors py-2"
+              onClick={() => setIsOpen(false)}
+            >
+              Kiến thức
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61581889931780"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-300 hover:text-sky-400 transition-colors py-2"
+              onClick={() => setIsOpen(false)}
+            >
+              Liên hệ
+            </a>
+            <div className="pt-2">
+              <GlowButton href="#cta">Đăng ký Beta</GlowButton>
+            </div>
+          </nav>
+        </Motion.div>
+      )}
     </Motion.header>
   )
 }
 
 /* ================= HERO SECTION ================= */
-const HeroSection = () => {
+const HeroSection = ({ onDemoClick }) => {
   const { scrollY } = useScroll()
   const _y = useTransform(scrollY, [0, 500], [0, 150]) // Parallax effect (unused but ready)
   
@@ -219,11 +337,11 @@ const HeroSection = () => {
             Chinh phục <span className="text-sky-400 font-semibold">Vista Quizventure</span>, nghe podcast, xem video, tích điểm đổi quà và đặt lịch khám — tất cả trong một ứng dụng.
           </p>
           
-          <div className="flex flex-wrap justify-center gap-4 mb-16">
-            <GlowButton variant="primary" href="#demo" className="text-lg px-8 py-4">
+          <div className="flex flex-nowrap justify-center items-center gap-4 mb-16">
+            <GlowButton variant="primary" onClick={onDemoClick} className="text-lg px-8 py-4 whitespace-nowrap">
               Xem Demo
             </GlowButton>
-            <GlowButton variant="outline" href="#features" className="text-lg px-8 py-4">
+            <GlowButton variant="outline" href="#features" className="text-lg px-8 py-4 whitespace-nowrap">
               Tìm hiểu thêm
             </GlowButton>
           </div>
@@ -293,15 +411,22 @@ const HeroSection = () => {
       </div>
       
       {/* Scroll indicator */}
-      <Motion.div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      <Motion.button
+        onClick={() => {
+          const featuresSection = document.getElementById('features')
+          if (featuresSection) {
+            featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+        }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer bg-transparent border-none p-2 hover:scale-110 transition-transform"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
+        aria-label="Scroll to features"
       >
         <svg className="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
-      </Motion.div>
+      </Motion.button>
     </section>
   )
 }
@@ -1026,10 +1151,13 @@ const Footer = () => {
 
 /* ================= MAIN APP ================= */
 function App() {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+  const VIDEO_DEMO_URL = 'https://res.cloudinary.com/dvucotc8z/video/upload/v1761540376/20251027_1103_New_Video_simple_compose_01k8hxbwz2e6sreb777hvnabfx_resmmr.mp4'
+  
   return (
     <div className="bg-slate-900 text-white">
       <Header />
-      <HeroSection />
+      <HeroSection onDemoClick={() => setIsVideoModalOpen(true)} />
       
       {/* Scrolling banner */}
       <div className="bg-slate-950 border-y border-white/10">
@@ -1045,6 +1173,13 @@ function App() {
       <CTASection />
       <Footer />
       <VistaChatbot />
+      
+      {/* Video Modal */}
+      <VideoModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_DEMO_URL}
+      />
     </div>
   )
 }
