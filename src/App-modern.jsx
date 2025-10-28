@@ -26,7 +26,7 @@ const COMPANY_INFO = {
 const BentoCard = ({ children, className = '', span = 1, rowSpan = 1, hover = true }) => {
   return (
     <Motion.div
-      className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-white/10 ${className}`}
+      className={`relative overflow-hidden rounded-2xl bg-white backdrop-blur-xl border border-blue-100 shadow-lg ${className}`}
       style={{ 
         gridColumn: `span ${span}`,
         gridRow: `span ${rowSpan}`
@@ -34,12 +34,12 @@ const BentoCard = ({ children, className = '', span = 1, rowSpan = 1, hover = tr
       whileHover={hover ? { 
         scale: 1.02, 
         zIndex: 10,
-        boxShadow: '0 25px 50px -12px rgba(14, 165, 233, 0.5)'
+        boxShadow: '0 25px 50px -12px rgba(59, 130, 246, 0.3)'
       } : {}}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-sky-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       {children}
     </Motion.div>
   )
@@ -47,9 +47,9 @@ const BentoCard = ({ children, className = '', span = 1, rowSpan = 1, hover = tr
 
 const GlowButton = ({ children, variant = 'primary', onClick, href, className = '' }) => {
   const variants = {
-    primary: 'bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 shadow-lg shadow-sky-500/50',
-    secondary: 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500 shadow-lg shadow-purple-500/50',
-    outline: 'border-2 border-sky-400 text-sky-400 hover:bg-sky-400/10'
+    primary: 'bg-gradient-to-r from-blue-500 to-sky-600 hover:from-blue-600 hover:to-sky-700 shadow-lg shadow-blue-500/30 text-white',
+    secondary: 'bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500 shadow-lg shadow-purple-500/50 text-white',
+    outline: 'bg-blue-400 hover:bg-blue-500 border-2 border-blue-500 hover:border-blue-600 shadow-lg shadow-blue-400/30 text-white'
   }
   
   const Comp = href ? 'a' : 'button'
@@ -59,7 +59,7 @@ const GlowButton = ({ children, variant = 'primary', onClick, href, className = 
       <Comp
         href={href}
         onClick={onClick}
-        className={`inline-block px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${variants[variant]} ${className}`}
+        className={`inline-block px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${variants[variant]} ${className}`}
       >
         {children}
       </Comp>
@@ -80,9 +80,9 @@ const ScrollingText = ({ items, speed = 20 }) => {
         }}
       >
         {[...items, ...items, ...items].map((item, i) => (
-          <span key={i} className="text-slate-400 font-medium flex items-center gap-2">
+          <span key={i} className="text-gray-600 font-medium flex items-center gap-2">
             {item}
-            <span className="text-sky-400">✦</span>
+            <span className="text-blue-500">✦</span>
           </span>
         ))}
       </Motion.div>
@@ -113,7 +113,7 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 text-white hover:text-sky-400 transition-colors duration-200"
+          className="absolute -top-12 right-0 text-white hover:text-blue-400 transition-colors duration-200"
         >
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -142,7 +142,7 @@ const Header = () => {
   
   return (
     <Motion.header 
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/10"
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-blue-100 shadow-sm"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
@@ -157,14 +157,14 @@ const Header = () => {
           <img 
             src={LOGO_URL}
             alt="VISTA Logo"
-            className="w-12 h-12 rounded-xl object-cover ring-2 ring-sky-400/30"
+            className="w-12 h-12 rounded-xl object-cover ring-2 ring-blue-400/30"
           />
           <div className="flex flex-col">
-            <span className="text-lg font-bold bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent leading-tight">
+            <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent leading-tight">
               VISTA
             </span>
-            <span className="text-xs text-slate-400 leading-tight">
-              Patient Journey
+            <span className="text-xs text-gray-600 leading-tight">
+              Hành trình chăm sóc mắt
             </span>
           </div>
         </Motion.a>
@@ -173,7 +173,7 @@ const Header = () => {
         <nav className="hidden md:flex items-center gap-8">
           <Motion.a
             href="#features"
-            className="text-slate-300 hover:text-sky-400 transition-colors"
+            className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0 }}
@@ -182,27 +182,27 @@ const Header = () => {
           </Motion.a>
           <Motion.a
             href="/quiz"
-            className="text-slate-300 hover:text-sky-400 transition-colors"
+            className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            Quizventure
+            Câu hỏi trắc nghiệm
           </Motion.a>
           <Motion.a
             href="/knowledge"
-            className="text-slate-300 hover:text-sky-400 transition-colors"
+            className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            Kiến thức
+            Kiến thức nhãn khoa
           </Motion.a>
           <Motion.a
             href="https://www.facebook.com/profile.php?id=61581889931780"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-300 hover:text-sky-400 transition-colors"
+            className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -229,7 +229,7 @@ const Header = () => {
       {/* Mobile menu dropdown */}
       {isOpen && (
         <Motion.div
-          className="md:hidden absolute top-full left-0 right-0 bg-slate-900/95 backdrop-blur-xl border-b border-white/10"
+          className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-blue-100 shadow-lg"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -237,30 +237,30 @@ const Header = () => {
           <nav className="flex flex-col p-6 gap-4">
             <a
               href="#features"
-              className="text-slate-300 hover:text-sky-400 transition-colors py-2"
+              className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium"
               onClick={() => setIsOpen(false)}
             >
               Tính năng
             </a>
             <a
               href="/quiz"
-              className="text-slate-300 hover:text-sky-400 transition-colors py-2"
+              className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium"
               onClick={() => setIsOpen(false)}
             >
-              Quizventure
+              Câu hỏi trắc nghiệm
             </a>
             <a
               href="/knowledge"
-              className="text-slate-300 hover:text-sky-400 transition-colors py-2"
+              className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium"
               onClick={() => setIsOpen(false)}
             >
-              Kiến thức
+              Kiến thức nhãn khoa
             </a>
             <a
               href="https://www.facebook.com/profile.php?id=61581889931780"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-300 hover:text-sky-400 transition-colors py-2"
+              className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium"
               onClick={() => setIsOpen(false)}
             >
               Liên hệ
@@ -281,11 +281,11 @@ const HeroSection = ({ onDemoClick }) => {
   const _y = useTransform(scrollY, [0, 500], [0, 150]) // Parallax effect (unused but ready)
   
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-sky-50 pt-20">
       {/* Animated background */}
       <div className="absolute inset-0">
         <Motion.div 
-          className="absolute top-20 left-20 w-96 h-96 bg-sky-500/30 rounded-full blur-3xl"
+          className="absolute top-20 left-20 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl"
           animate={{ 
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3]
@@ -293,7 +293,7 @@ const HeroSection = ({ onDemoClick }) => {
           transition={{ duration: 8, repeat: Infinity }}
         />
         <Motion.div 
-          className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl"
+          className="absolute bottom-20 right-20 w-96 h-96 bg-sky-200/40 rounded-full blur-3xl"
           animate={{ 
             scale: [1.2, 1, 1.2],
             opacity: [0.3, 0.5, 0.3]
@@ -310,31 +310,31 @@ const HeroSection = ({ onDemoClick }) => {
         >
           {/* Badge */}
           <Motion.div 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm font-medium mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-sm font-medium mb-8"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
             </span>
             Y tế · Nhãn khoa · Gamification
           </Motion.div>
           
           {/* Main title */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-white via-sky-200 to-white bg-clip-text text-transparent letter-spacing-wide">
-              Học về chăm sóc mắt
+            <span className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent letter-spacing-wide">
+              Chăm sóc sức khỏe mắt
             </span>
             <br />
-            <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-purple-600 bg-clip-text text-transparent letter-spacing-wide">
-              qua trò chơi & kiến thức
+            <span className="bg-gradient-to-r from-blue-600 via-sky-500 to-blue-600 bg-clip-text text-transparent letter-spacing-wide">
+              thông qua trải nghiệm tương tác
             </span>
           </h1>
           
-          <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed letter-spacing-wide">
-            Chinh phục <span className="text-sky-400 font-semibold">Vista Quizventure</span>, nghe podcast, xem video, tích điểm đổi quà và đặt lịch khám — tất cả trong một ứng dụng.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed letter-spacing-wide">
+            Nâng cao kiến thức nhãn khoa qua <span className="text-blue-600 font-semibold">bài kiểm tra tương tác</span>, nội dung đa phương tiện, tích lũy điểm thưởng và đặt lịch tái khám định kỳ — tất cả trong một nền tảng tích hợp.
           </p>
           
           <div className="flex flex-nowrap justify-center items-center gap-4 mb-16">
@@ -389,10 +389,10 @@ const HeroSection = ({ onDemoClick }) => {
           transition={{ delay: 0.6 }}
         >
           {[
-            { value: '1000+', label: 'Câu hỏi Quizventure' },
-            { value: '50+', label: 'Video & Podcast' },
-            { value: '100+', label: 'Phần quà' },
-            { value: '24/7', label: 'Hỗ trợ' }
+            { value: '1000+', label: 'Câu hỏi kiến thức nhãn khoa' },
+            { value: '50+', label: 'Nội dung đa phương tiện' },
+            { value: '100+', label: 'Phần thưởng giá trị' },
+            { value: '24/7', label: 'Tư vấn hỗ trợ' }
           ].map((stat, i) => (
             <Motion.div 
               key={stat.label}
@@ -401,10 +401,10 @@ const HeroSection = ({ onDemoClick }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 + i * 0.1 }}
             >
-              <div className="text-3xl font-bold bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent mb-2">
+              <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent mb-2">
                 {stat.value}
               </div>
-              <div className="text-slate-400 text-sm">{stat.label}</div>
+              <div className="text-gray-600 text-sm">{stat.label}</div>
             </Motion.div>
           ))}
         </Motion.div>
@@ -423,7 +423,7 @@ const HeroSection = ({ onDemoClick }) => {
         transition={{ duration: 2, repeat: Infinity }}
         aria-label="Scroll to features"
       >
-        <svg className="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
       </Motion.button>
@@ -434,11 +434,11 @@ const HeroSection = ({ onDemoClick }) => {
 /* ================= 3D EYE ANIMATIONS SHOWCASE ================= */
 const EyeAnimationsSection = () => {
   return (
-    <section className="py-16 bg-slate-900 relative overflow-hidden">
+    <section className="py-16 bg-gradient-to-b from-white to-blue-50 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-sky-100/40 rounded-full blur-3xl" />
       </div>
       
       <div className="relative max-w-7xl mx-auto px-6">
@@ -449,12 +449,12 @@ const EyeAnimationsSection = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            <span className="bg-gradient-to-r from-sky-400 to-purple-600 bg-clip-text text-transparent letter-spacing-wide">
-              Khám Phá Cấu Trúc Mắt 3D
+            <span className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent letter-spacing-wide">
+              Mô hình giải phẫu nhãn cầu 3D
             </span>
           </h2>
-          <p className="text-slate-400 letter-spacing-wide">
-            Tương tác trực quan với mô hình 3D chân thực
+          <p className="text-gray-600 letter-spacing-wide">
+            Trực quan hóa cấu trúc và chức năng của hệ thống thị giác
           </p>
         </Motion.div>
         
@@ -467,9 +467,9 @@ const EyeAnimationsSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10 overflow-hidden">
+            <div className="relative p-8 rounded-2xl bg-white backdrop-blur-xl border border-blue-100 overflow-hidden shadow-lg">
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-sky-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               {/* GIF */}
               <Motion.div 
@@ -484,18 +484,18 @@ const EyeAnimationsSection = () => {
                   loading="lazy"
                 />
                 {/* Floating badge */}
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-sky-500/20 backdrop-blur-sm border border-sky-500/30 text-sky-400 text-xs font-semibold">
+                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-blue-100 backdrop-blur-sm border border-blue-200 text-blue-700 text-xs font-semibold">
                   3D Model
                 </div>
               </Motion.div>
               
               {/* Info */}
               <div className="relative mt-6 text-center">
-                <h3 className="text-xl font-bold text-white mb-2 letter-spacing-wide">
-                  Cấu Trúc Mắt
+                <h3 className="text-xl font-bold text-gray-800 mb-2 letter-spacing-wide">
+                  Giải phẫu nhãn cầu
                 </h3>
-                <p className="text-slate-400 text-sm letter-spacing-wide">
-                  Khám phá các bộ phận chi tiết của mắt
+                <p className="text-gray-600 text-sm letter-spacing-wide">
+                  Tìm hiểu các cấu trúc giải phẫu của hệ thống thị giác
                 </p>
               </div>
             </div>
@@ -509,9 +509,9 @@ const EyeAnimationsSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="relative p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10 overflow-hidden">
+            <div className="relative p-8 rounded-2xl bg-white backdrop-blur-xl border border-blue-100 overflow-hidden shadow-lg">
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-sky-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               {/* GIF */}
               <Motion.div 
@@ -526,18 +526,18 @@ const EyeAnimationsSection = () => {
                   loading="lazy"
                 />
                 {/* Floating badge */}
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-purple-500/20 backdrop-blur-sm border border-purple-500/30 text-purple-400 text-xs font-semibold">
-                  Interactive
+                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-sky-100 backdrop-blur-sm border border-sky-200 text-sky-700 text-xs font-semibold">
+                  Tương tác
                 </div>
               </Motion.div>
               
               {/* Info */}
               <div className="relative mt-6 text-center">
-                <h3 className="text-xl font-bold text-white mb-2 letter-spacing-wide">
-                  Hoạt Động Mắt
+                <h3 className="text-xl font-bold text-gray-800 mb-2 letter-spacing-wide">
+                  Sinh lý thị giác
                 </h3>
-                <p className="text-slate-400 text-sm letter-spacing-wide">
-                  Hiểu cách mắt hoạt động và điều chỉnh
+                <p className="text-gray-600 text-sm letter-spacing-wide">
+                  Cơ chế điều tiết và phản xạ đồng tử
                 </p>
               </div>
             </div>
@@ -552,51 +552,51 @@ const EyeAnimationsSection = () => {
 const BentoGridSection = () => {
   const features = [
     {
-      title: 'Vista Quizventure',
-      description: 'Hơn 1000 thử thách nhãn khoa cá nhân hóa với hành trình gamified.',
+      title: 'Hệ thống kiểm tra kiến thức',
+      description: 'Hơn 1000 câu hỏi nhãn khoa với hành trình học tập cá nhân hóa, theo dõi tiến độ và xếp hạng thành tích.',
       icon: '🚀',
       image: 'v1761408612/unnamed_pzaiys.jpg',
       gradient: 'from-sky-500/30 via-blue-500/20 to-purple-500/30',
       wrapperClass: 'lg:col-span-2 lg:row-span-2 min-h-[420px]',
       emphasis: true,
-      highlights: ['Lộ trình cá nhân hóa', 'Leaderboard thời gian thực'],
-      cta: 'Vào Vista Quizventure',
+      highlights: ['Lộ trình cá nhân hóa', 'Xếp hạng thời gian thực'],
+      cta: 'Bắt đầu kiểm tra',
       link: '/quiz'
     },
     {
-      title: 'Podcast Y Tế',
-      description: 'Nghe mọi lúc mọi nơi, kiến thức chuyên sâu',
+      title: 'Nội dung âm thanh chuyên sâu',
+      description: 'Bài giảng và tư vấn nhãn khoa từ các chuyên gia',
       icon: '🎧',
       image: 'v1761409108/unnamed_1_g44gjc.jpg',
       gradient: 'from-purple-500/30 via-pink-500/20 to-rose-500/30',
       wrapperClass: 'lg:col-span-1 min-h-[220px]'
     },
     {
-      title: 'Video Giáo Dục',
-      description: 'Hình ảnh sinh động, dễ hiểu, dễ nhớ',
+      title: 'Video hướng dẫn chuyên môn',
+      description: 'Minh họa trực quan các kỹ thuật và quy trình khám nhãn khoa',
       icon: '📹',
       image: 'v1761410139/unnamed_2_inzt8g.jpg',
       gradient: 'from-emerald-500/30 via-teal-500/20 to-cyan-500/30',
       wrapperClass: 'lg:col-span-1 min-h-[220px]'
     },
     {
-      title: 'Studio 360°',
-      description: 'Trải nghiệm phòng mổ ảo chân thực',
+      title: 'Phòng mổ thực tế ảo 360°',
+      description: 'Trải nghiệm không gian phẫu thuật nhãn khoa với công nghệ 360°',
       icon: '🏥',
       gradient: 'from-indigo-500/30 via-violet-500/20 to-purple-500/30',
       wrapperClass: 'lg:col-span-2 min-h-[220px]',
       link: '/studio360'
     },
     {
-      title: 'Tích Điểm Đổi Quà',
-      description: 'Học nhiều - Quà nhiều - Gắn bó lâu dài',
+      title: 'Hệ thống điểm thưởng',
+      description: 'Tích lũy điểm qua hoạt động học tập để đổi phần thưởng y tế',
       icon: '🎁',
       gradient: 'from-rose-500/30 via-pink-500/20 to-fuchsia-500/30',
       wrapperClass: 'lg:col-span-2 min-h-[220px]'
     },
     {
-      title: 'Kiến Thức Nhãn Khoa',
-      description: 'Thư viện bài viết và tài liệu chuyên sâu',
+      title: 'Thư viện tài liệu nhãn khoa',
+      description: 'Cơ sở dữ liệu bài viết, nghiên cứu và hướng dẫn chuyên ngành',
       icon: '📚',
       gradient: 'from-amber-500/30 via-orange-500/20 to-red-500/30',
       wrapperClass: 'lg:col-span-2 min-h-[220px]',
@@ -605,11 +605,11 @@ const BentoGridSection = () => {
   ]
   
   return (
-    <section id="features" className="py-24 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+    <section id="features" className="py-24 bg-gradient-to-b from-blue-50 via-white to-sky-50 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-sky-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-sky-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
       
       <div className="relative max-w-7xl mx-auto px-6">
@@ -627,21 +627,21 @@ const BentoGridSection = () => {
             transition={{ duration: 0.5 }}
             className="inline-block"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-sm font-medium mb-6">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
               </span>
               Tính năng độc đáo
             </div>
           </Motion.div>
           
           <h2 className="text-4xl md:text-6xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-purple-600 bg-clip-text text-transparent letter-spacing-wide">
+            <span className="bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 bg-clip-text text-transparent letter-spacing-wide">
               Tính năng nổi bật
             </span>
           </h2>
-          <p className="text-slate-400 text-lg letter-spacing-wide max-w-2xl mx-auto">
+          <p className="text-gray-600 text-lg letter-spacing-wide max-w-2xl mx-auto">
             Trải nghiệm học tập toàn diện về chăm sóc mắt với công nghệ hiện đại
           </p>
         </Motion.div>
@@ -691,7 +691,7 @@ const BentoGridSection = () => {
                   )}
 
                   {/* Glass card background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-white/10 group-hover:border-white/20 transition-all duration-300" />
+                  <div className="absolute inset-0 bg-white/95 backdrop-blur-xl border border-blue-100 group-hover:border-blue-200 transition-all duration-300 shadow-lg" />
 
                   {/* Animated gradient border on hover */}
                   <Motion.div 
@@ -722,12 +722,12 @@ const BentoGridSection = () => {
                       </Motion.div>
 
                       {/* Title */}
-                      <h3 className={`${isEmphasis ? 'text-3xl md:text-4xl' : 'text-2xl'} font-bold text-white mb-3 letter-spacing-wide group-hover:text-sky-300 transition-colors duration-300`}>
+                      <h3 className={`${isEmphasis ? 'text-3xl md:text-4xl' : 'text-2xl'} font-bold text-gray-800 mb-3 letter-spacing-wide group-hover:text-blue-700 transition-colors duration-300`}>
                         {feature.title}
                       </h3>
 
                       {/* Description */}
-                      <p className={`${isEmphasis ? 'text-slate-300 text-lg max-w-xl' : 'text-slate-400'} letter-spacing-wide group-hover:text-slate-300 transition-colors duration-300`}>
+                      <p className={`${isEmphasis ? 'text-gray-700 text-lg max-w-xl' : 'text-gray-600'} letter-spacing-wide group-hover:text-gray-700 transition-colors duration-300`}>
                         {feature.description}
                       </p>
 
@@ -736,7 +736,7 @@ const BentoGridSection = () => {
                           {feature.highlights.map((item) => (
                             <span
                               key={item}
-                              className="px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-200 text-xs font-semibold tracking-wide"
+                              className="px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold tracking-wide"
                             >
                               {item}
                             </span>
@@ -751,7 +751,7 @@ const BentoGridSection = () => {
                       initial={{ x: -10 }}
                       whileHover={{ x: 0 }}
                     >
-                      <div className="flex items-center gap-3 text-sky-400 font-semibold">
+                      <div className="flex items-center gap-3 text-blue-600 font-semibold">
                         <span className="text-sm uppercase tracking-wide">{ctaLabel}</span>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -762,7 +762,7 @@ const BentoGridSection = () => {
 
                   {/* Bottom glow bar */}
                   <Motion.div 
-                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-sky-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     animate={{
                       x: ['-100%', '100%']
                     }}
@@ -774,7 +774,7 @@ const BentoGridSection = () => {
                     {[...Array(6)].map((_, idx) => (
                       <Motion.div
                         key={idx}
-                        className="absolute w-1 h-1 bg-sky-400 rounded-full"
+                        className="absolute w-1 h-1 bg-blue-500 rounded-full"
                         style={{
                           left: `${Math.random() * 100}%`,
                           top: `${Math.random() * 100}%`,
@@ -805,16 +805,16 @@ const BentoGridSection = () => {
 /* ================= AUTO-SCROLL JOURNEY ================= */
 const JourneySection = () => {
   const steps = [
-    { icon: '📱', title: 'Tải App', desc: 'Đăng ký tài khoản miễn phí' },
-    { icon: '🚀', title: 'Vào Quizventure', desc: 'Thử thách kiến thức và tích điểm' },
-    { icon: '📚', title: 'Học Kiến Thức', desc: 'Podcast, video, bài viết' },
-    { icon: '🎁', title: 'Đổi Quà', desc: 'Sử dụng điểm đổi phần thưởng' },
-    { icon: '📅', title: 'Đặt Lịch', desc: 'Khám mắt định kỳ' },
-    { icon: '💚', title: 'Chăm Sóc', desc: 'Mắt khỏe mạnh lâu dài' }
+    { icon: '📱', title: 'Đăng ký tài khoản', desc: 'Tạo hồ sơ sức khỏe mắt cá nhân' },
+    { icon: '🚀', title: 'Kiểm tra kiến thức', desc: 'Hoàn thành bài đánh giá nhãn khoa' },
+    { icon: '📚', title: 'Học tập liên tục', desc: 'Tiếp cận nội dung đa phương tiện' },
+    { icon: '🎁', title: 'Tích điểm thưởng', desc: 'Đổi phần thưởng y tế giá trị' },
+    { icon: '📅', title: 'Đặt lịch tái khám', desc: 'Lên lịch khám định kỳ' },
+    { icon: '💚', title: 'Duy trì sức khỏe', desc: 'Bảo vệ thị lực bền vững' }
   ]
   
   return (
-    <section className="py-24 bg-slate-900 overflow-hidden">
+    <section className="py-24 bg-gradient-to-b from-sky-50 to-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <Motion.div 
           className="text-center mb-16"
@@ -823,12 +823,12 @@ const JourneySection = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-6xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent letter-spacing-wide">
-              Hành trình của bạn
+            <span className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent letter-spacing-wide">
+              Lộ trình chăm sóc mắt
             </span>
           </h2>
-          <p className="text-slate-400 text-lg letter-spacing-wide">
-            Từ chơi đến chăm sóc toàn diện
+          <p className="text-gray-600 text-lg letter-spacing-wide">
+            Từ học tập đến bảo vệ thị lực toàn diện
           </p>
         </Motion.div>
         
@@ -846,14 +846,14 @@ const JourneySection = () => {
             {[...steps, ...steps, ...steps].map((step, i) => (
               <Motion.div
                 key={i}
-                className="flex-shrink-0 w-80 p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10"
+                className="flex-shrink-0 w-80 p-8 rounded-2xl bg-white border border-blue-100 shadow-lg"
                 whileHover={{ scale: 1.05, y: -10 }}
               >
                 <div className="text-5xl mb-4">{step.icon}</div>
-                <h3 className="text-2xl font-bold text-white mb-2 letter-spacing-wide">
+                <h3 className="text-2xl font-bold text-gray-800 mb-2 letter-spacing-wide">
                   {step.title}
                 </h3>
-                <p className="text-slate-400 letter-spacing-wide">{step.desc}</p>
+                <p className="text-gray-600 letter-spacing-wide">{step.desc}</p>
               </Motion.div>
             ))}
           </Motion.div>
@@ -866,15 +866,15 @@ const JourneySection = () => {
 /* ================= REWARDS GRID ================= */
 const RewardsSection = () => {
   const rewards = [
-    { icon: '🎟️', name: 'Voucher khám', points: '500đ' },
-    { icon: '👓', name: 'Gọng kính', points: '1000đ' },
-    { icon: '💊', name: 'Thuốc nhỏ mắt', points: '300đ' },
-    { icon: '📚', name: 'Sách y khoa', points: '800đ' },
-    { icon: '🎁', name: 'Quà bí mật', points: '???đ' }
+    { icon: '🎟️', name: 'Phiếu khám mắt', points: '500đ' },
+    { icon: '👓', name: 'Gọng kính chính hãng', points: '1000đ' },
+    { icon: '💊', name: 'Dược phẩm nhãn khoa', points: '300đ' },
+    { icon: '📚', name: 'Tài liệu chuyên ngành', points: '800đ' },
+    { icon: '🎁', name: 'Ưu đãi đặc biệt', points: '???đ' }
   ]
   
   return (
-    <section className="py-24 bg-gradient-to-b from-slate-800 to-slate-900">
+    <section className="py-24 bg-gradient-to-b from-white to-blue-50">
       <div className="max-w-7xl mx-auto px-6">
         <Motion.div 
           className="text-center mb-16"
@@ -883,12 +883,12 @@ const RewardsSection = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-6xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-600 bg-clip-text text-transparent letter-spacing-wide">
-              Thư viện quà tặng
+            <span className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent letter-spacing-wide">
+              Phần thưởng giá trị
             </span>
           </h2>
-          <p className="text-slate-400 text-lg letter-spacing-wide">
-            Học nhiều - Quà nhiều - Gắn bó lâu
+          <p className="text-gray-600 text-lg letter-spacing-wide">
+            Tích điểm học tập - Đổi lấy dịch vụ y tế
           </p>
         </Motion.div>
         
@@ -896,7 +896,7 @@ const RewardsSection = () => {
           {rewards.map((reward, i) => (
             <Motion.div
               key={i}
-              className="p-6 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10 text-center group cursor-pointer"
+              className="p-6 rounded-2xl bg-white border border-blue-100 shadow-lg text-center group cursor-pointer"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -904,16 +904,16 @@ const RewardsSection = () => {
               whileHover={{ 
                 scale: 1.1, 
                 rotate: 5,
-                boxShadow: '0 25px 50px -12px rgba(251, 191, 36, 0.5)'
+                boxShadow: '0 25px 50px -12px rgba(59, 130, 246, 0.4)'
               }}
             >
               <div className="text-5xl mb-4 group-hover:scale-125 transition-transform duration-300">
                 {reward.icon}
               </div>
-              <h3 className="text-white font-bold mb-2 letter-spacing-wide">
+              <h3 className="text-gray-800 font-bold mb-2 letter-spacing-wide">
                 {reward.name}
               </h3>
-              <div className="text-yellow-400 font-semibold">{reward.points}</div>
+              <div className="text-blue-600 font-semibold">{reward.points}</div>
             </Motion.div>
           ))}
         </div>
@@ -941,16 +941,16 @@ const CTASection = () => {
   }
   
   return (
-    <section id="cta" className="py-24 bg-slate-900 relative overflow-hidden">
+    <section id="cta" className="py-24 bg-gradient-to-b from-blue-50 to-white relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0">
         <Motion.div 
-          className="absolute top-0 left-0 w-96 h-96 bg-sky-500/20 rounded-full blur-3xl"
+          className="absolute top-0 left-0 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl"
           animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
         <Motion.div 
-          className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+          className="absolute bottom-0 right-0 w-96 h-96 bg-sky-200/30 rounded-full blur-3xl"
           animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
           transition={{ duration: 10, repeat: Infinity, delay: 1 }}
         />
@@ -964,17 +964,17 @@ const CTASection = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-sky-400 to-purple-600 bg-clip-text text-transparent letter-spacing-wide">
-              Tham gia Beta Testing
+            <span className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent letter-spacing-wide">
+              Đăng ký trải nghiệm sớm
             </span>
           </h2>
-          <p className="text-slate-400 text-lg letter-spacing-wide">
-            Trải nghiệm sớm và nhận ưu đãi đặc biệt
+          <p className="text-gray-600 text-lg letter-spacing-wide">
+            Tham gia chương trình thử nghiệm và nhận ưu đãi đặc biệt
           </p>
         </Motion.div>
         
         <Motion.div
-          className="p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10"
+          className="p-8 rounded-2xl bg-white border border-blue-100 shadow-lg"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -987,7 +987,7 @@ const CTASection = () => {
                 placeholder="Họ và tên"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-6 py-4 rounded-xl bg-slate-900/50 border border-white/10 text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition-colors letter-spacing-wide"
+                className="w-full px-6 py-4 rounded-xl bg-blue-50/50 border border-blue-200 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none transition-colors letter-spacing-wide"
                 required
               />
             </div>
@@ -997,7 +997,7 @@ const CTASection = () => {
                 placeholder="Email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-6 py-4 rounded-xl bg-slate-900/50 border border-white/10 text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition-colors letter-spacing-wide"
+                className="w-full px-6 py-4 rounded-xl bg-blue-50/50 border border-blue-200 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none transition-colors letter-spacing-wide"
                 required
               />
             </div>
@@ -1007,7 +1007,7 @@ const CTASection = () => {
                 placeholder="Số điện thoại"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-6 py-4 rounded-xl bg-slate-900/50 border border-white/10 text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition-colors letter-spacing-wide"
+                className="w-full px-6 py-4 rounded-xl bg-blue-50/50 border border-blue-200 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none transition-colors letter-spacing-wide"
                 required
               />
             </div>
@@ -1015,7 +1015,7 @@ const CTASection = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold shadow-lg shadow-sky-500/50 transition-all duration-300 disabled:opacity-50 letter-spacing-wide"
+              className="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-sky-600 hover:from-blue-600 hover:to-sky-700 text-white font-semibold shadow-lg shadow-blue-500/30 transition-all duration-300 disabled:opacity-50 letter-spacing-wide"
             >
               {isSubmitting ? 'Đang gửi...' : 'Đăng ký ngay'}
             </button>
@@ -1043,7 +1043,7 @@ const CTASection = () => {
 /* ================= FOOTER ================= */
 const Footer = () => {
   return (
-    <footer className="py-12 bg-slate-950 border-t border-white/10">
+    <footer className="py-12 bg-blue-50 border-t border-blue-100">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
@@ -1052,30 +1052,30 @@ const Footer = () => {
               <img 
                 src={LOGO_URL}
                 alt="VISTA Logo"
-                className="w-12 h-12 rounded-xl object-cover ring-2 ring-sky-400/30"
+                className="w-12 h-12 rounded-xl object-cover ring-2 ring-blue-400/30"
               />
               <div className="flex flex-col">
-                <span className="text-lg font-bold text-white leading-tight">VISTA</span>
-                <span className="text-xs text-slate-400 leading-tight">Patient Journey</span>
+                <span className="text-lg font-bold text-gray-800 leading-tight">VISTA</span>
+                <span className="text-xs text-gray-600 leading-tight">Hành trình chăm sóc mắt</span>
               </div>
             </div>
-            <p className="text-slate-400 text-sm mb-3 letter-spacing-wide">
-              Học về chăm sóc mắt qua trò chơi & kiến thức tương tác
+            <p className="text-gray-600 text-sm mb-3 letter-spacing-wide">
+              Nền tảng giáo dục sức khỏe mắt tương tác cho cộng đồng
             </p>
-            <div className="space-y-2 text-sm text-slate-400">
+            <div className="space-y-2 text-sm text-gray-600">
               <p className="flex items-start gap-2">
-                <span className="text-sky-400">📍</span>
+                <span className="text-blue-600">📍</span>
                 <span className="leading-relaxed">{COMPANY_INFO.address}</span>
               </p>
               <p className="flex items-center gap-2">
-                <span className="text-sky-400">📞</span>
-                <a href={`tel:${COMPANY_INFO.phone}`} className="hover:text-sky-400 transition-colors">
+                <span className="text-blue-600">📞</span>
+                <a href={`tel:${COMPANY_INFO.phone}`} className="hover:text-blue-600 transition-colors">
                   {COMPANY_INFO.phone}
                 </a>
               </p>
               <p className="flex items-center gap-2">
-                <span className="text-sky-400">✉️</span>
-                <a href={`mailto:${COMPANY_INFO.email}`} className="hover:text-sky-400 transition-colors">
+                <span className="text-blue-600">✉️</span>
+                <a href={`mailto:${COMPANY_INFO.email}`} className="hover:text-blue-600 transition-colors">
                   {COMPANY_INFO.email}
                 </a>
               </p>
@@ -1083,53 +1083,53 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-white font-bold mb-4 letter-spacing-wide">Tính năng</h3>
-            <ul className="space-y-2 text-slate-400">
-              <li><a href="#" className="hover:text-sky-400 transition-colors">Vista Quizventure</a></li>
-              <li><a href="#" className="hover:text-sky-400 transition-colors">Podcast</a></li>
-              <li><a href="#" className="hover:text-sky-400 transition-colors">Video</a></li>
-              <li><a href="#" className="hover:text-sky-400 transition-colors">Đặt lịch</a></li>
+            <h3 className="text-gray-800 font-bold mb-4 letter-spacing-wide">Tính năng</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Kiểm tra kiến thức</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Nội dung âm thanh</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Video hướng dẫn</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Đặt lịch khám</a></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-white font-bold mb-4 letter-spacing-wide">Hỗ trợ</h3>
-            <ul className="space-y-2 text-slate-400">
-              <li><a href="#" className="hover:text-sky-400 transition-colors">FAQs</a></li>
-              <li><a href="#" className="hover:text-sky-400 transition-colors">Liên hệ</a></li>
-              <li><a href="#" className="hover:text-sky-400 transition-colors">Điều khoản</a></li>
-              <li><a href="#" className="hover:text-sky-400 transition-colors">Bảo mật</a></li>
+            <h3 className="text-gray-800 font-bold mb-4 letter-spacing-wide">Hỗ trợ</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Câu hỏi thường gặp</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Liên hệ</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Điều khoản sử dụng</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Chính sách bảo mật</a></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-white font-bold mb-4 letter-spacing-wide">Kết nối</h3>
+            <h3 className="text-gray-800 font-bold mb-4 letter-spacing-wide">Kết nối</h3>
             <div className="space-y-3">
               <a 
                 href={COMPANY_INFO.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 text-slate-400 hover:text-sky-400 transition-colors group"
+                className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors group"
               >
-                <div className="w-10 h-10 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center text-xl group-hover:bg-sky-500/20 group-hover:border-sky-500/30 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-white border border-blue-100 flex items-center justify-center text-xl group-hover:bg-blue-50 group-hover:border-blue-300 transition-all">
                   📘
                 </div>
                 <span className="text-sm">Facebook</span>
               </a>
               <a 
                 href={`mailto:${COMPANY_INFO.email}`}
-                className="flex items-center gap-3 text-slate-400 hover:text-sky-400 transition-colors group"
+                className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors group"
               >
-                <div className="w-10 h-10 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center text-xl group-hover:bg-sky-500/20 group-hover:border-sky-500/30 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-white border border-blue-100 flex items-center justify-center text-xl group-hover:bg-blue-50 group-hover:border-blue-300 transition-all">
                   ✉️
                 </div>
                 <span className="text-sm">Email</span>
               </a>
               <a 
                 href={`tel:${COMPANY_INFO.phone}`}
-                className="flex items-center gap-3 text-slate-400 hover:text-sky-400 transition-colors group"
+                className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors group"
               >
-                <div className="w-10 h-10 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center text-xl group-hover:bg-sky-500/20 group-hover:border-sky-500/30 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-white border border-blue-100 flex items-center justify-center text-xl group-hover:bg-blue-50 group-hover:border-blue-300 transition-all">
                   📞
                 </div>
                 <span className="text-sm">Hotline</span>
@@ -1138,9 +1138,9 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="pt-8 border-t border-white/10 text-center text-slate-400 letter-spacing-wide">
-          <p>© 2025 VISTA - Patient Journey. Made with 💙 for better eye health.</p>
-          <p className="text-sm mt-2 text-slate-500">
+        <div className="pt-8 border-t border-blue-100 text-center text-gray-600 letter-spacing-wide">
+          <p>© 2025 VISTA - Hành trình chăm sóc mắt. Made with 💙 for better eye health.</p>
+          <p className="text-sm mt-2 text-gray-500">
             {COMPANY_INFO.address}
           </p>
         </div>
@@ -1155,12 +1155,12 @@ function App() {
   const VIDEO_DEMO_URL = 'https://res.cloudinary.com/dvucotc8z/video/upload/v1761540376/20251027_1103_New_Video_simple_compose_01k8hxbwz2e6sreb777hvnabfx_resmmr.mp4'
   
   return (
-    <div className="bg-slate-900 text-white">
+    <div className="bg-white text-gray-900">
       <Header />
       <HeroSection onDemoClick={() => setIsVideoModalOpen(true)} />
       
       {/* Scrolling banner */}
-      <div className="bg-slate-950 border-y border-white/10">
+      <div className="bg-blue-50 border-y border-blue-100">
         <ScrollingText items={['BỀN VỮNG', 'GIẢI PHÁP', 'TÁI TẠO', 'CÔNG NGHỆ']} />
       </div>
       

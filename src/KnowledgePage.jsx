@@ -1,6 +1,6 @@
 // Knowledge Page - VISTA Eye Care Education
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 const LOGO_URL = 'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/567696130_122104196085062997_7245508250228661975_n_nu6jbt.jpg'
@@ -171,9 +171,9 @@ const knowledgeData = {
 }
 
 const difficultyColors = {
-  'Dễ': 'bg-green-500/20 border-green-500/30 text-green-400',
-  'Trung bình': 'bg-yellow-500/20 border-yellow-500/30 text-yellow-400',
-  'Khó': 'bg-red-500/20 border-red-500/30 text-red-400'
+  'Dễ': 'bg-green-50 border-green-200 text-green-700',
+  'Trung bình': 'bg-yellow-50 border-yellow-200 text-yellow-700',
+  'Khó': 'bg-red-50 border-red-200 text-red-700'
 }
 
 const categoryIcons = {
@@ -195,10 +195,10 @@ const KnowledgePage = () => {
     : knowledgeData.lessons.filter(l => l.category === selectedCategory)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50">
       {/* Header */}
-      <motion.header 
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/10"
+      <Motion.header 
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-blue-100 shadow-sm"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
@@ -208,91 +208,91 @@ const KnowledgePage = () => {
             <img 
               src={LOGO_URL}
               alt="VISTA Logo"
-              className="w-12 h-12 rounded-xl object-cover ring-2 ring-sky-400/30 group-hover:ring-sky-400/60 transition-all"
+              className="w-12 h-12 rounded-xl object-cover ring-2 ring-blue-400/30 group-hover:ring-blue-400/60 transition-all"
             />
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-white">VISTA</span>
-              <span className="text-xs text-slate-400">Kiến thức nhãn khoa</span>
+              <span className="text-lg font-bold text-gray-800">VISTA</span>
+              <span className="text-xs text-gray-600">Thư viện tài liệu nhãn khoa</span>
             </div>
           </Link>
           
           <Link 
             to="/"
-            className="px-6 py-2 rounded-xl border-2 border-sky-400 text-sky-400 font-semibold hover:bg-sky-400/10 transition-all"
+            className="px-6 py-2 rounded-xl border-2 border-blue-500 text-blue-600 font-semibold hover:bg-blue-50 transition-all"
           >
             Về trang chủ
           </Link>
         </div>
-      </motion.header>
+      </Motion.header>
 
       {/* Main Content */}
       <div className="pt-24 pb-12 px-6">
         <div className="max-w-7xl mx-auto">
           {/* Title Section */}
-          <motion.div
+          <Motion.div
             className="text-center mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <motion.div 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium mb-6"
+            <Motion.div 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-sm font-medium mb-6"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
             >
               <span>📚</span>
               20 Bài học chuyên sâu
-            </motion.div>
+            </Motion.div>
             
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-500 to-teal-500 bg-clip-text text-transparent letter-spacing-wide">
-                Kiến Thức Nhãn Khoa
+              <span className="bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 bg-clip-text text-transparent letter-spacing-wide">
+                Thư viện tài liệu nhãn khoa
               </span>
             </h1>
             
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed letter-spacing-wide">
-              Khám phá 20 bài học toàn diện về mắt - từ cấu tạo, bệnh lý đến phẫu thuật và chăm sóc
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed letter-spacing-wide">
+              Khám phá 20 bài học toàn diện về nhãn khoa - từ giải phẫu, bệnh lý đến phẫu thuật và chăm sóc
             </p>
-          </motion.div>
+          </Motion.div>
 
           {/* Category Filter */}
-          <motion.div 
+          <Motion.div 
             className="flex flex-wrap justify-center gap-3 mb-12"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            {categories.map((cat, i) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-6 py-3 rounded-xl font-semibold transition-all ${
                   selectedCategory === cat
-                    ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-500/50'
-                    : 'bg-slate-800/50 text-slate-400 border border-white/10 hover:border-sky-500/30 hover:text-sky-400'
+                    ? 'bg-gradient-to-r from-blue-500 to-sky-600 text-white shadow-lg shadow-blue-500/30'
+                    : 'bg-white text-gray-600 border border-blue-200 hover:border-blue-400 hover:text-blue-600'
                 }`}
               >
                 {cat !== 'Tất cả' && categoryIcons[cat]} {cat}
               </button>
             ))}
-          </motion.div>
+          </Motion.div>
 
           {/* Lessons Grid */}
-          <motion.div 
+          <Motion.div 
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
             {filteredLessons.map((lesson, i) => (
-              <motion.div
+              <Motion.div
                 key={lesson.lessonId}
-                className="group relative p-6 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10 hover:border-sky-500/30 cursor-pointer transition-all"
+                className="group relative p-6 rounded-2xl bg-white border border-blue-100 hover:border-blue-300 cursor-pointer transition-all shadow-md hover:shadow-xl"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 + i * 0.05 }}
-                whileHover={{ y: -5, boxShadow: '0 25px 50px -12px rgba(14, 165, 233, 0.3)' }}
+                whileHover={{ y: -5, boxShadow: '0 25px 50px -12px rgba(59, 130, 246, 0.3)' }}
                 onClick={() => setSelectedLesson(lesson)}
               >
                 <div className="flex items-start justify-between mb-4">
@@ -302,42 +302,42 @@ const KnowledgePage = () => {
                   </div>
                 </div>
 
-                <div className="mb-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-medium inline-block">
+                <div className="mb-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium inline-block">
                   {lesson.category}
                 </div>
 
-                <h3 className="text-lg font-bold text-white mb-3 group-hover:text-sky-400 transition-colors">
+                <h3 className="text-lg font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">
                   {lesson.title}
                 </h3>
 
-                <p className="text-slate-400 text-sm leading-relaxed line-clamp-3">
+                <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                   {lesson.summary}
                 </p>
 
-                <div className="mt-4 flex items-center gap-2 text-sky-400 text-sm font-semibold group-hover:gap-3 transition-all">
+                <div className="mt-4 flex items-center gap-2 text-blue-600 text-sm font-semibold group-hover:gap-3 transition-all">
                   Xem chi tiết
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-              </motion.div>
+              </Motion.div>
             ))}
-          </motion.div>
+          </Motion.div>
         </div>
       </div>
 
       {/* Lesson Detail Modal */}
       <AnimatePresence>
         {selectedLesson && (
-          <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm"
+          <Motion.div
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-gray-900/80 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedLesson(null)}
           >
-            <motion.div
-              className="relative max-w-3xl w-full max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl border border-white/10 p-8"
+            <Motion.div
+              className="relative max-w-3xl w-full max-h-[90vh] overflow-y-auto bg-white rounded-3xl border border-blue-100 shadow-2xl p-8"
               initial={{ scale: 0.9, opacity: 0, y: 50 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 50 }}
@@ -345,7 +345,7 @@ const KnowledgePage = () => {
             >
               <button
                 onClick={() => setSelectedLesson(null)}
-                className="absolute top-6 right-6 w-10 h-10 rounded-full bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center transition-all"
+                className="absolute top-6 right-6 w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 flex items-center justify-center transition-all"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -355,7 +355,7 @@ const KnowledgePage = () => {
               <div className="text-5xl mb-4">{categoryIcons[selectedLesson.category]}</div>
 
               <div className="flex items-center gap-3 mb-4">
-                <div className="px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm font-medium">
+                <div className="px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium">
                   {selectedLesson.category}
                 </div>
                 <div className={`px-3 py-1 rounded-full border text-sm font-semibold ${difficultyColors[selectedLesson.difficulty]}`}>
@@ -363,35 +363,35 @@ const KnowledgePage = () => {
                 </div>
               </div>
 
-              <h2 className="text-3xl font-bold text-white mb-4">
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">
                 {selectedLesson.title}
               </h2>
 
-              <p className="text-lg text-sky-300 mb-6 italic">
+              <p className="text-lg text-blue-700 mb-6 italic">
                 {selectedLesson.summary}
               </p>
 
-              <div className="prose prose-invert max-w-none">
+              <div className="prose prose-gray max-w-none">
                 {selectedLesson.content.split('\n').map((paragraph, i) => (
-                  <p key={i} className="text-slate-300 leading-relaxed mb-4">
+                  <p key={i} className="text-gray-700 leading-relaxed mb-4">
                     {paragraph}
                   </p>
                 ))}
               </div>
 
-              <div className="mt-8 pt-6 border-t border-white/10 flex justify-between items-center">
-                <div className="text-sm text-slate-400">
-                  Mã bài học: <span className="text-sky-400 font-mono">{selectedLesson.lessonId}</span>
+              <div className="mt-8 pt-6 border-t border-blue-100 flex justify-between items-center">
+                <div className="text-sm text-gray-600">
+                  Mã bài học: <span className="text-blue-600 font-mono">{selectedLesson.lessonId}</span>
                 </div>
                 <button
                   onClick={() => setSelectedLesson(null)}
-                  className="px-6 py-3 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold transition-all"
+                  className="px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold transition-all shadow-lg shadow-blue-500/30"
                 >
                   Đóng
                 </button>
               </div>
-            </motion.div>
-          </motion.div>
+            </Motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </div>

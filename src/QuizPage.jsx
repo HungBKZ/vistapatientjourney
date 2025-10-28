@@ -1,6 +1,6 @@
 // Quiz Demo Page - VISTA Patient Journey
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 const LOGO_URL = 'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/567696130_122104196085062997_7245508250228661975_n_nu6jbt.jpg'
@@ -295,66 +295,66 @@ const QuizPage = () => {
 
   if (quizComplete) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
-        <motion.div
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50 flex items-center justify-center p-6">
+        <Motion.div
           className="max-w-2xl w-full"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <div className="text-center p-12 rounded-3xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10">
-            <motion.div
+          <div className="text-center p-12 rounded-3xl bg-white border border-blue-100 shadow-2xl">
+            <Motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
               className="text-8xl mb-6"
             >
               {score >= 8 ? '🏆' : score >= 5 ? '🎉' : '💪'}
-            </motion.div>
+            </Motion.div>
             
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Hoàn thành!
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">
+              Hoàn thành bài kiểm tra!
             </h2>
             
-            <div className="text-6xl font-bold bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent mb-6">
+            <div className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent mb-6">
               {score}/{totalQuestions}
             </div>
             
-            <p className="text-slate-300 text-lg mb-8">
-              {score >= 8 ? 'Xuất sắc! Bạn là chuyên gia về mắt!' : 
-               score >= 5 ? 'Tốt lắm! Kiến thức của bạn rất vững.' : 
-               'Hãy thử lại để cải thiện kiến thức nhé!'}
+            <p className="text-gray-600 text-lg mb-8">
+              {score >= 8 ? 'Xuất sắc! Bạn có kiến thức nhãn khoa vững vàng!' : 
+               score >= 5 ? 'Tốt lắm! Kiến thức của bạn ở mức khá.' : 
+               'Hãy thử lại để nâng cao kiến thức nhãn khoa!'}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
+              <Motion.button
                 onClick={handleRestart}
-                className="px-8 py-4 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold shadow-lg shadow-sky-500/50 hover:shadow-sky-500/70 transition-all"
+                className="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-sky-600 text-white font-semibold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Chơi lại
-              </motion.button>
+                Làm lại bài kiểm tra
+              </Motion.button>
               
               <Link to="/">
-                <motion.button
-                  className="px-8 py-4 rounded-xl border-2 border-sky-400 text-sky-400 font-semibold hover:bg-sky-400/10 transition-all w-full"
+                <Motion.button
+                  className="px-8 py-4 rounded-xl border-2 border-blue-500 text-blue-600 font-semibold hover:bg-blue-50 transition-all w-full"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   Về trang chủ
-                </motion.button>
+                </Motion.button>
               </Link>
             </div>
           </div>
-        </motion.div>
+        </Motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50 p-6">
       {/* Header */}
-      <motion.div 
+      <Motion.div 
         className="max-w-4xl mx-auto mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -364,59 +364,59 @@ const QuizPage = () => {
             <img 
               src={LOGO_URL}
               alt="VISTA Logo"
-              className="w-12 h-12 rounded-xl object-cover ring-2 ring-sky-400/30 group-hover:ring-sky-400/60 transition-all"
+              className="w-12 h-12 rounded-xl object-cover ring-2 ring-blue-400/30 group-hover:ring-blue-400/60 transition-all"
             />
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-white">VISTA</span>
-              <span className="text-xs text-slate-400">Patient Journey</span>
+              <span className="text-lg font-bold text-gray-800">VISTA</span>
+              <span className="text-xs text-gray-600">Hành trình chăm sóc mắt</span>
             </div>
           </Link>
           
           <div className="text-right">
-            <div className="text-sky-400 font-bold text-lg">
+            <div className="text-blue-600 font-bold text-lg">
               Điểm: {score}/{totalQuestions}
             </div>
-            <div className="text-slate-400 text-sm">
-              Demo Version
+            <div className="text-gray-600 text-sm">
+              Phiên bản thử nghiệm
             </div>
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="relative h-3 bg-slate-700/50 rounded-full overflow-hidden">
-          <motion.div
-            className="absolute inset-y-0 left-0 bg-gradient-to-r from-sky-500 to-blue-600"
+        <div className="relative h-3 bg-blue-100 rounded-full overflow-hidden">
+          <Motion.div
+            className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-sky-600"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.5 }}
           />
         </div>
-        <div className="flex justify-between mt-2 text-sm text-slate-400">
+        <div className="flex justify-between mt-2 text-sm text-gray-600">
           <span>Câu {currentQuestion + 1}/{totalQuestions}</span>
           <span>{Math.round(progress)}%</span>
         </div>
 
         {/* Dev Notice */}
-        <motion.div
-          className="mt-4 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-sm text-center"
+        <Motion.div
+          className="mt-4 p-3 rounded-xl bg-yellow-50 border border-yellow-200 text-yellow-700 text-sm text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          ⚠️ Trang demo - Đang trong quá trình phát triển (kết quả chưa được lưu)
-        </motion.div>
-      </motion.div>
+          ⚠️ Trang thử nghiệm - Đang phát triển (kết quả chưa được lưu)
+        </Motion.div>
+      </Motion.div>
 
       {/* Question Card */}
-      <motion.div
+      <Motion.div
         className="max-w-4xl mx-auto"
         key={currentQuestion}
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -100 }}
       >
-        <div className="p-8 rounded-3xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10">
+        <div className="p-8 rounded-3xl bg-white border border-blue-100 shadow-xl">
           {/* Question */}
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 leading-relaxed">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 leading-relaxed">
             {question.question}
           </h2>
 
@@ -424,21 +424,21 @@ const QuizPage = () => {
           <div className="mb-6">
             <button
               onClick={() => setShowHint(!showHint)}
-              className="text-sm text-sky-400 hover:text-sky-300 transition-colors flex items-center gap-2"
+              className="text-sm text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2 font-medium"
             >
               <span>💡</span>
               {showHint ? 'Ẩn gợi ý' : 'Hiển thị gợi ý'}
             </button>
             <AnimatePresence>
               {showHint && (
-                <motion.div
-                  className="mt-3 p-4 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-300 text-sm"
+                <Motion.div
+                  className="mt-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                 >
                   {question.hint}
-                </motion.div>
+                </Motion.div>
               )}
             </AnimatePresence>
           </div>
@@ -452,17 +452,17 @@ const QuizPage = () => {
               const showWrong = showResult && isSelected && !isCorrect
 
               return (
-                <motion.button
+                <Motion.button
                   key={index}
                   onClick={() => handleAnswerClick(index)}
                   disabled={selectedAnswer !== null}
                   className={`
                     w-full p-6 rounded-xl text-left transition-all duration-300
                     ${selectedAnswer === null ? 'hover:scale-[1.02] cursor-pointer' : 'cursor-not-allowed'}
-                    ${showCorrect ? 'bg-green-500/20 border-2 border-green-500' : ''}
-                    ${showWrong ? 'bg-red-500/20 border-2 border-red-500' : ''}
-                    ${!showResult && !isSelected ? 'bg-slate-700/50 border border-white/10 hover:bg-slate-700/70' : ''}
-                    ${!showResult && isSelected ? 'bg-sky-500/20 border-2 border-sky-500' : ''}
+                    ${showCorrect ? 'bg-green-50 border-2 border-green-500' : ''}
+                    ${showWrong ? 'bg-red-50 border-2 border-red-500' : ''}
+                    ${!showResult && !isSelected ? 'bg-blue-50/50 border border-blue-200 hover:bg-blue-50 hover:border-blue-300' : ''}
+                    ${!showResult && isSelected ? 'bg-blue-100 border-2 border-blue-500' : ''}
                   `}
                   whileHover={selectedAnswer === null ? { x: 10 } : {}}
                   whileTap={selectedAnswer === null ? { scale: 0.98 } : {}}
@@ -472,39 +472,39 @@ const QuizPage = () => {
                       flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm
                       ${showCorrect ? 'bg-green-500 text-white' : ''}
                       ${showWrong ? 'bg-red-500 text-white' : ''}
-                      ${!showResult ? 'bg-slate-600 text-slate-300' : ''}
+                      ${!showResult ? 'bg-blue-200 text-blue-700' : ''}
                     `}>
                       {showCorrect ? '✓' : showWrong ? '✗' : String.fromCharCode(65 + index)}
                     </div>
                     
                     <div className="flex-1">
                       <div className={`font-semibold mb-2 ${
-                        showCorrect ? 'text-green-400' : 
-                        showWrong ? 'text-red-400' : 
-                        'text-white'
+                        showCorrect ? 'text-green-700' : 
+                        showWrong ? 'text-red-700' : 
+                        'text-gray-800'
                       }`}>
                         {option.text}
                       </div>
                       
                       <AnimatePresence>
                         {showResult && (isSelected || isCorrect) && (
-                          <motion.div
+                          <Motion.div
                             className={`text-sm mt-2 ${
-                              showCorrect ? 'text-green-300' : 
-                              showWrong ? 'text-red-300' : 
-                              'text-slate-400'
+                              showCorrect ? 'text-green-600' : 
+                              showWrong ? 'text-red-600' : 
+                              'text-gray-600'
                             }`}
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
                           >
                             {option.rationale}
-                          </motion.div>
+                          </Motion.div>
                         )}
                       </AnimatePresence>
                     </div>
                   </div>
-                </motion.button>
+                </Motion.button>
               )
             })}
           </div>
@@ -512,24 +512,24 @@ const QuizPage = () => {
           {/* Next Button */}
           <AnimatePresence>
             {showResult && (
-              <motion.div
+              <Motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex justify-end"
               >
-                <motion.button
+                <Motion.button
                   onClick={handleNext}
-                  className="px-8 py-4 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold shadow-lg shadow-sky-500/50 hover:shadow-sky-500/70 transition-all"
+                  className="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-sky-600 text-white font-semibold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   {currentQuestion < totalQuestions - 1 ? 'Câu tiếp theo →' : 'Xem kết quả'}
-                </motion.button>
-              </motion.div>
+                </Motion.button>
+              </Motion.div>
             )}
           </AnimatePresence>
         </div>
-      </motion.div>
+      </Motion.div>
     </div>
   )
 }

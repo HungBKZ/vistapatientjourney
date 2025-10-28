@@ -1,15 +1,18 @@
 // Studio 360° Page - VISTA Patient Journey
 import { useState, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion as Motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 const LOGO_URL = 'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/567696130_122104196085062997_7245508250228661975_n_nu6jbt.jpg'
-// High quality 360° Video
+// High quality 360° Video with interactive controls
 const STUDIO_360_VIDEO = 'https://res.cloudinary.com/dvucotc8z/video/upload/v1761413824/20251026_0029_New_Video_simple_compose_01k8e6ng8pej0rr0ne0d140866_eftwd1.mp4'
 
 const Studio360Page = () => {
   const [showControls, setShowControls] = useState(true)
   const [zoom, setZoom] = useState(1)
+  const [pan, setPan] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [isPlaying, setIsPlaying] = useState(true)
   const videoRef = useRef(null)
 
@@ -21,8 +24,8 @@ const Studio360Page = () => {
     },
     {
       icon: '👨‍⚕️',
-      title: 'Tương Tác Thực Tế',
-      description: 'Quan sát quy trình phẫu thuật từ mọi góc độ'
+      title: 'Tương Tác Chuột',
+      description: 'Zoom bằng chuột cuộn, kéo để di chuyển, double-click để reset'
     },
     {
       icon: '🎓',
@@ -46,8 +49,41 @@ const Studio360Page = () => {
 
   const handleReset = () => {
     setZoom(1)
+    setPan({ x: 0, y: 0 })
   }
 
+  // Mouse interaction handlers for Video
+  const handleWheel = (e) => {
+    e.preventDefault()
+    const delta = e.deltaY * -0.001
+    setZoom(prev => Math.min(Math.max(prev + delta, 0.5), 2))
+  }
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true)
+    setDragStart({
+      x: e.clientX - pan.x,
+      y: e.clientY - pan.y
+    })
+  }
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return
+    setPan({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
+    })
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  const handleDoubleClick = () => {
+    handleReset()
+  }
+
+  // Video play/pause handler
   const togglePlay = () => {
     if (videoRef.current) {
       if (isPlaying) {
@@ -60,10 +96,10 @@ const Studio360Page = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50">
       {/* Header */}
-      <motion.header 
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/10"
+      <Motion.header 
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-blue-100 shadow-lg shadow-blue-500/5"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
@@ -73,82 +109,82 @@ const Studio360Page = () => {
             <img 
               src={LOGO_URL}
               alt="VISTA Logo"
-              className="w-12 h-12 rounded-xl object-cover ring-2 ring-sky-400/30 group-hover:ring-sky-400/60 transition-all"
+              className="w-12 h-12 rounded-xl object-cover ring-2 ring-blue-400/30 group-hover:ring-blue-400/60 transition-all"
             />
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-white">VISTA</span>
-              <span className="text-xs text-slate-400">Patient Journey</span>
+              <span className="text-lg font-bold text-gray-800">VISTA</span>
+              <span className="text-xs text-gray-600">Hành trình chăm sóc mắt</span>
             </div>
           </Link>
           
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm">
+            <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-100 border border-blue-200 text-blue-700 text-sm">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
               </span>
               360° Interactive
             </div>
             <Link 
               to="/"
-              className="px-6 py-2 rounded-xl border-2 border-sky-400 text-sky-400 font-semibold hover:bg-sky-400/10 transition-all"
+              className="px-6 py-2 rounded-xl border-2 border-blue-500 text-blue-600 font-semibold hover:bg-blue-50 transition-all"
             >
               Về trang chủ
             </Link>
           </div>
         </div>
-      </motion.header>
+      </Motion.header>
 
       {/* Main Content */}
       <div className="pt-24 pb-12 px-6">
         <div className="max-w-7xl mx-auto">
           {/* Title Section */}
-          <motion.div
+          <Motion.div
             className="text-center mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <motion.div 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-6"
+            <Motion.div 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-sm font-medium mb-6"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
             >
               <span>🎬</span>
               Trải nghiệm 360°
-            </motion.div>
+            </Motion.div>
             
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent letter-spacing-wide">
+              <span className="bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 bg-clip-text text-transparent letter-spacing-wide">
                 Studio 360° Phòng Mổ Ảo
               </span>
             </h1>
             
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed letter-spacing-wide">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed letter-spacing-wide">
               Khám phá không gian phẫu thuật nhãn khoa với công nghệ 3D 360° tương tác
             </p>
-          </motion.div>
+          </Motion.div>
 
           {/* 360° Viewer */}
-          <motion.div
+          <Motion.div
             className="mb-12"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="relative rounded-3xl overflow-hidden bg-slate-800/50 border border-white/10 p-4">
+            <div className="relative rounded-3xl overflow-hidden bg-white border border-blue-100 p-4 shadow-xl shadow-blue-500/10">
               {/* Controls Overlay */}
               {showControls && (
-                <motion.div 
-                  className="absolute top-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4 px-6 py-3 rounded-full bg-slate-900/90 backdrop-blur-xl border border-white/10"
+                <Motion.div 
+                  className="absolute top-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4 px-6 py-3 rounded-full bg-white/95 backdrop-blur-xl border border-blue-200 shadow-lg"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
                 >
                   <button
                     onClick={handleZoomOut}
-                    className="w-10 h-10 rounded-full bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 flex items-center justify-center transition-all"
                     title="Zoom Out"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,13 +192,13 @@ const Studio360Page = () => {
                     </svg>
                   </button>
                   
-                  <div className="text-white font-semibold min-w-[80px] text-center">
+                  <div className="text-gray-800 font-semibold min-w-[80px] text-center">
                     {Math.round(zoom * 100)}%
                   </div>
                   
                   <button
                     onClick={handleZoomIn}
-                    className="w-10 h-10 rounded-full bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 flex items-center justify-center transition-all"
                     title="Zoom In"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,167 +206,178 @@ const Studio360Page = () => {
                     </svg>
                   </button>
                   
-                  <div className="w-px h-8 bg-white/20" />
+                  <div className="w-px h-8 bg-blue-200" />
                   
                   <button
                     onClick={handleReset}
-                    className="px-4 py-2 rounded-full bg-sky-500 hover:bg-sky-600 text-white font-semibold transition-all"
+                    className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-sky-600 hover:from-blue-600 hover:to-sky-700 text-white font-semibold transition-all shadow-lg shadow-blue-500/30"
                   >
                     Reset
                   </button>
                   
                   <button
                     onClick={() => setShowControls(false)}
-                    className="w-10 h-10 rounded-full bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 flex items-center justify-center transition-all"
                     title="Hide Controls"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
-                </motion.div>
+                </Motion.div>
               )}
 
               {/* Show Controls Button (when hidden) */}
               {!showControls && (
                 <button
                   onClick={() => setShowControls(true)}
-                  className="absolute top-8 left-1/2 -translate-x-1/2 z-10 px-6 py-3 rounded-full bg-slate-900/90 backdrop-blur-xl border border-white/10 text-white font-semibold hover:bg-slate-800/90 transition-all"
+                  className="absolute top-8 left-1/2 -translate-x-1/2 z-10 px-6 py-3 rounded-full bg-white/95 backdrop-blur-xl border border-blue-200 text-gray-800 font-semibold hover:bg-blue-50 transition-all shadow-lg"
                 >
                   Hiển thị điều khiển
                 </button>
               )}
 
-              {/* 360° Video Player */}
-              <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-slate-900/50">
-                <motion.div
+              {/* 360° Video Player with Interactive Controls */}
+              <div 
+                className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100"
+                style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+                onWheel={handleWheel}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onDoubleClick={handleDoubleClick}
+              >
+                <div
                   className="absolute inset-0 flex items-center justify-center"
-                  animate={{ scale: zoom }}
-                  transition={{ type: "spring", damping: 20 }}
+                  style={{
+                    transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
+                    transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+                  }}
                 >
                   <video 
                     ref={videoRef}
                     src={STUDIO_360_VIDEO}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-contain select-none"
                     autoPlay
                     loop
                     muted
                     playsInline
                   />
-                </motion.div>
+                </div>
 
                 {/* Play/Pause Button */}
                 <button
                   onClick={togglePlay}
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-slate-900/90 backdrop-blur-sm border-2 border-white/20 hover:border-sky-400/50 text-white flex items-center justify-center transition-all hover:scale-110 group"
+                  className="absolute bottom-4 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-white/90 backdrop-blur-sm border-2 border-blue-200 hover:border-blue-400 text-blue-700 flex items-center justify-center transition-all hover:scale-110 group shadow-lg"
                 >
                   {isPlaying ? (
-                    <svg className="w-8 h-8 group-hover:text-sky-400 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 h-8 group-hover:text-blue-600 transition-colors" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
                     </svg>
                   ) : (
-                    <svg className="w-8 h-8 ml-1 group-hover:text-sky-400 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 h-8 ml-1 group-hover:text-blue-600 transition-colors" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z"/>
                     </svg>
                   )}
                 </button>
 
-                {/* Rotation Indicator */}
-                <div className="absolute bottom-4 left-4 flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/80 backdrop-blur-sm border border-white/10 text-white text-sm">
-                  <motion.div
+                {/* Interactive Hint */}
+                <div className="absolute bottom-4 left-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm border border-blue-200 text-gray-700 text-sm shadow-lg">
+                  <Motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                   >
                     🔄
-                  </motion.div>
-                  <span>360° View</span>
+                  </Motion.div>
+                  <span>Cuộn để zoom, kéo để di chuyển</span>
                 </div>
 
                 {/* Corner Labels */}
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-purple-500/20 backdrop-blur-sm border border-purple-500/30 text-purple-300 text-xs font-semibold">
+                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-blue-100 backdrop-blur-sm border border-blue-200 text-blue-700 text-xs font-semibold">
                   3D View
                 </div>
                 
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-sky-500/20 backdrop-blur-sm border border-sky-500/30 text-sky-300 text-xs font-semibold">
-                  360° Rotation
+                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-sky-100 backdrop-blur-sm border border-sky-200 text-sky-700 text-xs font-semibold">
+                  360° Interactive
                 </div>
               </div>
 
               {/* Info Banner */}
-              <motion.div 
-                className="mt-4 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-sm text-center"
+              <Motion.div 
+                className="mt-4 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                💡 <strong>Tip:</strong> Video HD 360° - Sử dụng Zoom để xem chi tiết, nhấn nút Play/Pause để điều khiển
-              </motion.div>
+                💡 <strong>Hướng dẫn:</strong> Cuộn chuột để zoom, kéo để di chuyển, double-click để reset, nhấn Play/Pause để điều khiển video
+              </Motion.div>
             </div>
-          </motion.div>
+          </Motion.div>
 
           {/* Features Grid */}
-          <motion.div
+          <Motion.div
             className="mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
             <h2 className="text-3xl font-bold text-center mb-8">
-              <span className="bg-gradient-to-r from-sky-400 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent">
                 Tính Năng Nổi Bật
               </span>
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {features.map((feature, i) => (
-                <motion.div
+                <Motion.div
                   key={i}
-                  className="p-6 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-700/90 backdrop-blur-xl border border-white/10 hover:border-sky-500/30 transition-all group"
+                  className="p-6 rounded-2xl bg-white backdrop-blur-xl border border-blue-100 hover:border-blue-300 transition-all group shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 + i * 0.1 }}
-                  whileHover={{ y: -5, boxShadow: '0 25px 50px -12px rgba(14, 165, 233, 0.3)' }}
+                  whileHover={{ y: -5 }}
                 >
                   <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2 letter-spacing-wide">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2 letter-spacing-wide">
                     {feature.title}
                   </h3>
-                  <p className="text-slate-400 text-sm letter-spacing-wide">
+                  <p className="text-gray-600 text-sm letter-spacing-wide">
                     {feature.description}
                   </p>
-                </motion.div>
+                </Motion.div>
               ))}
             </div>
-          </motion.div>
+          </Motion.div>
 
           {/* Coming Soon Section */}
-          <motion.div
-            className="text-center p-12 rounded-3xl bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-500/20"
+          <Motion.div
+            className="text-center p-12 rounded-3xl bg-gradient-to-br from-blue-50 to-sky-50 border border-blue-200 shadow-xl shadow-blue-500/10"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1 }}
           >
             <div className="text-6xl mb-6">🚀</div>
-            <h3 className="text-3xl font-bold text-white mb-4">
+            <h3 className="text-3xl font-bold text-gray-800 mb-4">
               Sắp Ra Mắt
             </h3>
-            <p className="text-slate-300 text-lg max-w-2xl mx-auto mb-6">
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
               Phiên bản VR tương tác hoàn toàn, cho phép bạn di chuyển tự do trong không gian 3D
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <div className="px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-sm">
+              <div className="px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-sm">
                 🥽 VR Headset Support
               </div>
-              <div className="px-4 py-2 rounded-full bg-pink-500/20 border border-pink-500/30 text-pink-300 text-sm">
+              <div className="px-4 py-2 rounded-full bg-sky-100 border border-sky-200 text-sky-700 text-sm">
                 🎮 Interactive Controls
               </div>
-              <div className="px-4 py-2 rounded-full bg-sky-500/20 border border-sky-500/30 text-sky-300 text-sm">
+              <div className="px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-sm">
                 📱 Mobile AR
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
         </div>
       </div>
     </div>
