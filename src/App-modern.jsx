@@ -595,7 +595,7 @@ const EyeAnimationsSection = () => {
                   Giải phẫu nhãn cầu
                 </h3>
                 <p className="text-gray-600 text-sm letter-spacing-wide">
-                  Tìm hiểu các cấu trúc giải phẫu của hệ thống thị giác
+                  Các cấu trúc giải phẫu của hệ thống thị giác
                 </p>
               </div>
             </div>
