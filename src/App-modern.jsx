@@ -337,13 +337,113 @@ const HeroSection = ({ onDemoClick }) => {
             Nâng cao kiến thức nhãn khoa qua <span className="text-blue-600 font-semibold">bài kiểm tra tương tác</span>, nội dung đa phương tiện, tích lũy điểm thưởng và đặt lịch tái khám định kỳ — tất cả trong một nền tảng tích hợp.
           </p>
           
-          <div className="flex flex-nowrap justify-center items-center gap-4 mb-16">
-            <GlowButton variant="primary" onClick={onDemoClick} className="text-lg px-8 py-4 whitespace-nowrap">
-              Xem Demo
-            </GlowButton>
-            <GlowButton variant="outline" href="#features" className="text-lg px-8 py-4 whitespace-nowrap">
-              Tìm hiểu thêm
-            </GlowButton>
+          <div className="flex justify-center items-center mb-16">
+            <div className="relative">
+              {/* Outer glow rings */}
+              <Motion.div
+                className="absolute inset-0 rounded-full"
+                animate={{
+                  boxShadow: [
+                    '0 0 0 0 rgba(59, 130, 246, 0.7)',
+                    '0 0 0 30px rgba(59, 130, 246, 0)',
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeOut"
+                }}
+              />
+              
+              {/* Middle ring */}
+              <Motion.div
+                className="absolute -inset-4 rounded-full bg-gradient-to-r from-blue-400 via-sky-400 to-blue-500 opacity-20 blur-xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.2, 0.4, 0.2],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              
+              {/* Main button */}
+              <Motion.button
+                onClick={onDemoClick}
+                className="relative group w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-sky-500 to-blue-600 hover:from-blue-600 hover:via-sky-600 hover:to-blue-700 shadow-2xl shadow-blue-500/60 flex items-center justify-center transition-all duration-500 overflow-hidden"
+                whileHover={{ scale: 1.15, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.3, rotate: -180 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ 
+                  delay: 0.5, 
+                  type: "spring", 
+                  stiffness: 300,
+                  damping: 15
+                }}
+              >
+                {/* Animated gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                
+                {/* Inner glow */}
+                <div className="absolute inset-2 rounded-full bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                {/* Play icon with animation */}
+                <Motion.svg 
+                  className="w-10 h-10 text-white relative z-10 drop-shadow-lg" 
+                  fill="currentColor" 
+                  viewBox="0 0 24 24"
+                  animate={{
+                    x: [0, 2, 0],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <path d="M8 5v14l11-7z"/>
+                </Motion.svg>
+                
+                {/* Sparkle effects */}
+                <Motion.div
+                  className="absolute top-2 right-2 w-2 h-2 bg-white rounded-full"
+                  animate={{
+                    scale: [0, 1, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: 0.5,
+                  }}
+                />
+                <Motion.div
+                  className="absolute bottom-3 left-3 w-1.5 h-1.5 bg-white rounded-full"
+                  animate={{
+                    scale: [0, 1, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: 1,
+                  }}
+                />
+              </Motion.button>
+              
+              {/* Tooltip with enhanced style */}
+              <Motion.div 
+                className="absolute -bottom-14 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full bg-gradient-to-r from-gray-800 to-gray-900 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap shadow-xl border border-white/10"
+                initial={{ y: -10 }}
+                whileHover={{ y: 0 }}
+              >
+                <span className="relative z-10">🎬 Xem Demo Video</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-sky-500/20 rounded-full blur" />
+              </Motion.div>
+            </div>
           </div>
           
           {/* 3D Eye Animations */}
@@ -353,7 +453,7 @@ const HeroSection = ({ onDemoClick }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8 }}
           >
-            <Motion.div
+            {/* <Motion.div
               className="relative group"
               whileHover={{ scale: 1.1, rotate: 5 }}
             >
@@ -377,7 +477,7 @@ const HeroSection = ({ onDemoClick }) => {
                 className="relative w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-2xl"
                 loading="lazy"
               />
-            </Motion.div>
+            </Motion.div> */}
           </Motion.div>
         </Motion.div>
         
@@ -588,6 +688,25 @@ const BentoGridSection = () => {
       link: '/studio360'
     },
     {
+      title: 'Mô phỏng thị giác bệnh lý',
+      description: 'Trải nghiệm trực quan các bệnh lý mắt (cận thị, viễn thị, võng mạc ĐTĐ, tăng nhãn áp...) qua camera với hiệu ứng filter thực tế',
+      icon: '👁️',
+      gradient: 'from-cyan-500/30 via-blue-500/20 to-indigo-500/30',
+      wrapperClass: 'lg:col-span-2 min-h-[220px]',
+      highlights: ['AR Camera', 'Filter thực tế'],
+      cta: 'Trải nghiệm ngay',
+      externalLink: 'https://vista-camera-eyes.vercel.app'
+    },
+    {
+      title: 'Đặt lịch khám',
+      description: 'Đặt lịch tái khám định kỳ, nhận nhắc nhở tự động và quản lý lịch sử khám bệnh',
+      icon: '📅',
+      gradient: 'from-green-500/30 via-emerald-500/20 to-teal-500/30',
+      wrapperClass: 'lg:col-span-2 min-h-[220px]',
+      highlights: ['Nhắc nhở tự động', 'Quản lý lịch sử'],
+      cta: 'Đặt lịch ngay'
+    },
+    {
       title: 'Hệ thống điểm thưởng',
       description: 'Tích lũy điểm qua hoạt động học tập để đổi phần thưởng y tế',
       icon: '🎁',
@@ -649,8 +768,10 @@ const BentoGridSection = () => {
         {/* Enhanced Bento Grid - Responsive layout with highlighted quiz */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[220px] lg:auto-rows-[240px]">
           {features.map((feature, i) => {
-            const CardWrapper = feature.link ? Link : 'div'
-            const cardProps = feature.link ? { to: feature.link } : {}
+            const CardWrapper = feature.externalLink ? 'a' : (feature.link ? Link : 'div')
+            const cardProps = feature.externalLink 
+              ? { href: feature.externalLink, target: '_blank', rel: 'noopener noreferrer' }
+              : (feature.link ? { to: feature.link } : {})
             const isEmphasis = feature.emphasis
             const ctaLabel = feature.cta || 'Khám phá'
 

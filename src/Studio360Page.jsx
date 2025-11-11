@@ -1,99 +1,35 @@
 // Studio 360° Page - VISTA Patient Journey
-import { useState, useRef } from 'react'
 import { motion as Motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 const LOGO_URL = 'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/567696130_122104196085062997_7245508250228661975_n_nu6jbt.jpg'
-// High quality 360° Video with interactive controls
-const STUDIO_360_VIDEO = 'https://res.cloudinary.com/dvucotc8z/video/upload/v1761413824/20251026_0029_New_Video_simple_compose_01k8e6ng8pej0rr0ne0d140866_eftwd1.mp4'
+// Skybox 360° Interactive Viewer from Blockade Labs
+const SKYBOX_360_URL = 'https://skybox.blockadelabs.com/e/a4a35bb78bf856af69b9beccb1625023'
 
 const Studio360Page = () => {
-  const [showControls, setShowControls] = useState(true)
-  const [zoom, setZoom] = useState(1)
-  const [pan, setPan] = useState({ x: 0, y: 0 })
-  const [isDragging, setIsDragging] = useState(false)
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
-  const [isPlaying, setIsPlaying] = useState(true)
-  const videoRef = useRef(null)
 
   const features = [
     {
       icon: '🏥',
-      title: 'Phòng Mổ Ảo',
-      description: 'Trải nghiệm phòng mổ nhãn khoa chân thực với công nghệ 360°'
+      title: 'Phòng Mổ Ảo 360°',
+      description: 'Trải nghiệm phòng mổ nhãn khoa chân thực với công nghệ Skybox 360°'
     },
     {
       icon: '👨‍⚕️',
-      title: 'Tương Tác Chuột',
-      description: 'Zoom bằng chuột cuộn, kéo để di chuyển, double-click để reset'
+      title: 'Tương Tác Thực Tế',
+      description: 'Kéo để xoay góc nhìn 360°, khám phá toàn bộ không gian phòng mổ'
     },
     {
       icon: '🎓',
       title: 'Học Tập Tương Tác',
-      description: 'Hiểu rõ từng bước trong ca phẫu thuật mắt'
+      description: 'Quan sát chi tiết thiết bị y tế và không gian phẫu thuật'
     },
     {
       icon: '🔍',
-      title: 'Chi Tiết 3D',
-      description: 'Zoom vào từng thiết bị y tế và dụng cụ phẫu thuật'
+      title: 'Chất Lượng Cao',
+      description: 'Hình ảnh 360° sắc nét, trải nghiệm như đang ở thực tế'
     }
   ]
-
-  const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev + 0.2, 2))
-  }
-
-  const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev - 0.2, 0.5))
-  }
-
-  const handleReset = () => {
-    setZoom(1)
-    setPan({ x: 0, y: 0 })
-  }
-
-  // Mouse interaction handlers for Video
-  const handleWheel = (e) => {
-    e.preventDefault()
-    const delta = e.deltaY * -0.001
-    setZoom(prev => Math.min(Math.max(prev + delta, 0.5), 2))
-  }
-
-  const handleMouseDown = (e) => {
-    setIsDragging(true)
-    setDragStart({
-      x: e.clientX - pan.x,
-      y: e.clientY - pan.y
-    })
-  }
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return
-    setPan({
-      x: e.clientX - dragStart.x,
-      y: e.clientY - dragStart.y
-    })
-  }
-
-  const handleMouseUp = () => {
-    setIsDragging(false)
-  }
-
-  const handleDoubleClick = () => {
-    handleReset()
-  }
-
-  // Video play/pause handler
-  const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause()
-      } else {
-        videoRef.current.play()
-      }
-      setIsPlaying(!isPlaying)
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50">
@@ -174,143 +110,39 @@ const Studio360Page = () => {
             transition={{ delay: 0.4 }}
           >
             <div className="relative rounded-3xl overflow-hidden bg-white border border-blue-100 p-4 shadow-xl shadow-blue-500/10">
-              {/* Controls Overlay */}
-              {showControls && (
-                <Motion.div 
-                  className="absolute top-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4 px-6 py-3 rounded-full bg-white/95 backdrop-blur-xl border border-blue-200 shadow-lg"
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                >
-                  <button
-                    onClick={handleZoomOut}
-                    className="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 flex items-center justify-center transition-all"
-                    title="Zoom Out"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
-                    </svg>
-                  </button>
-                  
-                  <div className="text-gray-800 font-semibold min-w-[80px] text-center">
-                    {Math.round(zoom * 100)}%
-                  </div>
-                  
-                  <button
-                    onClick={handleZoomIn}
-                    className="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 flex items-center justify-center transition-all"
-                    title="Zoom In"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                    </svg>
-                  </button>
-                  
-                  <div className="w-px h-8 bg-blue-200" />
-                  
-                  <button
-                    onClick={handleReset}
-                    className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-sky-600 hover:from-blue-600 hover:to-sky-700 text-white font-semibold transition-all shadow-lg shadow-blue-500/30"
-                  >
-                    Reset
-                  </button>
-                  
-                  <button
-                    onClick={() => setShowControls(false)}
-                    className="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 flex items-center justify-center transition-all"
-                    title="Hide Controls"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </Motion.div>
-              )}
-
-              {/* Show Controls Button (when hidden) */}
-              {!showControls && (
-                <button
-                  onClick={() => setShowControls(true)}
-                  className="absolute top-8 left-1/2 -translate-x-1/2 z-10 px-6 py-3 rounded-full bg-white/95 backdrop-blur-xl border border-blue-200 text-gray-800 font-semibold hover:bg-blue-50 transition-all shadow-lg"
-                >
-                  Hiển thị điều khiển
-                </button>
-              )}
-
-              {/* 360° Video Player with Interactive Controls */}
-              <div 
-                className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100"
-                style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-                onWheel={handleWheel}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-                onDoubleClick={handleDoubleClick}
-              >
-                <div
-                  className="absolute inset-0 flex items-center justify-center"
-                  style={{
-                    transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-                    transition: isDragging ? 'none' : 'transform 0.3s ease-out'
-                  }}
-                >
-                  <video 
-                    ref={videoRef}
-                    src={STUDIO_360_VIDEO}
-                    className="w-full h-full object-contain select-none"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                  />
-                </div>
-
-                {/* Play/Pause Button */}
-                <button
-                  onClick={togglePlay}
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-white/90 backdrop-blur-sm border-2 border-blue-200 hover:border-blue-400 text-blue-700 flex items-center justify-center transition-all hover:scale-110 group shadow-lg"
-                >
-                  {isPlaying ? (
-                    <svg className="w-8 h-8 group-hover:text-blue-600 transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-                    </svg>
-                  ) : (
-                    <svg className="w-8 h-8 ml-1 group-hover:text-blue-600 transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  )}
-                </button>
-
-                {/* Interactive Hint */}
-                <div className="absolute bottom-4 left-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm border border-blue-200 text-gray-700 text-sm shadow-lg">
-                  <Motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  >
-                    🔄
-                  </Motion.div>
-                  <span>Cuộn để zoom, kéo để di chuyển</span>
-                </div>
-
+              {/* Skybox 360° Interactive Viewer */}
+              <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100 shadow-2xl">
+                <iframe 
+                  src={SKYBOX_360_URL}
+                  className="w-full h-full"
+                  style={{ border: 0 }}
+                  allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer"
+                  title="Phòng mổ 360° - Vista Patient Journey"
+                />
+                
                 {/* Corner Labels */}
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-blue-100 backdrop-blur-sm border border-blue-200 text-blue-700 text-xs font-semibold">
-                  3D View
+                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-blue-100 backdrop-blur-sm border border-blue-200 text-blue-700 text-xs font-semibold shadow-lg">
+                  🎬 Skybox 360°
                 </div>
                 
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-sky-100 backdrop-blur-sm border border-sky-200 text-sky-700 text-xs font-semibold">
-                  360° Interactive
+                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-sky-100 backdrop-blur-sm border border-sky-200 text-sky-700 text-xs font-semibold shadow-lg">
+                  🔄 Interactive VR
                 </div>
               </div>
 
               {/* Info Banner */}
               <Motion.div 
-                className="mt-4 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm text-center"
+                className="mt-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-200 text-blue-700 text-sm text-center shadow-lg"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                💡 <strong>Hướng dẫn:</strong> Cuộn chuột để zoom, kéo để di chuyển, double-click để reset, nhấn Play/Pause để điều khiển video
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-lg">🎮</span>
+                  <div>
+                    <strong>Hướng dẫn tương tác:</strong> Kéo chuột để xoay 360°, cuộn để zoom, click vào góc để fullscreen
+                  </div>
+                </div>
               </Motion.div>
             </div>
           </Motion.div>

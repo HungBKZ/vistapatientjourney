@@ -1,9 +1,24 @@
-// Knowledge Page - VISTA Eye Care Education
+// Knowledge Page - VISTA Eye Care Education (Duolingo Style)
 import { useState } from 'react'
 import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 const LOGO_URL = 'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/567696130_122104196085062997_7245508250228661975_n_nu6jbt.jpg'
+
+// Progress data (stored in localStorage)
+const getProgress = () => {
+  const saved = localStorage.getItem('vistaLearningProgress')
+  return saved ? JSON.parse(saved) : {
+    completedLessons: [],
+    currentStreak: 0,
+    totalXP: 0,
+    lastCompletedDate: null
+  }
+}
+
+const saveProgress = (progress) => {
+  localStorage.setItem('vistaLearningProgress', JSON.stringify(progress))
+}
 
 const knowledgeData = {
   "lessons": [
@@ -170,158 +185,230 @@ const knowledgeData = {
   ]
 }
 
-const difficultyColors = {
-  'Dễ': 'bg-green-50 border-green-200 text-green-700',
-  'Trung bình': 'bg-yellow-50 border-yellow-200 text-yellow-700',
-  'Khó': 'bg-red-50 border-red-200 text-red-700'
-}
-
-const categoryIcons = {
-  'Cấu tạo mắt': '👁️',
-  'Tật khúc xạ': '👓',
-  'Bệnh lý thường gặp': '🏥',
-  'Phẫu thuật': '⚕️',
-  'Chăm sóc & Phẫu thuật': '💊'
-}
-
 const KnowledgePage = () => {
   const [selectedLesson, setSelectedLesson] = useState(null)
-  const [selectedCategory, setSelectedCategory] = useState('Tất cả')
-
-  const categories = ['Tất cả', ...new Set(knowledgeData.lessons.map(l => l.category))]
-
-  const filteredLessons = selectedCategory === 'Tất cả' 
-    ? knowledgeData.lessons 
-    : knowledgeData.lessons.filter(l => l.category === selectedCategory)
+  const [progress, setProgress] = useState(getProgress())
+  
+  const isLessonCompleted = (lessonId) => progress.completedLessons.includes(lessonId)
+  
+  const isLessonUnlocked = (index) => {
+    if (index === 0) return true // First lesson always unlocked
+    return isLessonCompleted(knowledgeData.lessons[index - 1].lessonId)
+  }
+  
+  const completeLesson = (lessonId) => {
+    if (!progress.completedLessons.includes(lessonId)) {
+      const newProgress = {
+        ...progress,
+        completedLessons: [...progress.completedLessons, lessonId],
+        totalXP: progress.totalXP + 10,
+        lastCompletedDate: new Date().toISOString()
+      }
+      setProgress(newProgress)
+      saveProgress(newProgress)
+    }
+  }
+  
+  const getLessonIcon = (category) => {
+    const icons = {
+      'Cấu tạo mắt': '👁️',
+      'Tật khúc xạ': '👓',
+      'Bệnh lý thường gặp': '🏥',
+      'Phẫu thuật': '⚕️',
+      'Chăm sóc': '💊'
+    }
+    return icons[category] || '📚'
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50">
-      {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+      {/* Header with Stats */}
       <Motion.header 
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-blue-100 shadow-sm"
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200 shadow-sm"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
             <img 
               src={LOGO_URL}
               alt="VISTA Logo"
-              className="w-12 h-12 rounded-xl object-cover ring-2 ring-blue-400/30 group-hover:ring-blue-400/60 transition-all"
+              className="w-10 h-10 rounded-xl object-cover ring-2 ring-green-400/30 group-hover:ring-green-400/60 transition-all"
             />
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-gray-800">VISTA</span>
-              <span className="text-xs text-gray-600">Thư viện tài liệu nhãn khoa</span>
+              <span className="text-lg font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">VISTA</span>
+              <span className="text-xs text-gray-500">Learning Path</span>
             </div>
           </Link>
           
-          <Link 
-            to="/"
-            className="px-6 py-2 rounded-xl border-2 border-blue-500 text-blue-600 font-semibold hover:bg-blue-50 transition-all"
-          >
-            Về trang chủ
-          </Link>
+          {/* Progress Stats (Duolingo style) */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-50 border border-orange-200">
+              <span className="text-2xl">🔥</span>
+              <div>
+                <div className="text-xs text-gray-500">Streak</div>
+                <div className="text-sm font-bold text-orange-600">{progress.currentStreak} ngày</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 border border-blue-200">
+              <span className="text-2xl">⭐</span>
+              <div>
+                <div className="text-xs text-gray-500">Total XP</div>
+                <div className="text-sm font-bold text-blue-600">{progress.totalXP}</div>
+              </div>
+            </div>
+            
+            <Link 
+              to="/"
+              className="px-4 py-2 rounded-xl border-2 border-gray-300 text-gray-600 font-semibold hover:bg-gray-50 transition-all"
+            >
+              Trang chủ
+            </Link>
+          </div>
         </div>
       </Motion.header>
 
-      {/* Main Content */}
+      {/* Main Content - Learning Path */}
       <div className="pt-24 pb-12 px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Title Section */}
+        <div className="max-w-4xl mx-auto">
+          {/* Title */}
           <Motion.div
-            className="text-center mb-12"
+            className="text-center mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Motion.div 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-sm font-medium mb-6"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <span>📚</span>
-              20 Bài học chuyên sâu
-            </Motion.div>
-            
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 bg-clip-text text-transparent letter-spacing-wide">
-                Thư viện tài liệu nhãn khoa
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+                Lộ trình học Nhãn khoa
               </span>
             </h1>
-            
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed letter-spacing-wide">
-              Khám phá 20 bài học toàn diện về nhãn khoa - từ giải phẫu, bệnh lý đến phẫu thuật và chăm sóc
+            <p className="text-gray-600">
+              Hoàn thành từng bài học để mở khóa cấp độ tiếp theo
             </p>
           </Motion.div>
 
-          {/* Category Filter */}
-          <Motion.div 
-            className="flex flex-wrap justify-center gap-3 mb-12"
-            initial={{ opacity: 0, y: 20 }}
+          {/* Learning Path (Duolingo Style) */}
+          <div className="relative">
+            {/* Vertical Path Line */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-gray-200 via-gray-300 to-gray-200 -translate-x-1/2 rounded-full" />
+            
+            {/* Lessons */}
+            <div className="space-y-8">
+              {knowledgeData.lessons.map((lesson, index) => {
+                const completed = isLessonCompleted(lesson.lessonId)
+                const unlocked = isLessonUnlocked(index)
+                const isLeft = index % 2 === 0
+                
+                return (
+                  <Motion.div
+                    key={lesson.lessonId}
+                    className={`relative flex items-center ${isLeft ? 'justify-start' : 'justify-end'}`}
+                    initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    {/* Lesson Card */}
+                    <Motion.button
+                      onClick={() => unlocked && setSelectedLesson(lesson)}
+                      disabled={!unlocked}
+                      className={`relative group w-72 p-6 rounded-2xl transition-all duration-300 ${
+                        completed
+                          ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 shadow-lg shadow-green-500/20'
+                          : unlocked
+                          ? 'bg-white border-2 border-blue-200 hover:border-blue-400 hover:shadow-xl shadow-lg'
+                          : 'bg-gray-100 border-2 border-gray-300 opacity-60 cursor-not-allowed'
+                      }`}
+                      whileHover={unlocked ? { scale: 1.05, y: -5 } : {}}
+                      whileTap={unlocked ? { scale: 0.98 } : {}}
+                    >
+                      {/* Icon */}
+                      <div className="text-5xl mb-3 filter drop-shadow-lg">
+                        {completed ? '✅' : unlocked ? getLessonIcon(lesson.category) : '🔒'}
+                      </div>
+                      
+                      {/* Title */}
+                      <h3 className={`text-lg font-bold mb-2 ${
+                        completed ? 'text-green-700' : unlocked ? 'text-gray-800' : 'text-gray-500'
+                      }`}>
+                        {lesson.title}
+                      </h3>
+                      
+                      {/* Category Badge */}
+                      <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                        completed 
+                          ? 'bg-green-100 text-green-700 border border-green-300'
+                          : 'bg-blue-50 text-blue-700 border border-blue-200'
+                      }`}>
+                        {lesson.category}
+                      </div>
+                      
+                      {/* Completion Badge */}
+                      {completed && (
+                        <Motion.div
+                          className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg"
+                          initial={{ scale: 0, rotate: -180 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ type: "spring", stiffness: 500 }}
+                        >
+                          <span className="text-white text-lg">✓</span>
+                        </Motion.div>
+                      )}
+                      
+                      {/* XP Badge */}
+                      {unlocked && !completed && (
+                        <div className="absolute -top-2 -right-2 px-2 py-1 bg-gradient-to-r from-orange-400 to-yellow-400 rounded-full text-xs font-bold text-white shadow-lg">
+                          +10 XP
+                        </div>
+                      )}
+                    </Motion.button>
+                    
+                    {/* Center Node */}
+                    <div className={`absolute left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-4 ${
+                      completed 
+                        ? 'bg-green-500 border-green-300 shadow-lg shadow-green-500/50'
+                        : unlocked
+                        ? 'bg-blue-500 border-blue-300 shadow-lg shadow-blue-500/50 animate-pulse'
+                        : 'bg-gray-300 border-gray-200'
+                    }`} />
+                  </Motion.div>
+                )
+              })}
+            </div>
+          </div>
+          
+          {/* Progress Summary */}
+          <Motion.div
+            className="mt-12 p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-sky-50 border-2 border-blue-200"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.8 }}
           >
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all ${
-                  selectedCategory === cat
-                    ? 'bg-gradient-to-r from-blue-500 to-sky-600 text-white shadow-lg shadow-blue-500/30'
-                    : 'bg-white text-gray-600 border border-blue-200 hover:border-blue-400 hover:text-blue-600'
-                }`}
-              >
-                {cat !== 'Tất cả' && categoryIcons[cat]} {cat}
-              </button>
-            ))}
-          </Motion.div>
-
-          {/* Lessons Grid */}
-          <Motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            {filteredLessons.map((lesson, i) => (
-              <Motion.div
-                key={lesson.lessonId}
-                className="group relative p-6 rounded-2xl bg-white border border-blue-100 hover:border-blue-300 cursor-pointer transition-all shadow-md hover:shadow-xl"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 + i * 0.05 }}
-                whileHover={{ y: -5, boxShadow: '0 25px 50px -12px rgba(59, 130, 246, 0.3)' }}
-                onClick={() => setSelectedLesson(lesson)}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="text-4xl">{categoryIcons[lesson.category]}</div>
-                  <div className={`px-3 py-1 rounded-full border text-xs font-semibold ${difficultyColors[lesson.difficulty]}`}>
-                    {lesson.difficulty}
-                  </div>
+            <div className="text-center">
+              <div className="text-4xl mb-3">🎓</div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Tiến độ học tập</h3>
+              <div className="flex items-center justify-center gap-8 mb-4">
+                <div>
+                  <div className="text-2xl font-bold text-blue-600">{progress.completedLessons.length}/{knowledgeData.lessons.length}</div>
+                  <div className="text-sm text-gray-600">Bài học hoàn thành</div>
                 </div>
-
-                <div className="mb-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium inline-block">
-                  {lesson.category}
+                <div>
+                  <div className="text-2xl font-bold text-orange-600">{progress.totalXP}</div>
+                  <div className="text-sm text-gray-600">Tổng điểm XP</div>
                 </div>
-
-                <h3 className="text-lg font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">
-                  {lesson.title}
-                </h3>
-
-                <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                  {lesson.summary}
-                </p>
-
-                <div className="mt-4 flex items-center gap-2 text-blue-600 text-sm font-semibold group-hover:gap-3 transition-all">
-                  Xem chi tiết
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </Motion.div>
-            ))}
+              </div>
+              {/* Progress Bar */}
+              <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                <Motion.div
+                  className="h-full bg-gradient-to-r from-green-500 to-blue-500"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(progress.completedLessons.length / knowledgeData.lessons.length) * 100}%` }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                />
+              </div>
+            </div>
           </Motion.div>
         </div>
       </div>
@@ -330,65 +417,66 @@ const KnowledgePage = () => {
       <AnimatePresence>
         {selectedLesson && (
           <Motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-gray-900/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedLesson(null)}
           >
             <Motion.div
-              className="relative max-w-3xl w-full max-h-[90vh] overflow-y-auto bg-white rounded-3xl border border-blue-100 shadow-2xl p-8"
-              initial={{ scale: 0.9, opacity: 0, y: 50 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 50 }}
+              className="relative w-full max-w-3xl max-h-[80vh] overflow-y-auto bg-white rounded-3xl shadow-2xl"
+              initial={{ scale: 0.9, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 50 }}
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Close Button */}
               <button
                 onClick={() => setSelectedLesson(null)}
-                className="absolute top-6 right-6 w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 flex items-center justify-center transition-all"
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all z-10"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-
-              <div className="text-5xl mb-4">{categoryIcons[selectedLesson.category]}</div>
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className="px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium">
+              
+              {/* Content */}
+              <div className="p-8">
+                <div className="text-6xl mb-4">{getLessonIcon(selectedLesson.category)}</div>
+                <div className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-4">
                   {selectedLesson.category}
                 </div>
-                <div className={`px-3 py-1 rounded-full border text-sm font-semibold ${difficultyColors[selectedLesson.difficulty]}`}>
-                  {selectedLesson.difficulty}
+                <h2 className="text-3xl font-bold text-gray-800 mb-4">{selectedLesson.title}</h2>
+                <p className="text-lg text-gray-600 mb-6 italic">{selectedLesson.summary}</p>
+                
+                <div className="prose prose-lg max-w-none">
+                  {selectedLesson.content.split('\n').map((paragraph, i) => (
+                    <p key={i} className="text-gray-700 leading-relaxed mb-4">
+                      {paragraph}
+                    </p>
+                  ))}
                 </div>
-              </div>
-
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                {selectedLesson.title}
-              </h2>
-
-              <p className="text-lg text-blue-700 mb-6 italic">
-                {selectedLesson.summary}
-              </p>
-
-              <div className="prose prose-gray max-w-none">
-                {selectedLesson.content.split('\n').map((paragraph, i) => (
-                  <p key={i} className="text-gray-700 leading-relaxed mb-4">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-blue-100 flex justify-between items-center">
-                <div className="text-sm text-gray-600">
-                  Mã bài học: <span className="text-blue-600 font-mono">{selectedLesson.lessonId}</span>
-                </div>
-                <button
-                  onClick={() => setSelectedLesson(null)}
-                  className="px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold transition-all shadow-lg shadow-blue-500/30"
-                >
-                  Đóng
-                </button>
+                
+                {/* Complete Button */}
+                {!isLessonCompleted(selectedLesson.lessonId) && (
+                  <Motion.button
+                    onClick={() => {
+                      completeLesson(selectedLesson.lessonId)
+                      setSelectedLesson(null)
+                    }}
+                    className="w-full mt-8 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-lg shadow-xl shadow-green-500/30 transition-all"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    ✓ Hoàn thành bài học (+10 XP)
+                  </Motion.button>
+                )}
+                
+                {isLessonCompleted(selectedLesson.lessonId) && (
+                  <div className="w-full mt-8 py-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 text-green-700 font-bold text-lg text-center">
+                    ✅ Đã hoàn thành
+                  </div>
+                )}
               </div>
             </Motion.div>
           </Motion.div>
