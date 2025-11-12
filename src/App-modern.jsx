@@ -1280,7 +1280,7 @@ const Footer = () => {
 /* ================= MAIN APP ================= */
 function App() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
-  const VIDEO_DEMO_URL = 'https://res.cloudinary.com/dvucotc8z/video/upload/v1761540376/20251027_1103_New_Video_simple_compose_01k8hxbwz2e6sreb777hvnabfx_resmmr.mp4'
+  const VIDEO_DEMO_URL = 'https://res.cloudinary.com/dvucotc8z/video/upload/v1762953516/7217243583738_phqjqj.mp4'
   
   return (
     <div className="bg-white text-gray-900">
