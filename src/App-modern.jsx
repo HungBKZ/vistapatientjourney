@@ -669,7 +669,9 @@ const BentoGridSection = () => {
       icon: '🎧',
       image: 'v1761409108/unnamed_1_g44gjc.jpg',
       gradient: 'from-purple-500/30 via-pink-500/20 to-rose-500/30',
-      wrapperClass: 'lg:col-span-1 min-h-[220px]'
+      wrapperClass: 'lg:col-span-1 min-h-[220px]',
+      link: '/podcast',
+      cta: 'Nghe ngay'
     },
     {
       title: 'Video hướng dẫn chuyên môn',
@@ -677,7 +679,9 @@ const BentoGridSection = () => {
       icon: '📹',
       image: 'v1761410139/unnamed_2_inzt8g.jpg',
       gradient: 'from-emerald-500/30 via-teal-500/20 to-cyan-500/30',
-      wrapperClass: 'lg:col-span-1 min-h-[220px]'
+      wrapperClass: 'lg:col-span-1 min-h-[220px]',
+      link: '/video',
+      cta: 'Xem ngay'
     },
     {
       title: 'Phòng mổ thực tế ảo 360°',
@@ -704,14 +708,17 @@ const BentoGridSection = () => {
       gradient: 'from-green-500/30 via-emerald-500/20 to-teal-500/30',
       wrapperClass: 'lg:col-span-2 min-h-[220px]',
       highlights: ['Nhắc nhở tự động', 'Quản lý lịch sử'],
-      cta: 'Đặt lịch ngay'
+      cta: 'Đặt lịch ngay',
+      link: '/booking'
     },
     {
       title: 'Hệ thống điểm thưởng',
       description: 'Tích lũy điểm qua hoạt động học tập để đổi phần thưởng y tế',
       icon: '🎁',
       gradient: 'from-rose-500/30 via-pink-500/20 to-fuchsia-500/30',
-      wrapperClass: 'lg:col-span-2 min-h-[220px]'
+      wrapperClass: 'lg:col-span-2 min-h-[220px]',
+      link: '/rewards',
+      cta: 'Xem thưởng'
     },
     {
       title: 'Thư viện tài liệu nhãn khoa',
