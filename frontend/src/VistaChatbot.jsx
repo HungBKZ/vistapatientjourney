@@ -21,8 +21,9 @@ const VistaChatbot = () => {
   const faqFuse = useMemo(() => {
     return new Fuse(faqData, {
       keys: ['question'],
-      threshold: 0.4,
-      distance: 80
+      threshold: 0.25,  // Stricter matching - lower = more exact
+      distance: 40,     // Shorter distance for better accuracy
+      minMatchCharLength: 3  // Minimum 3 characters to match
     })
   }, [])
 
@@ -94,8 +95,31 @@ const VistaChatbot = () => {
   const fallbackAnswer = (text) => {
     const normalized = text.trim().toLowerCase()
     const result = faqFuse.search(normalized)
+    
+    // More strict validation
     if (!result.length) return null
-    return result[0].item.answer
+    
+    const bestMatch = result[0]
+    
+    // Only accept if score is good enough (lower score = better match)
+    // Fuse.js score ranges from 0 (perfect) to 1 (terrible)
+    if (bestMatch.score && bestMatch.score > 0.4) {
+      console.log('⚠️ FAQ match score too low:', bestMatch.score, 'for:', normalized)
+      return null
+    }
+    
+    // Check if query and matched question have similar length
+    const queryWords = normalized.split(/\s+/).length
+    const matchWords = bestMatch.item.question.toLowerCase().split(/\s+/).length
+    const wordDiff = Math.abs(queryWords - matchWords)
+    
+    if (wordDiff > 3) {
+      console.log('⚠️ FAQ word count too different:', queryWords, 'vs', matchWords)
+      return null
+    }
+    
+    console.log('✅ FAQ matched:', bestMatch.item.question, 'Score:', bestMatch.score)
+    return bestMatch.item.answer
   }
 
   // Call Azure Gemini API
