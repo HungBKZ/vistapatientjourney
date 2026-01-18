@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
+import MobileNavBar from './components/Layout/MobileNavBar';
 import HomePage from './pages/HomePage';
 import BookingPage from './pages/BookingPage';
 import ServicesPage from './pages/ServicesPage';
@@ -14,7 +15,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-grow">
+        <main className="flex-grow pb-16 md:pb-0">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/booking" element={<BookingPage />} />
@@ -25,6 +26,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <MobileNavBar />
         <VistaChatbot />
       </div>
     </BrowserRouter>

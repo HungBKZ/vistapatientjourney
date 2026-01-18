@@ -85,3 +85,15 @@ img {
 img[src=""] {
   opacity: 0;
 }
+
+/* Safe area for mobile bottom navbar (iPhone notch, etc.) */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Hide scrollbar on mobile when navbar is visible */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 4rem;
+  }
+}
