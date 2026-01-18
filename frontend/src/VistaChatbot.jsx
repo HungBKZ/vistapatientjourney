@@ -4,16 +4,8 @@ import Fuse from 'fuse.js'
 
 import faqData from './fallback/faq.json'
 
-// Gemini API configuration
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`
-
-// Vista persona for Gemini
-const VISTA_PERSONA = `Bạn là Vista Care Buddy - trợ lý ảo nhãn khoa của Vista Patient Journey.
-
-Trả lời ngắn gọn (2-3 câu), thân thiện, dùng emoji 👁️ 😊. Không tự ý chẩn đoán hoặc kê đơn. Khuyên đặt lịch khám nếu cần thiết.
-
-Vista có: Quizventure (quiz nhãn khoa), Studio 360° (phòng mổ ảo), địa chỉ 600 Nguyễn Văn Cừ nối dài, Cần Thơ.`
+// API configuration - Azure endpoint
+const API_ENDPOINT = 'https://webserviceapp.azurewebsites.net/api/gemini/ask'
 
 // Suggested quick-reply questions
 const QUICK_SUGGESTIONS = [
@@ -106,74 +98,51 @@ const VistaChatbot = () => {
     return result[0].item.answer
   }
 
-  // Call Gemini API
+  // Call Azure Gemini API
   const callGeminiAPI = async (userQuestion) => {
-    if (!GEMINI_API_KEY) {
-      console.warn('⚠️ Gemini API key not configured')
-      return null
-    }
-
-    console.log('🤖 Calling Gemini API for:', userQuestion)
+    console.log('🤖 Calling Azure Gemini API for:', userQuestion)
 
     try {
-      const response = await fetch(GEMINI_API_URL, {
+      const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: `${VISTA_PERSONA}\n\nCâu hỏi của người dùng: ${userQuestion}`
-                }
-              ]
-            }
-          ],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 500
-          }
+          request: userQuestion,
+          prompt: userQuestion
         })
       })
 
       if (!response.ok) {
         const errorText = await response.text()
-        console.error('❌ Gemini API error:', response.status, errorText)
+        console.error('❌ API error:', response.status, errorText)
         return null
       }
 
       const data = await response.json()
-      console.log('✅ Gemini full response:', JSON.stringify(data, null, 2))
+      console.log('✅ API response:', data)
       
-      // Parse response text from candidates
+      // Parse Gemini format response
       const candidate = data?.candidates?.[0]
       
       if (!candidate) {
-        console.error('❌ No candidates in response')
+        console.warn('⚠️ No candidates in response:', data)
         return null
       }
       
-      console.log('🔍 Candidate:', candidate)
-      console.log('🔍 Finish reason:', candidate?.finishReason)
-      console.log('🔍 Content:', candidate?.content)
-      
-      // Try different paths
-      const parts = candidate?.content?.parts || candidate?.parts
-      console.log('🔍 Parts:', parts)
-      
+      const parts = candidate?.content?.parts
       const aiText = parts?.[0]?.text
       
       if (!aiText) {
-        console.warn('⚠️ No text found. Candidate structure:', JSON.stringify(candidate, null, 2))
+        console.warn('⚠️ No text found in response:', data)
         return null
       }
       
       console.log('📝 Extracted AI text:', aiText)
       return aiText
     } catch (error) {
-      console.error('❌ Gemini API call failed:', error)
+      console.error('❌ API call failed:', error)
       return null
     }
   }
@@ -222,19 +191,19 @@ const VistaChatbot = () => {
         return
       }
 
-      // 3. Call Gemini AI
-      console.log('🔄 No FAQ match, calling Gemini...')
+      // 3. Call Azure Gemini AI
+      console.log('🔄 No FAQ match, calling Azure API...')
       const aiResponse = await callGeminiAPI(userMessage.text)
       
       if (aiResponse) {
-        console.log('✅ Gemini responded')
+        console.log('✅ Azure API responded')
         setMessages((prev) => [
           ...prev,
           { role: 'assistant', text: aiResponse }
         ])
       } else {
         // 4. Final fallback
-        console.log('⚠️ Gemini failed, using fallback')
+        console.log('⚠️ Azure API failed, using fallback')
         setMessages((prev) => [
           ...prev,
           {
