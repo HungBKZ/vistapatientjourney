@@ -37,6 +37,14 @@ const VistaChatbot = () => {
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef(null)
+  
+  // Anti-spam tracking
+  const [messageTimestamps, setMessageTimestamps] = useState([])
+  const [lastMessageTime, setLastMessageTime] = useState(0)
+  const [isBlocked, setIsBlocked] = useState(false)
+  
+  const COOLDOWN_MS = 2000 // 2 seconds between messages
+  const MAX_MESSAGES_PER_MINUTE = 10 // Max 10 messages per minute
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -178,6 +186,47 @@ const VistaChatbot = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (!input.trim()) return
+
+    const now = Date.now()
+    
+    // Check cooldown between messages
+    if (now - lastMessageTime < COOLDOWN_MS) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: '⏱️ Vui lòng chờ 2 giây trước khi gửi tin nhắn tiếp theo để tránh spam hệ thống.'
+        }
+      ])
+      return
+    }
+    
+    // Check rate limit (max messages per minute)
+    const oneMinuteAgo = now - 60000
+    const recentMessages = messageTimestamps.filter(t => t > oneMinuteAgo)
+    
+    if (recentMessages.length >= MAX_MESSAGES_PER_MINUTE) {
+      setIsBlocked(true)
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: '🚫 Bạn đã gửi quá nhiều tin nhắn! Vui lòng chờ 1 phút trước khi tiếp tục. Điều này giúp hệ thống hoạt động ổn định hơn.'
+        }
+      ])
+      
+      // Unblock after 1 minute
+      setTimeout(() => {
+        setIsBlocked(false)
+        setMessageTimestamps([])
+      }, 60000)
+      
+      return
+    }
+    
+    // Update tracking
+    setLastMessageTime(now)
+    setMessageTimestamps([...recentMessages, now])
 
     const userMessage = { role: 'user', text: input.trim() }
     setMessages((prev) => [...prev, userMessage])
@@ -372,12 +421,13 @@ const VistaChatbot = () => {
                 type="text"
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
-                placeholder="Nhập câu hỏi về mắt, dịch vụ..."
-                className="flex-1 rounded-full bg-white/80 backdrop-blur-sm border border-sky-300/50 px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400 shadow-inner"
+                disabled={isBlocked}
+                placeholder={isBlocked ? "Đang bị chặn do spam..." : "Nhập câu hỏi về mắt, dịch vụ..."}
+                className="flex-1 rounded-full bg-white/80 backdrop-blur-sm border border-sky-300/50 px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400 shadow-inner disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <Motion.button
                 type="submit"
-                disabled={!input.trim() || isLoading}
+                disabled={!input.trim() || isLoading || isBlocked}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-sm font-semibold text-white shadow-lg shadow-sky-500/40 hover:shadow-xl hover:shadow-sky-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
