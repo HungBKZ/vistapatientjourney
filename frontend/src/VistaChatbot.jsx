@@ -9,12 +9,12 @@ const API_ENDPOINT = 'https://chatbotconversationapi.azurewebsites.net/api/Gemin
 
 // Suggested quick-reply questions
 const QUICK_SUGGESTIONS = [
-  'Xin chào',
-  'Bạn là ai?',
-  'Bạn có thể giúp gì?',
-  'Studio 360 là gì?',
-  'Đặt lịch khám mắt',
-  'Quizventure hoạt động ra sao?'
+  'Khám mắt tổng quát là gì?',
+  'Triệu chứng cận thị',
+  'Phòng ngừa đục thủy tinh thể',
+  'Giá dịch vụ khám mắt',
+  'Đặt lịch khám như thế nào?',
+  'Giờ làm việc của Vista'
 ]
 
 const VistaChatbot = () => {
@@ -30,7 +30,7 @@ const VistaChatbot = () => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      text: 'Chào bạn! 👋 Mình là Vista Care Buddy. Bạn có thể hỏi mình về bệnh lý mắt, Studio 360°, Quizventure hoặc các dịch vụ Vista nhé!'
+      text: 'Xin chào! 👁️ Mình là trợ lý Vista Eye Care. Bạn có thể hỏi mình về:\n• Các bệnh lý về mắt\n• Dịch vụ khám & điều trị\n• Đặt lịch hẹn\n• Giá cả & thời gian\n\nBạn cần tư vấn gì không? 😊'
     }
   ])
   const [input, setInput] = useState('')
@@ -65,17 +65,17 @@ const VistaChatbot = () => {
 
     // Greetings
     if (isGreeting) {
-      return 'Xin chào! 👋 Mình là Vista Care Buddy. Bạn muốn tìm hiểu về Quizventure, Studio 360°, kiến thức nhãn khoa hay đặt lịch khám không?'
+      return 'Xin chào! 👋 Chào mừng bạn đến với Vista Eye Care. Mình có thể tư vấn về:\n• Khám mắt tổng quát\n• Đo khúc xạ & cắt kính\n• Phẫu thuật LASIK\n• Điều trị các bệnh về mắt\n\nBạn quan tâm dịch vụ nào nhỉ? 😊'
     }
 
     // Who are you
     if (isWhoAreYou) {
-      return 'Mình là Vista Care Buddy – trợ lý ảo của Vista Patient Journey. Mình có thể trả lời câu hỏi thường gặp về mắt, hướng dẫn sử dụng app, Studio 360° và Vista Quizventure.'
+      return 'Mình là trợ lý ảo của Vista Eye Care - Trung tâm nhãn khoa uy tín tại Cần Thơ. Mình có thể giúp bạn:\n✓ Tìm hiểu về bệnh lý mắt\n✓ Tư vấn dịch vụ khám & điều trị\n✓ Hướng dẫn đặt lịch hẹn\n✓ Giải đáp thắc mắc về giá cả'
     }
 
     // What can you do
     if (isWhatCanYouDo) {
-      return 'Mình có thể: trả lời câu hỏi thường gặp, gợi ý nội dung học, giới thiệu Studio 360°, hướng dẫn chơi Quizventure và cách đặt lịch khám. Bạn hỏi mình bất cứ điều gì nhé!'
+      return 'Mình có thể hỗ trợ bạn:\n📋 Tư vấn các dịch vụ nhãn khoa\n👁️ Giải đáp về bệnh lý mắt\n📅 Hướng dẫn đặt lịch khám\n💰 Thông tin giá dịch vụ\n⏰ Giờ làm việc & địa chỉ\n\nBạn cần giúp gì nhỉ?'
     }
 
     // Contact / social
@@ -208,7 +208,7 @@ const VistaChatbot = () => {
           ...prev,
           {
             role: 'assistant',
-            text: 'Xin lỗi, mình chưa có thông tin về câu hỏi này. Bạn có thể thử hỏi về: đau mắt đỏ, cận thị, Studio 360°, Quizventure, hoặc đặt lịch khám mắt nhé! 😊'
+            text: 'Xin lỗi, mình chưa có thông tin về câu hỏi này. Bạn có thể thử hỏi về:\n• Khám mắt tổng quát\n• Cận thị, viễn thị\n• Đục thủy tinh thể\n• Giá dịch vụ\n• Đặt lịch hẹn\n\nHoặc gọi hotline: 038 883 3157 để được tư vấn trực tiếp nhé! 😊'
           }
         ])
       }
@@ -227,73 +227,94 @@ const VistaChatbot = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 md:bottom-6 md:right-6 max-md:bottom-20 max-md:right-4">
       <AnimatePresence>
         {isOpen && (
           <Motion.div
             key="vista-chat-panel"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2 }}
-            className="w-80 sm:w-96 max-h-[70vh] bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="w-80 sm:w-96 max-h-[75vh] bg-white/80 backdrop-blur-2xl border border-sky-200/60 rounded-3xl shadow-2xl shadow-sky-500/20 flex flex-col overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(240,249,255,0.95) 100%)'
+            }}
           >
-            <div className="px-5 py-4 bg-gradient-to-r from-sky-500/20 via-blue-500/10 to-purple-500/20 border-b border-white/10 flex items-center justify-between">
-              <div>
-                <p className="text-sm uppercase tracking-widest text-sky-300">Vista AI</p>
-                <p className="text-base font-semibold text-white">Care Buddy trực tuyến</p>
+            {/* Header with gradient */}
+            <div className="px-6 py-5 bg-gradient-to-r from-sky-500 via-blue-500 to-purple-500 relative overflow-hidden">
+              {/* Animated glass effect overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent backdrop-blur-sm" />
+              
+              <div className="relative flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-xl">
+                    👁️
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-white/80 font-medium">Vista Eye Care</p>
+                    <p className="text-base font-bold text-white">AI Assistant</p>
+                  </div>
+                </div>
+                <Motion.button
+                  whileHover={{ rotate: 90, scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={toggleChat}
+                  className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                  aria-label="Đóng Vista AI"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </Motion.button>
               </div>
-              <Motion.button
-                whileHover={{ rotate: 90 }}
-                onClick={toggleChat}
-                className="w-8 h-8 rounded-full bg-slate-800/80 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white"
-                aria-label="Đóng Vista AI"
-              >
-                ×
-              </Motion.button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4" aria-live="polite">
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 bg-gradient-to-b from-transparent to-blue-50/30" aria-live="polite">
               {messages.map((message, index) => (
-                <div
+                <Motion.div
                   key={`${message.role}-${index}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                   className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-md ${
+                    className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-lg ${
                       message.role === 'assistant'
-                        ? 'bg-slate-800/80 border border-sky-500/30 text-slate-100'
-                        : 'bg-sky-500 text-white shadow-sky-500/40'
+                        ? 'bg-white/90 backdrop-blur-sm border border-sky-200/60 text-gray-800 shadow-sky-200/50'
+                        : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-sky-500/40'
                     }`}
                   >
-                    {message.text}
+                    <div className="whitespace-pre-line">{message.text}</div>
                   </div>
-                </div>
+                </Motion.div>
               ))}
               
               {/* Loading indicator */}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-slate-800/80 border border-sky-500/30 rounded-2xl px-4 py-3 text-sm">
+                  <div className="bg-white/90 backdrop-blur-sm border border-sky-200/60 rounded-2xl px-4 py-3 shadow-lg shadow-sky-200/50">
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1">
                         <Motion.div
-                          className="w-2 h-2 bg-sky-400 rounded-full"
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ duration: 1, repeat: Infinity, delay: 0 }}
+                          className="w-2 h-2 bg-sky-500 rounded-full"
+                          animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
+                          transition={{ duration: 0.8, repeat: Infinity, delay: 0 }}
                         />
                         <Motion.div
-                          className="w-2 h-2 bg-sky-400 rounded-full"
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+                          className="w-2 h-2 bg-blue-500 rounded-full"
+                          animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
+                          transition={{ duration: 0.8, repeat: Infinity, delay: 0.15 }}
                         />
                         <Motion.div
-                          className="w-2 h-2 bg-sky-400 rounded-full"
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+                          className="w-2 h-2 bg-purple-500 rounded-full"
+                          animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
+                          transition={{ duration: 0.8, repeat: Infinity, delay: 0.3 }}
                         />
                       </div>
-                      <span className="text-slate-400 text-xs">Đang suy nghĩ...</span>
+                      <span className="text-gray-500 text-xs">Đang soạn câu trả lời...</span>
                     </div>
                   </div>
                 </div>
@@ -303,17 +324,17 @@ const VistaChatbot = () => {
             </div>
 
             {/* Quick suggestion chips */}
-            <div className="px-5 py-2 border-t border-white/10 bg-slate-900/60">
-              <p className="text-xs text-slate-400 mb-2">Gợi ý câu hỏi:</p>
+            <div className="px-5 py-3 border-t border-sky-200/40 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
+              <p className="text-xs text-gray-600 font-medium mb-2">💡 Gợi ý câu hỏi:</p>
               <div className="flex flex-wrap gap-2">
                 {QUICK_SUGGESTIONS.map((suggestion, idx) => (
                   <Motion.button
                     key={idx}
                     type="button"
                     onClick={() => handleQuickSuggestion(suggestion)}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-3 py-1 rounded-full bg-slate-800/60 border border-sky-500/20 text-xs text-sky-300 hover:bg-sky-500/20 hover:border-sky-500/40 transition-colors"
+                    className="px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-sky-300/40 text-xs text-sky-700 hover:bg-sky-50 hover:border-sky-400/60 transition-all shadow-sm hover:shadow-md"
                   >
                     {suggestion}
                   </Motion.button>
@@ -321,35 +342,63 @@ const VistaChatbot = () => {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="px-5 pb-5 pt-2 flex items-center gap-2 border-t border-white/10 bg-slate-900/80">
+            {/* Input Form */}
+            <form onSubmit={handleSubmit} className="px-5 pb-5 pt-3 flex items-center gap-2 border-t border-sky-200/40 bg-white/60 backdrop-blur-sm">
               <input
                 type="text"
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
-                placeholder="Hỏi Vista Care Buddy về mắt, bài học, Studio 360°..."
-                className="flex-1 rounded-2xl bg-slate-800/60 border border-white/10 px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
+                placeholder="Nhập câu hỏi về mắt, dịch vụ..."
+                className="flex-1 rounded-full bg-white/80 backdrop-blur-sm border border-sky-300/50 px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400 shadow-inner"
               />
               <Motion.button
                 type="submit"
+                disabled={!input.trim() || isLoading}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-4 py-2 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 text-sm font-semibold text-white shadow-lg shadow-sky-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-sm font-semibold text-white shadow-lg shadow-sky-500/40 hover:shadow-xl hover:shadow-sky-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
-                Gửi
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
               </Motion.button>
             </form>
           </Motion.div>
         )}
       </AnimatePresence>
 
-  <Motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+      {/* Floating Button */}
+      <Motion.button
+        whileHover={{ scale: 1.1, rotate: 5 }}
+        whileTap={{ scale: 0.9 }}
         onClick={toggleChat}
-        className="w-16 h-16 rounded-full bg-gradient-to-br from-sky-500 to-purple-500 shadow-xl shadow-sky-500/40 border border-white/20 flex items-center justify-center text-2xl"
-        aria-label="Mở Vista Care Buddy"
+        className="w-14 h-14 rounded-full bg-gradient-to-br from-sky-500 via-blue-500 to-purple-500 shadow-xl shadow-sky-500/40 border-2 border-white/50 flex items-center justify-center text-2xl relative overflow-hidden group"
+        aria-label="Mở Vista AI Assistant"
       >
-        {isOpen ? '−' : '👁️'}
-  </Motion.button>
+        {/* Glass overlay effect */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        
+        <Motion.span
+          animate={isOpen ? { rotate: 180, scale: 0.9 } : { rotate: 0, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="relative z-10"
+        >
+          {isOpen ? (
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          ) : '👁️'}
+        </Motion.span>
+        
+        {/* Pulse effect when closed */}
+        {!isOpen && (
+          <Motion.div
+            className="absolute inset-0 rounded-full bg-sky-400"
+            animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        )}
+      </Motion.button>
     </div>
   )
 }
