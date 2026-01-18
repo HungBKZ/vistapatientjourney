@@ -149,6 +149,12 @@ const VistaChatbot = () => {
       if (!response.ok) {
         const errorText = await response.text()
         console.error('❌ API error:', response.status, errorText)
+        
+        // Handle quota exceeded error
+        if (response.status === 429) {
+          return '⚠️ Hệ thống AI đang quá tải. Vui lòng thử lại sau hoặc sử dụng các câu hỏi thường gặp bên dưới.'
+        }
+        
         return null
       }
 
