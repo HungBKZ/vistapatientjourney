@@ -140,24 +140,27 @@ export default function BookingPage() {
         </div>
 
         {/* Progress */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between max-w-lg mx-auto">
+        <div className="mb-8 overflow-x-auto">
+          <div className="flex items-center justify-between max-w-lg mx-auto min-w-[320px] px-2">
             {steps.map((s, i) => (
-              <div key={s.id} className="flex items-center">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                  ${i <= currentStepIndex ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
-                  {i + 1}
+              <div key={s.id} className="flex flex-col items-center">
+                <div className="flex items-center">
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium
+                    ${i <= currentStepIndex ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                    {i + 1}
+                  </div>
+                  {i < steps.length - 1 && (
+                    <div className={`w-6 sm:w-12 h-0.5 mx-0.5 sm:mx-1 ${i < currentStepIndex ? 'bg-blue-600' : 'bg-gray-200'}`} />
+                  )}
                 </div>
-                {i < steps.length - 1 && (
-                  <div className={`w-8 sm:w-16 h-0.5 mx-1 ${i < currentStepIndex ? 'bg-blue-600' : 'bg-gray-200'}`} />
-                )}
+                <span className="text-[10px] sm:text-xs text-gray-500 mt-1 hidden sm:block">{s.label}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Content */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
+        <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
           {step === 'service' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Chọn dịch vụ</h2>
