@@ -5,7 +5,7 @@ import Fuse from 'fuse.js'
 import faqData from './fallback/faq.json'
 
 // API configuration - Azure endpoint
-const API_ENDPOINT = 'https://webserviceapp.azurewebsites.net/api/gemini/ask'
+const API_ENDPOINT = 'https://chatbotconversationapi.azurewebsites.net/api/Gemini/ask'
 
 // Suggested quick-reply questions
 const QUICK_SUGGESTIONS = [
