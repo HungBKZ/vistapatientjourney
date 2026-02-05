@@ -1,211 +1,422 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import type { Article } from '../types';
-import api from '../services/api';
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
 
-const eyeCareTips = [
-  {
-    title: 'Quy tắc 20-20-20',
-    description: 'Mỗi 20 phút nhìn màn hình, hãy nhìn xa 20 feet (6m) trong 20 giây.',
-    icon: '👁️',
-  },
-  {
-    title: 'Bảo vệ khỏi UV',
-    description: 'Đeo kính râm khi ra ngoài trời để bảo vệ mắt khỏi tia UV.',
-    icon: '🕶️',
-  },
-  {
-    title: 'Dinh dưỡng cho mắt',
-    description: 'Bổ sung vitamin A, omega-3 từ cá, rau xanh và trái cây.',
-    icon: '🥕',
-  },
-  {
-    title: 'Khám mắt định kỳ',
-    description: 'Khám mắt 6 tháng - 1 năm/lần để phát hiện sớm các vấn đề.',
-    icon: '📋',
-  },
-];
+type Experience = {
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  href: string;
+  accent: 'violet' | 'sky' | 'emerald';
+};
 
-const features = [
+const experiences: Experience[] = [
   {
-    title: 'Trải nghiệm kính mắt',
-    description: 'Lựa chọn mắt kính phù hợp',
-    icon: '👓',
+    title: 'Trải nghiệm mắt kính',
+    subtitle: 'Virtual Try-On',
+    description: 'Lựa chọn mắt kính phù hợp với gương mặt của bạn qua công nghệ AR',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310445/VDZ08622_maluun.jpg',
     href: 'https://vista-camera-eyes.vercel.app/',
-    color: 'bg-purple-50 text-purple-600',
+    accent: 'violet',
   },
   {
     title: 'Trải nghiệm thị giác',
-    description: 'Nhìn thế giới qua đôi mắt khác',
-    icon: '👁️',
+    subtitle: 'Visual Simulation',
+    description: 'Nhìn thế giới qua đôi mắt của người mắc các bệnh lý về mắt',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310518/625361590_122119516413062997_1303514405670367212_n_wzuecd.jpg',
     href: 'https://vista-camera-eyes.vercel.app/eye-simulation.html',
-    external: false,
-    color: 'bg-blue-50 text-blue-600',
+    accent: 'sky',
   },
   {
     title: 'Kiểm tra thị lực',
-    description: 'Kiểm tra thị lực của đôi mắt bạn',
-    icon: '✅',
+    subtitle: 'Vision Test',
+    description: 'Kiểm tra thị lực của đôi mắt bạn ngay tại nhà một cách nhanh chóng',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310767/623446721_122119025241062997_8088043366359299100_n_cr5mod.jpg',
     href: 'https://vista-camera-eyes.vercel.app/',
-    color: 'bg-green-50 text-green-600',
+    accent: 'emerald',
   },
 ];
 
 export default function KnowledgePage() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const containerRef = useRef<HTMLElement | null>(null);
+  const pointerRef = useRef({
+    rafId: 0,
+    hasPointer: false,
+    tx: 0,
+    ty: 0,
+    cx: 0,
+    cy: 0,
+    trx: 0,
+    try: 0,
+    crx: 0,
+    cry: 0,
+  });
+
+  const clipPaths = useMemo(
+    () =>
+      [
+        'polygon(0 0, 92% 0, 80% 100%, 0 100%)',
+        'polygon(12% 0, 92% 0, 80% 100%, 0 100%)',
+        'polygon(12% 0, 100% 0, 100% 100%, 0 100%)',
+      ] as const,
+    []
+  );
+
+  const accent = (key: Experience['accent']) => {
+    switch (key) {
+      case 'violet':
+        return 'bg-violet-400/80';
+      case 'sky':
+        return 'bg-sky-400/80';
+      case 'emerald':
+        return 'bg-emerald-400/80';
+      default:
+        return 'bg-white/60';
+    }
+  };
 
   useEffect(() => {
-    api.getArticles({ limit: 10 })
-      .then((res: any) => setArticles(res.data || []))
-      .finally(() => setLoading(false));
-  }, []);
+    const el = containerRef.current;
+    if (!el || prefersReducedMotion) return;
+
+    const setTargetsFromClient = (clientX: number, clientY: number) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = Math.min(Math.max(clientX - rect.left, 0), rect.width);
+      const y = Math.min(Math.max(clientY - rect.top, 0), rect.height);
+
+      const px = rect.width ? x / rect.width : 0.5;
+      const py = rect.height ? y / rect.height : 0.5;
+      const ry = (px - 0.5) * 8;
+      const rx = (0.5 - py) * 6;
+
+      pointerRef.current.tx = x;
+      pointerRef.current.ty = y;
+      pointerRef.current.trx = rx;
+      pointerRef.current.try = ry;
+    };
+
+    const tick = () => {
+      const c = containerRef.current;
+      if (!c) return;
+
+      const p = pointerRef.current;
+      const ease = 0.15; // Faster easing = fewer frames needed
+      p.cx += (p.tx - p.cx) * ease;
+      p.cy += (p.ty - p.cy) * ease;
+      p.crx += (p.trx - p.crx) * ease;
+      p.cry += (p.try - p.cry) * ease;
+
+      c.style.setProperty('--mx', `${Math.round(p.cx)}px`);
+      c.style.setProperty('--my', `${Math.round(p.cy)}px`);
+      c.style.setProperty('--rx', `${p.crx.toFixed(1)}deg`);
+      c.style.setProperty('--ry', `${p.cry.toFixed(1)}deg`);
+
+      const settled =
+        Math.abs(p.tx - p.cx) < 0.5 &&
+        Math.abs(p.ty - p.cy) < 0.5 &&
+        Math.abs(p.trx - p.crx) < 0.05 &&
+        Math.abs(p.try - p.cry) < 0.05;
+
+      if (p.hasPointer || !settled) {
+        p.rafId = window.requestAnimationFrame(tick);
+      } else {
+        p.rafId = 0;
+      }
+    };
+
+    const ensureTicking = () => {
+      if (!pointerRef.current.rafId) {
+        pointerRef.current.rafId = window.requestAnimationFrame(tick);
+      }
+    };
+
+    const onMove = (evt: MouseEvent) => {
+      pointerRef.current.hasPointer = true;
+      setTargetsFromClient(evt.clientX, evt.clientY);
+      ensureTicking();
+    };
+
+    const onLeave = () => {
+      pointerRef.current.hasPointer = false;
+      const rect = el.getBoundingClientRect();
+      pointerRef.current.tx = rect.width * 0.5;
+      pointerRef.current.ty = rect.height * 0.4;
+      pointerRef.current.trx = 0;
+      pointerRef.current.try = 0;
+      ensureTicking();
+    };
+
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+    onLeave();
+
+    return () => {
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
+      if (pointerRef.current.rafId) cancelAnimationFrame(pointerRef.current.rafId);
+      pointerRef.current.rafId = 0;
+    };
+  }, [prefersReducedMotion]);
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="pt-28 pb-16 bg-gradient-to-b from-blue-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Thị giác thực tế ảo
-          </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Tìm hiểu các bệnh lý về mắt
-          </p>
+    <MotionConfig
+      reducedMotion={prefersReducedMotion ? 'always' : 'never'}
+      transition={{ type: 'tween', duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      <div className="min-h-screen bg-black text-white">
+        {/* Main Interactive Section - 3 Diagonal Sections */}
+        <section ref={containerRef} className="relative h-[100svh] overflow-hidden">
+        {/* Subtle background treatment (less neon, more cinematic) */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 vj-grid" />
+          <div className="absolute inset-0 vj-vignette" />
+          <div className="absolute inset-0 vj-spotlight" />
         </div>
-      </section>
 
-      {/* Features - Podcast, 3D Model, Quiz */}
-      <section className="py-12 -mt-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-3 gap-6">
-            {features.map((feature, index) => {
-              const Component = feature.external ? 'a' : Link;
-              const props = feature.external 
-                ? { href: feature.href, target: '_blank', rel: 'noopener noreferrer' }
-                : { to: feature.href };
-              
-              return (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Component
-                    {...props as any}
-                    className="block bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
-                  >
-                    <div className={`w-14 h-14 rounded-xl ${feature.color} flex items-center justify-center text-2xl mb-4`}>
-                      {feature.icon}
+        <div className="relative h-full">
+          <div className="absolute left-6 md:left-10 top-24 z-30 select-none">
+            <div className="text-xs uppercase tracking-[0.28em] text-white/60">Knowledge</div>
+            <div className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight text-white/90">
+              Trải nghiệm thị giác
+            </div>
+          </div>
+
+          <motion.div
+            className="absolute right-6 md:right-10 top-24 z-30 text-xs text-white/60 select-none"
+            animate={{ opacity: activeIndex === null ? 1 : 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            Di chuột qua từng phần để xem chi tiết
+          </motion.div>
+
+          <div className="absolute inset-0 flex">
+          {experiences.map((exp, index) => (
+            <div
+              key={exp.title}
+              className={
+                'vj-panel relative cursor-pointer focus:outline-none overflow-hidden transition-[flex] duration-300 ease-out ' +
+                (index === 0 ? '' : '-ml-16 md:-ml-24')
+              }
+              style={{
+                clipPath: clipPaths[index] ?? clipPaths[0],
+                flex: activeIndex === index ? 1.7 : 1,
+              }}
+              tabIndex={0}
+              onMouseEnter={() => setActiveIndex(index)}
+              onMouseLeave={() => setActiveIndex(null)}
+              onFocus={() => setActiveIndex(index)}
+              onBlur={() => setActiveIndex(null)}
+              onTouchStart={() => setActiveIndex(index)}
+              data-active={activeIndex === index ? 'true' : 'false'}
+            >
+              {/* Background Image */}
+              <div className="absolute inset-0 overflow-hidden">
+                <img
+                  src={exp.image}
+                  alt={exp.title}
+                  className={
+                    'w-full h-full object-cover transition-transform duration-300 ease-out will-change-transform ' +
+                    (activeIndex === index ? 'scale-[1.08]' : 'scale-[1.02]') +
+                    (activeIndex !== null && activeIndex !== index ? ' brightness-75 saturate-50' : '')
+                  }
+                />
+
+                {/* Cinematic overlay - simplified */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black/85" />
+              </div>
+
+              {/* Border + accent */}
+              <div
+                className={
+                  'absolute inset-0 ring-1 transition-all duration-500 ' +
+                  (activeIndex === index ? 'ring-white/25' : 'ring-white/10')
+                }
+              />
+
+              {/* Lift/tilt only for active panel */}
+              <div
+                className={
+                  'absolute inset-0 transition-transform duration-500 vj-tilt ' +
+                  (activeIndex === index ? 'vj-tilt-active' : '')
+                }
+              />
+              <div
+                className={
+                  'absolute left-8 md:left-10 top-28 md:top-32 h-[2px] w-10 rounded-full transition-all duration-500 ' +
+                  accent(exp.accent)
+                }
+                style={{
+                  opacity: activeIndex === null || activeIndex === index ? 1 : 0.25,
+                }}
+              />
+
+              {/* Content */}
+              <div className="relative z-10 h-full p-8 md:p-10">
+                <div className="h-full flex flex-col">
+                  <div className="pt-24 md:pt-28">
+                    <div className="text-xs uppercase tracking-[0.28em] text-white/65">
+                      {exp.subtitle}
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                      {feature.title}
-                      {feature.external && (
-                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
+                  </div>
+
+                  <div className="mt-auto pb-10 md:pb-12">
+                    <h2
+                      className={
+                        'font-semibold tracking-tight leading-[1.05] transition-all duration-300 ease-out ' +
+                        (activeIndex === index ? 'text-4xl md:text-5xl -translate-y-0.5' : 'text-3xl md:text-4xl') +
+                        (activeIndex !== null && activeIndex !== index ? ' opacity-60' : ' opacity-100')
+                      }
+                      style={{ textShadow: '0 10px 30px rgba(0,0,0,0.55)' }}
+                    >
+                      {exp.title}
+                    </h2>
+
+                    <AnimatePresence initial={false} mode="wait">
+                      {activeIndex === index && (
+                        <motion.p
+                          key="desc"
+                          className="mt-4 max-w-md text-white/80 leading-relaxed"
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 8 }}
+                          transition={{ duration: 0.2, ease: 'easeOut' }}
+                        >
+                          {exp.description}
+                        </motion.p>
                       )}
-                    </h3>
-                    <p className="text-gray-600 text-sm">{feature.description}</p>
-                  </Component>
-                </motion.div>
-              );
-            })}
+                    </AnimatePresence>
+
+                    <AnimatePresence initial={false} mode="wait">
+                      {activeIndex === index && (
+                        <motion.div
+                          key="cta"
+                          className="mt-6"
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 8 }}
+                          transition={{ duration: 0.2, ease: 'easeOut', delay: 0.05 }}
+                        >
+                          <a
+                            href={exp.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="vj-btn inline-flex items-center gap-2 rounded-full bg-white/95 text-black px-6 py-3 text-sm font-semibold
+                              transition-all duration-200 hover:bg-white hover:shadow-xl hover:shadow-black/30"
+                          >
+                            Trải nghiệm ngay
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                              />
+                            </svg>
+                          </a>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom number */}
+              <div className="absolute bottom-6 right-8 z-20 text-white/15 font-semibold tracking-[0.2em]">
+                0{index + 1}
+              </div>
+
+              {/* Subtle light sweep */}
+              <div
+                className={
+                  'absolute inset-0 pointer-events-none transition-opacity duration-300 ' +
+                  (activeIndex === index ? 'opacity-100' : 'opacity-0')
+                }
+              >
+                <div className="absolute -inset-x-24 -top-20 h-40 rotate-12 bg-white/10 blur-2xl" />
+              </div>
+            </div>
+          ))}
           </div>
         </div>
       </section>
 
-      {/* Eye Care Tips */}
-      {/* <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Mẹo bảo vệ mắt hàng ngày
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {eyeCareTips.map((tip, index) => (
-              <motion.div
-                key={tip.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center"
-              >
-                <div className="text-4xl mb-4">{tip.icon}</div>
-                <h3 className="font-semibold text-gray-900 mb-2">{tip.title}</h3>
-                <p className="text-gray-600 text-sm">{tip.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
-      {/* Visual Experience Banner */}
-
-      {/* Articles */}
-      {/* <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Bài viết mới nhất</h2>
-          
-          {loading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl h-64 animate-pulse" />
-              ))}
-            </div>
-          ) : articles.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-xl">
-              <p className="text-gray-500">Chưa có bài viết nào</p>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {articles.map((article, index) => (
-                <motion.article
-                  key={article.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                    <svg className="w-16 h-16 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} 
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} 
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </div>
-                  <div className="p-5">
-                    {article.category && (
-                      <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-50 text-blue-600 rounded mb-2">
-                        {article.category}
-                      </span>
-                    )}
-                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{article.title}</h3>
-                    <p className="text-gray-600 text-sm line-clamp-2">{article.excerpt}</p>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-          )}
-        </div>
-      </section> */}
-
-      {/* CTA */}
-      {/* <section className="py-16">
+      {/* Bottom CTA */}
+        <section className="relative py-20 bg-black">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Bạn có thắc mắc về sức khỏe mắt?
-          </h2>
-          <p className="text-gray-600 mb-8">
-            Đặt lịch khám để được bác sĩ chuyên khoa tư vấn trực tiếp
-          </p>
-          <Link to="/booking" className="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg">
-            Đặt lịch khám
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+              Bắt đầu hành trình của bạn
+            </h2>
+            <p className="text-xl text-gray-400 mb-10">
+              Khám phá và bảo vệ đôi mắt của bạn cùng VISTA
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/services"
+                className="px-7 py-3.5 bg-white text-black font-semibold rounded-full transition-all
+                  hover:bg-white/95 hover:shadow-xl hover:shadow-black/30"
+              >
+                Xem dịch vụ
+              </Link>
+              <Link
+                to="/quiz"
+                className="px-7 py-3.5 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full
+                  border border-white/15 transition-all"
+              >
+                Làm quiz
+              </Link>
+            </div>
+          </motion.div>
         </div>
-      </section> */}
-    </div>
+      </section>
+
+      <style>{`
+        .vj-vignette {
+          background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.85));
+        }
+
+        .vj-grid {
+          opacity: 0.1;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+          background-size: 60px 60px;
+        }
+
+        .vj-spotlight {
+          opacity: 0.8;
+          background: radial-gradient(600px 400px at var(--mx, 50%) var(--my, 40%), rgba(255,255,255,0.08), transparent 60%);
+          pointer-events: none;
+          will-change: background;
+        }
+
+        .vj-tilt { pointer-events: none; }
+        .vj-panel[data-active='true'] .vj-tilt {
+          transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-4px);
+        }
+
+        .vj-btn {
+          transform: translateY(0);
+        }
+
+        .vj-panel[data-active='true'] .vj-btn {
+          box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        .vj-panel {
+          will-change: flex;
+        }
+      `}</style>
+      </div>
+    </MotionConfig>
   );
 }

@@ -8,8 +8,8 @@ const navItems = [
   // { href: '/services', label: 'Dịch vụ' },
   // { href: '/booking', label: 'Đặt lịch' },
   { href: '/knowledge', label: 'Mắt ảo' },
-  { href: '/podcast', label: 'Podcast' },
-  { href: '/quiz', label: 'Quiz' },
+  { href: '/explore', label: 'Kiến thức' },
+  { href: '/journey', label: 'Hành trình' },
 ];
 
 export default function Header() {

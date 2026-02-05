@@ -6,7 +6,7 @@ import api from '../services/api';
 
 // Professional hospital images
 const IMAGES = {
-  hero: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710325/z7187641781717_35e4a88e7c6e52e45478bc4761b36cbf_uwiuar.jpg',
+  hero: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/626784497_122119516335062997_710351683700892706_n_wsoxsy.jpg',
   doctor1: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&q=80',
   doctor2: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&q=80',
   eyeExam: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/b_cvek81.jpg',
@@ -56,9 +56,18 @@ const VISTA_TEAM = [
 
 export default function HomePage() {
   const [services, setServices] = useState<Service[]>([]);
+  const [currentSection, setCurrentSection] = useState(0);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const isScrollingRef = useRef(false);
   const lastScrollTime = useRef(0);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const SECTION_NAMES = [
+    'Trang chủ',
+    'Về chúng tôi',
+    'Đội ngũ Vista',
+    'Tại sao chọn Vista'
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +85,9 @@ export default function HomePage() {
   const scrollToSection = useCallback((index: number) => {
     const section = sectionsRef.current[index];
     if (section && !isScrollingRef.current) {
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
       isScrollingRef.current = true;
+      setCurrentSection(index);
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => {
         isScrollingRef.current = false;
@@ -84,54 +95,136 @@ export default function HomePage() {
     }
   }, []);
 
+  // Track current section on scroll
   useEffect(() => {
-    let scrollAccumulator = 0;
-    let scrollTimeout: NodeJS.Timeout;
-
-    const handleWheel = (e: WheelEvent) => {
-      const now = Date.now();
-      if (now - lastScrollTime.current < 800 || isScrollingRef.current) return;
+    const handleScroll = () => {
+      if (isScrollingRef.current) return;
       
       const windowHeight = window.innerHeight;
+      let foundSection = 0;
+      let closestDistance = Infinity;
       
-      // Find current section index
-      let currentIndex = -1;
+      // Find the section closest to the center of viewport
       for (let i = 0; i < sectionsRef.current.length; i++) {
         const section = sectionsRef.current[i];
         if (section) {
           const rect = section.getBoundingClientRect();
-          if (rect.top <= windowHeight / 2 && rect.bottom > windowHeight / 2) {
+          const sectionCenter = rect.top + rect.height / 2;
+          const viewportCenter = windowHeight / 2;
+          const distance = Math.abs(sectionCenter - viewportCenter);
+          
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            foundSection = i;
+          }
+        }
+      }
+      
+      setCurrentSection(foundSection);
+      
+      // Auto-snap to nearest section after scroll stops
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+      scrollTimeout.current = setTimeout(() => {
+        const section = sectionsRef.current[foundSection];
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          // If section is not perfectly aligned at top, snap to it
+          if (Math.abs(rect.top) > 5) {
+            isScrollingRef.current = true;
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+              isScrollingRef.current = false;
+            }, 600);
+          }
+        }
+      }, 150); // Wait 150ms after scroll stops
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    };
+  }, []);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isScrollingRef.current) return;
+      
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault();
+        const nextIndex = Math.min(SECTION_NAMES.length - 1, currentSection + 1);
+        if (nextIndex !== currentSection) {
+          scrollToSection(nextIndex);
+        }
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        const prevIndex = Math.max(0, currentSection - 1);
+        if (prevIndex !== currentSection) {
+          scrollToSection(prevIndex);
+        }
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        scrollToSection(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        scrollToSection(SECTION_NAMES.length - 1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentSection, scrollToSection]);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      const now = Date.now();
+      // Shorter cooldown for more responsive scrolling
+      if (now - lastScrollTime.current < 600 || isScrollingRef.current) return;
+      
+      const windowHeight = window.innerHeight;
+      
+      // Find current section index - use closest section
+      let currentIndex = -1;
+      let closestDistance = Infinity;
+      
+      for (let i = 0; i < sectionsRef.current.length; i++) {
+        const section = sectionsRef.current[i];
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          const sectionTop = rect.top;
+          const distance = Math.abs(sectionTop);
+          
+          if (distance < closestDistance) {
+            closestDistance = distance;
             currentIndex = i;
-            break;
           }
         }
       }
       
       // If not in snap sections, allow normal scroll
-      if (currentIndex === -1 || currentIndex >= 5) return;
+      if (currentIndex === -1 || currentIndex >= SECTION_NAMES.length) return;
       
-      // If at last snap section (4) and scrolling down, allow normal scroll
-      if (currentIndex === 4 && e.deltaY > 0) return;
+      // If at last snap section and scrolling down, allow normal scroll
+      if (currentIndex === SECTION_NAMES.length - 1 && e.deltaY > 0) return;
       
-      // Accumulate scroll to detect intentional scroll
-      scrollAccumulator += e.deltaY;
+      // If at first section and scrolling up, allow normal scroll
+      if (currentIndex === 0 && e.deltaY < 0) return;
       
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        scrollAccumulator = 0;
-      }, 150);
+      // Very sensitive threshold - any intentional scroll will trigger
+      const threshold = 10;
+      if (Math.abs(e.deltaY) < threshold) return;
       
-      // Lower threshold for more sensitive snapping
-      const threshold = 30;
-      if (Math.abs(scrollAccumulator) < threshold) return;
+      // Prevent default scroll behavior
+      e.preventDefault();
       
-      const direction = scrollAccumulator > 0 ? 1 : -1;
-      const nextIndex = Math.max(0, Math.min(4, currentIndex + direction));
+      // Determine direction
+      const direction = e.deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.max(0, Math.min(SECTION_NAMES.length - 1, currentIndex + direction));
       
       if (nextIndex !== currentIndex) {
-        e.preventDefault();
         lastScrollTime.current = now;
-        scrollAccumulator = 0;
         scrollToSection(nextIndex);
       }
     };
@@ -146,25 +239,25 @@ export default function HomePage() {
 
   return (
     <div className="bg-white">
-      {/* Hero Section - Full width image with overlay */}
+      {/* Hero Section - Full width team image */}
       <section ref={setSectionRef(0)} className="relative h-screen">
         <div className="absolute inset-0">
           <img 
             src={IMAGES.hero}
-            alt="VISTA Eye Care"
-            className="w-full h-full object-cover"
+            alt="Nhóm VISTA"
+            className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-slate-900/30" />
         </div>
         
-        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 flex items-center">
+        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 flex items-end pb-20">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-xl"
+            className="max-w-2xl"
           >
-            <p className="text-blue-400 font-medium mb-4 tracking-wide">
+            <p className="text-blue-400 font-semibold mb-4 tracking-wide text-sm uppercase">
               VISTA - PATIENT JOURNEY
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
@@ -172,34 +265,6 @@ export default function HomePage() {
               <br />
               <span className="text-blue-400">được thấu hiểu</span>
             </h1>
-            <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-              VISTA là dự án với sứ mệnh nâng cao nhận thức cộng đồng về sức khỏe của mắt – những vấn đề tưởng chừng nhỏ nhưng ảnh hưởng lớn đến chất lượng sống.
-              Chúng tôi tin rằng khi mỗi người hiểu đúng về đôi mắt của mình, họ sẽ nhìn rõ hơn không chỉ thế giới, mà cả tương lai phía trước.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {/* <Link 
-                to="/booking"
-                className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium 
-                  rounded-lg transition-colors duration-200"
-              >
-                Trải nghiệm đặt lịch (demo)
-              </Link> */}
-              {/* <a 
-                href="tel:+84388833157"
-                className="px-8 py-4 border border-white/30 hover:bg-white/10 text-white 
-                  font-medium rounded-lg transition-colors duration-200 flex items-center gap-2"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Liên hệ nhóm: 038 883 3157
-              </a> */}
-            </div>
-
-            {/* <p className="mt-6 text-sm text-gray-300/90 max-w-xl">
-              Lưu ý: Nội dung trên website phục vụ mục đích học tập/dự án; không thay thế tư vấn y khoa.
-            </p> */}
           </motion.div>
         </div>
 
@@ -286,7 +351,7 @@ export default function HomePage() {
       </section> */}
 
       {/* About / Image Gallery Section */}
-      <section ref={setSectionRef(2)} className="py-20 min-h-screen flex flex-col justify-center">
+      <section ref={setSectionRef(1)} className="py-20 min-h-screen flex flex-col justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Image Grid */}
@@ -357,7 +422,7 @@ export default function HomePage() {
       </section>
 
       {/* Vista Team Section */}
-      <section ref={setSectionRef(3)} className="relative py-20 overflow-hidden min-h-screen flex flex-col justify-center">
+      <section ref={setSectionRef(2)} className="relative py-20 overflow-hidden min-h-screen flex flex-col justify-center">
         {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-sky-50 to-purple-50"></div>
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent"></div>
@@ -425,13 +490,17 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose Us */}
-      <section ref={setSectionRef(4)} className="py-20">
+      <section ref={setSectionRef(3)} className="py-20 min-h-screen flex flex-col justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <p className="text-blue-600 font-medium mb-2">TẠI SAO CHỌN VISTA?</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Vì sao chọn giải pháp này?
             </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              VISTA là dự án với sứ mệnh nâng cao nhận thức cộng đồng về sức khỏe của mắt – những vấn đề tưởng chừng nhỏ nhưng ảnh hưởng lớn đến chất lượng sống.
+              Chúng tôi tin rằng khi mỗi người hiểu đúng về đôi mắt của mình, họ sẽ nhìn rõ hơn không chỉ thế giới, mà cả tương lai phía trước.
+            </p>
           </div>
               {/* grid md:grid-cols-2 lg:grid-cols-4 gap-8  */}
               {/* flex flex-wrap justify-center gap-8 */}
@@ -522,6 +591,69 @@ export default function HomePage() {
           </div>
         </div>
       </section> */}
+
+      {/* Snap Scroll Navigation - Desktop */}
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block">
+        <div className="flex flex-col gap-4">
+          {SECTION_NAMES.map((name, index) => (
+            <div key={index} className="group relative">
+              {/* Tooltip */}
+              <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 opacity-0 
+                group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                <div className="bg-gray-900 text-white text-sm px-3 py-2 rounded-lg 
+                  whitespace-nowrap shadow-lg">
+                  {name}
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full 
+                    border-8 border-transparent border-l-gray-900" />
+                </div>
+              </div>
+              
+              {/* Dot Button */}
+              <button
+                onClick={() => scrollToSection(index)}
+                className={`relative w-3 h-3 rounded-full transition-all duration-300 
+                  ${currentSection === index 
+                    ? 'bg-blue-600 scale-125 shadow-lg shadow-blue-600/50' 
+                    : 'bg-gray-300 hover:bg-blue-400 hover:scale-110'
+                  }`}
+                aria-label={`Go to ${name}`}
+              >
+                {/* Pulse animation for active section */}
+                {currentSection === index && (
+                  <span className="absolute inset-0 rounded-full bg-blue-600 
+                    animate-ping opacity-75" />
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Snap Scroll Navigation - Mobile/Tablet */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
+        <div className="bg-white/90 backdrop-blur-md rounded-full shadow-lg px-4 py-3 
+          border border-gray-200/50">
+          <div className="flex items-center gap-3">
+            {SECTION_NAMES.map((name, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToSection(index)}
+                className={`relative transition-all duration-300 rounded-full
+                  ${currentSection === index 
+                    ? 'w-8 h-3 bg-blue-600' 
+                    : 'w-3 h-3 bg-gray-300 hover:bg-blue-400'
+                  }`}
+                aria-label={`Go to ${name}`}
+              >
+                {currentSection === index && (
+                  <span className="absolute inset-0 rounded-full bg-blue-600 
+                    animate-pulse opacity-75" />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
     </div>
   );

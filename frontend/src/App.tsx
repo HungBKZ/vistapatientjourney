@@ -6,8 +6,11 @@ import HomePage from './pages/HomePage';
 import BookingPage from './pages/BookingPage';
 import ServicesPage from './pages/ServicesPage';
 import KnowledgePage from './pages/KnowledgePage';
+import ExplorePage from './pages/ExplorePage';
+import JourneyPage from './pages/JourneyPage';
 import QuizPage from './pages/QuizPage';
 import PodcastPage from './pages/PodcastPage';
+import VideoPage from './VideoPage.jsx';
 import VistaChatbot from './VistaChatbot';
 
 function App() {
@@ -21,8 +24,11 @@ function App() {
             {/* <Route path="/booking" element={<BookingPage />} /> */}
             {/* <Route path="/services" element={<ServicesPage />} /> */}
             <Route path="/knowledge" element={<KnowledgePage />} />
+            <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/journey" element={<JourneyPage />} />
             <Route path="/quiz" element={<QuizPage />} />
             <Route path="/podcast" element={<PodcastPage />} />
+            <Route path="/video" element={<VideoPage />} />
             <Route path="*" element={<HomePage />} />
           </Routes>
         </main>
