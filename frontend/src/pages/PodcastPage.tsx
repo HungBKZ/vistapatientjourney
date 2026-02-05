@@ -108,7 +108,7 @@ export default function PodcastPage() {
             VISTA Podcast
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Chia sẻ kiến thức chăm sóc mắt từ đội ngũ chuyên gia - Nghe và đọc script chi tiết
+            Chia sẻ kiến thức chăm sóc mắt từ đội ngũ chuyên gia
           </p>
         </div>
       </section>

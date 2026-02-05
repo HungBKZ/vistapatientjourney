@@ -18,11 +18,12 @@ function App() {
         <main className="flex-grow pb-16 md:pb-0">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/services" element={<ServicesPage />} />
+            {/* <Route path="/booking" element={<BookingPage />} /> */}
+            {/* <Route path="/services" element={<ServicesPage />} /> */}
             <Route path="/knowledge" element={<KnowledgePage />} />
             <Route path="/quiz" element={<QuizPage />} />
             <Route path="/podcast" element={<PodcastPage />} />
+            <Route path="*" element={<HomePage />} />
           </Routes>
         </main>
         <Footer />

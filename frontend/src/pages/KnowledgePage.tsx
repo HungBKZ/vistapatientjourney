@@ -30,24 +30,24 @@ const eyeCareTips = [
 const features = [
   {
     title: 'Trải nghiệm kính mắt',
-    description: 'Lựa chọn mắt kính phù hợp với gương mặt của bạn',
-    icon: '🎧',
-    href: '/podcast',
+    description: 'Lựa chọn mắt kính phù hợp',
+    icon: '👓',
+    href: 'https://vista-camera-eyes.vercel.app/',
     color: 'bg-purple-50 text-purple-600',
   },
   {
     title: 'Trải nghiệm thị giác',
     description: 'Nhìn thế giới qua đôi mắt khác',
-    icon: '📸',
-    href: 'https://vista-camera-eyes.vercel.app/',
-    external: true,
+    icon: '👁️',
+    href: 'https://vista-camera-eyes.vercel.app/eye-simulation.html',
+    external: false,
     color: 'bg-blue-50 text-blue-600',
   },
   {
     title: 'Kiểm tra thị lực',
     description: 'Kiểm tra thị lực của đôi mắt bạn',
     icon: '✅',
-    href: '/quiz',
+    href: 'https://vista-camera-eyes.vercel.app/',
     color: 'bg-green-50 text-green-600',
   },
 ];
@@ -68,10 +68,10 @@ export default function KnowledgePage() {
       <section className="pt-28 pb-16 bg-gradient-to-b from-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Kiến thức nhãn khoa
+            Thị giác thực tế ảo
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Tìm hiểu về các bệnh lý về mắt và cách chăm sóc đôi mắt khỏe mạnh
+            Tìm hiểu các bệnh lý về mắt
           </p>
         </div>
       </section>
