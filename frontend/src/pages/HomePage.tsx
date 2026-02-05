@@ -18,13 +18,13 @@ const IMAGES = {
 const VISTA_TEAM = [
   {
     name: 'Nguyễn Hữu Lượng',
-    major: 'Digital Marketing',
+    major: 'Truyền thông kỹ thuật số',
     title: 'CEO',
     image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712466/z7442634880142_d1779c60ccfa68bc2b718ba79d8d3ba8_s5iju9.jpg',
   },
   {
     name: 'Cao Tấn Lộc',
-    major: 'Digital Marketing',
+    major: 'Truyền thông kỹ thuật số',
     title: 'CFO',
     image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712466/z7442634925500_413fc3f62c978bfaf62aa66199e81a31_tohe3n.jpg',
   },
@@ -165,26 +165,26 @@ export default function HomePage() {
             className="max-w-xl"
           >
             <p className="text-blue-400 font-medium mb-4 tracking-wide">
-              DỰ ÁN SINH VIÊN • VISTA PATIENT JOURNEY
+              VISTA - PATIENT JOURNEY
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Chăm sóc đôi mắt
+              Khi đôi mắt
               <br />
-              <span className="text-blue-400">của bạn</span>
+              <span className="text-blue-400">được thấu hiểu</span>
             </h1>
             <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-              Chúng mình là nhóm sinh viên khởi nghiệp đang xây dựng website hỗ trợ bệnh viện
-              giới thiệu dịch vụ, kiến thức nhãn khoa và trải nghiệm đặt lịch (demo).
+              VISTA là dự án với sứ mệnh nâng cao nhận thức cộng đồng về sức khỏe của mắt – những vấn đề tưởng chừng nhỏ nhưng ảnh hưởng lớn đến chất lượng sống.
+              Chúng tôi tin rằng khi mỗi người hiểu đúng về đôi mắt của mình, họ sẽ nhìn rõ hơn không chỉ thế giới, mà cả tương lai phía trước.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link 
+              {/* <Link 
                 to="/booking"
                 className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium 
                   rounded-lg transition-colors duration-200"
               >
                 Trải nghiệm đặt lịch (demo)
-              </Link>
-              <a 
+              </Link> */}
+              {/* <a 
                 href="tel:+84388833157"
                 className="px-8 py-4 border border-white/30 hover:bg-white/10 text-white 
                   font-medium rounded-lg transition-colors duration-200 flex items-center gap-2"
@@ -194,17 +194,17 @@ export default function HomePage() {
                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 Liên hệ nhóm: 038 883 3157
-              </a>
+              </a> */}
             </div>
 
-            <p className="mt-6 text-sm text-gray-300/90 max-w-xl">
+            {/* <p className="mt-6 text-sm text-gray-300/90 max-w-xl">
               Lưu ý: Nội dung trên website phục vụ mục đích học tập/dự án; không thay thế tư vấn y khoa.
-            </p>
+            </p> */}
           </motion.div>
         </div>
 
         {/* Quick Stats Bar */}
-        <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur">
+        {/* <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
@@ -220,11 +220,11 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </section>
 
       {/* Services Section */}
-      <section ref={setSectionRef(1)} className="py-20 bg-gray-50 min-h-screen flex flex-col justify-center">
+      {/* <section ref={setSectionRef(1)} className="py-20 bg-gray-50 min-h-screen flex flex-col justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-16">
             <p className="text-blue-600 font-medium mb-2">DỊCH VỤ</p>
@@ -283,7 +283,7 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* About / Image Gallery Section */}
       <section ref={setSectionRef(2)} className="py-20 min-h-screen flex flex-col justify-center">
@@ -321,20 +321,19 @@ export default function HomePage() {
             <div>
               <p className="text-blue-600 font-medium mb-2">VỀ CHÚNG TÔI</p>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Nhóm sinh viên xây dựng website hỗ trợ
+                Nhóm sinh viên Đại học FPT Cần Thơ
               </h2>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                VISTA Patient Journey là sản phẩm dự án do nhóm sinh viên thực hiện nhằm hỗ trợ
-                bệnh viện/đơn vị đối tác truyền tải thông tin rõ ràng hơn tới người dùng.
-                Chúng mình tập trung vào trải nghiệm, nội dung dễ hiểu và luồng thao tác tiện lợi.
+                VISTA - Patient Journey là dự án do nhóm sinh viên phát triển với mục tiêu nâng cao nhận thức cộng đồng về sức khỏe mắt và các vấn đề nhãn khoa thường gặp.
+                Thông qua việc hỗ trợ bệnh viện và đơn vị đối tác truyền tải thông tin một cách rõ ràng, dễ tiếp cận, dự án hướng đến việc giúp người dùng hiểu đúng, chăm sóc đúng và bảo vệ đôi mắt khỏe mạnh mỗi ngày, đặc biệt là trong thời đại số ngày nay.
               </p>
               
               <ul className="space-y-4 mb-8">
                 {[
-                  'Thiết kế giao diện thân thiện, dễ dùng trên điện thoại',
-                  'Sắp xếp nội dung kiến thức và dịch vụ rõ ràng',
-                  'Luồng đặt lịch (demo) nhanh gọn để minh hoạ trải nghiệm',
-                  'Dễ mở rộng tính năng theo yêu cầu của đơn vị đối tác',
+                  'Kiến thức về mắt',
+                  'Chăm sóc sức khỏe mắt',
+                  'Các vấn đề thường gặp về mắt',
+                  'Kiến thức xác thực từ tổ chức chuyên môn',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -345,13 +344,13 @@ export default function HomePage() {
                 ))}
               </ul>
 
-              <Link 
+              {/* <Link 
                 to="/booking"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 
                   text-white font-medium rounded-lg transition-colors"
               >
                 Xem luồng đặt lịch (demo)
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -434,8 +433,9 @@ export default function HomePage() {
               Vì sao chọn giải pháp này?
             </h2>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* grid md:grid-cols-2 lg:grid-cols-4 gap-8  */}
+              {/* flex flex-wrap justify-center gap-8 */}
+          <div className="flex flex-wrap justify-center gap-16">
             {[
               {
                 icon: (
@@ -444,19 +444,19 @@ export default function HomePage() {
                       d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 ),
-                title: 'Dễ tiếp cận',
-                description: 'Giao diện rõ ràng, ưu tiên trải nghiệm người dùng',
+                title: 'Thông tin xác thực',
+                // description: 'Giao diện rõ ràng, ưu tiên trải nghiệm người dùng',
               },
-              {
-                icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
-                      d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                  </svg>
-                ),
-                title: 'Dễ phát triển',
-                description: 'Kiến trúc web + API, thuận tiện mở rộng tính năng',
-              },
+              // {
+              //   icon: (
+              //     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              //       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
+              //         d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              //     </svg>
+              //   ),
+              //   title: 'Dễ phát triển',
+              //   description: 'Kiến trúc web + API, thuận tiện mở rộng tính năng',
+              // },
               {
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -464,8 +464,8 @@ export default function HomePage() {
                       d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 ),
-                title: 'Nội dung dễ hiểu',
-                description: 'Tổ chức kiến thức, dịch vụ và hướng dẫn theo luồng',
+                title: 'Vì sức khỏe cộng đồng',
+                // description: 'Tổ chức kiến thức, dịch vụ và hướng dẫn theo luồng',
               },
               {
                 icon: (
@@ -474,8 +474,8 @@ export default function HomePage() {
                       d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 ),
-                title: 'Hỗ trợ đối tác',
-                description: 'Tối ưu truyền thông và chuyển đổi người dùng (demo)',
+                title: 'Đối tác chuyên môn cao',
+                // description: 'Tối ưu truyền thông và chuyển đổi người dùng (demo)',
               },
             ].map((item) => (
               <div key={item.title} className="text-center">
@@ -483,7 +483,7 @@ export default function HomePage() {
                   {item.icon}
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm">{item.description}</p>
+                {/* <p className="text-gray-600 text-sm">{item.description}</p> */}
               </div>
             ))}
           </div>
@@ -491,7 +491,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-600">
+      {/* <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Trải nghiệm bản demo
@@ -521,7 +521,7 @@ export default function HomePage() {
             </a>
           </div>
         </div>
-      </section>
+      </section> */}
 
     </div>
   );

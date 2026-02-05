@@ -13,9 +13,9 @@ export default function Footer() {
               <img src={LOGO_URL} alt="VISTA" className="w-10 h-10 rounded-lg object-cover" />
               <span className="text-xl font-bold">VISTA</span>
             </Link>
-            <p className="text-gray-400 text-sm mb-4">
+            {/* <p className="text-gray-400 text-sm mb-4">
               Trung tâm nhãn khoa uy tín với đội ngũ bác sĩ chuyên nghiệp.
-            </p>
+            </p> */}
             {/* Social Links */}
             <div className="flex gap-3">
               <a 
@@ -48,7 +48,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          {/* <div>
             <h4 className="font-semibold mb-4">Truy cập nhanh</h4>
             <ul className="space-y-2 text-sm">
               <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">Trang chủ</Link></li>
@@ -57,10 +57,10 @@ export default function Footer() {
               <li><Link to="/knowledge" className="text-gray-400 hover:text-white transition-colors">Kiến thức</Link></li>
               <li><Link to="/podcast" className="text-gray-400 hover:text-white transition-colors">Podcast</Link></li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Services */}
-          <div>
+          {/* <div>
             <h4 className="font-semibold mb-4">Dịch vụ</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>Khám mắt tổng quát</li>
@@ -69,10 +69,10 @@ export default function Footer() {
               <li>Điều trị Glaucoma</li>
               <li>Khám mắt trẻ em</li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Working Hours */}
-          <div>
+          {/* <div>
             <h4 className="font-semibold mb-4">Giờ làm việc</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li className="flex justify-between">
@@ -88,7 +88,7 @@ export default function Footer() {
                 <span className="text-red-400">Nghỉ</span>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Contact */}
           <div>

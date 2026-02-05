@@ -5,9 +5,9 @@ const LOGO_URL = 'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/
 
 const navItems = [
   { href: '/', label: 'Trang chủ' },
-  { href: '/services', label: 'Dịch vụ' },
-  { href: '/booking', label: 'Đặt lịch' },
-  { href: '/knowledge', label: 'Kiến thức' },
+  // { href: '/services', label: 'Dịch vụ' },
+  // { href: '/booking', label: 'Đặt lịch' },
+  { href: '/knowledge', label: 'Mắt ảo' },
   { href: '/podcast', label: 'Podcast' },
   { href: '/quiz', label: 'Quiz' },
 ];
@@ -72,12 +72,12 @@ export default function Header() {
 
             {/* CTA Button */}
             <div className="hidden md:block">
-              <Link 
+              {/* <Link 
                 to="/booking" 
                 className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
               >
                 Đặt lịch khám
-              </Link>
+              </Link> */}
             </div>
 
             {/* Mobile Menu Button */}

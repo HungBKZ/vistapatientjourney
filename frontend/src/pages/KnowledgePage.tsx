@@ -29,15 +29,15 @@ const eyeCareTips = [
 
 const features = [
   {
-    title: 'Podcast Nhãn khoa',
-    description: 'Nghe các bài chia sẻ kiến thức chăm sóc mắt từ chuyên gia',
+    title: 'Trải nghiệm kính mắt',
+    description: 'Lựa chọn mắt kính phù hợp với gương mặt của bạn',
     icon: '🎧',
     href: '/podcast',
     color: 'bg-purple-50 text-purple-600',
   },
   {
     title: 'Trải nghiệm thị giác',
-    description: 'Nhìn thế giới qua đôi mắt khác nhau, thử filter và chụp "chân dung thị giác"',
+    description: 'Nhìn thế giới qua đôi mắt khác',
     icon: '📸',
     href: 'https://vista-camera-eyes.vercel.app/',
     external: true,
@@ -45,7 +45,7 @@ const features = [
   },
   {
     title: 'Kiểm tra thị lực',
-    description: 'Làm quiz để kiểm tra kiến thức về sức khỏe mắt',
+    description: 'Kiểm tra thị lực của đôi mắt bạn',
     icon: '✅',
     href: '/quiz',
     color: 'bg-green-50 text-green-600',
@@ -118,7 +118,7 @@ export default function KnowledgePage() {
       </section>
 
       {/* Eye Care Tips */}
-      <section className="py-16 bg-gray-50">
+      {/* <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
             Mẹo bảo vệ mắt hàng ngày
@@ -139,44 +139,12 @@ export default function KnowledgePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Visual Experience Banner */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-8 md:p-12">
-            <div className="relative z-10 max-w-xl">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                Trải nghiệm thị giác độc đáo
-              </h2>
-              <p className="text-blue-100 mb-6">
-                Nhìn thế giới qua đôi mắt khác nhau - thử các loại mắt kính và filter để chụp "chân dung thị giác" của riêng bạn.
-              </p>
-              <a 
-                href="https://vista-camera-eyes.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-blue-600 font-medium rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                Trải nghiệm ngay
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            </div>
-            {/* Background decoration */}
-            <div className="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-center opacity-20">
-              <svg className="w-64 h-64" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Articles */}
-      <section className="py-16 bg-gray-50">
+      {/* <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Bài viết mới nhất</h2>
           
@@ -222,10 +190,10 @@ export default function KnowledgePage() {
             </div>
           )}
         </div>
-      </section>
+      </section> */}
 
       {/* CTA */}
-      <section className="py-16">
+      {/* <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Bạn có thắc mắc về sức khỏe mắt?
@@ -237,7 +205,7 @@ export default function KnowledgePage() {
             Đặt lịch khám
           </Link>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
