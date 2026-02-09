@@ -1,7 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 
-const navItems = [
+type NavItem = {
+  path: string;
+  labelKey: string;
+  icon: React.ReactElement;
+  highlight?: boolean;
+  external?: boolean;
+};
+
+const navItems: NavItem[] = [
   {
     path: '/',
     labelKey: 'nav.home',
@@ -31,8 +39,9 @@ const navItems = [
     highlight: true,
   },
   {
-    path: '/knowledge',
+    path: 'https://vista-camera-eyes.vercel.app/eye-simulation.html',
     labelKey: 'nav.knowledge',
+    external: true,
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -59,6 +68,49 @@ export default function MobileNavBar() {
       <div className="flex justify-around items-center h-16 px-2">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
+          
+          if (item.external) {
+            return (
+              <a
+                key={item.path}
+                href={item.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(item.path, '_blank', 'noopener,noreferrer');
+                }}
+                className={`flex flex-col items-center justify-center flex-1 py-2 px-1 transition-colors ${
+                  item.highlight
+                    ? 'relative -top-3'
+                    : ''
+                }`}
+              >
+                {item.highlight ? (
+                  <div className={`flex flex-col items-center justify-center w-14 h-14 rounded-full shadow-lg ${
+                    isActive 
+                      ? 'bg-sky-500 text-white' 
+                      : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white'
+                  }`}>
+                    {item.icon}
+                  </div>
+                ) : (
+                  <div className={`${isActive ? 'text-sky-500' : 'text-gray-500'}`}>
+                    {item.icon}
+                  </div>
+                )}
+                <span className={`text-xs mt-1 ${
+                  item.highlight 
+                    ? 'text-sky-600 font-medium' 
+                    : isActive 
+                      ? 'text-sky-500 font-medium' 
+                      : 'text-gray-500'
+                }`}>
+                  {t(item.labelKey)}
+                </span>
+              </a>
+            );
+          }
           
           return (
             <Link
