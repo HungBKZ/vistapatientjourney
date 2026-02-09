@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import type { Service } from '../types';
 import api from '../services/api';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Professional hospital images
 const IMAGES = {
@@ -55,6 +56,7 @@ const VISTA_TEAM = [
 ] as const;
 
 export default function HomePage() {
+  const { t } = useLanguage();
   const [services, setServices] = useState<Service[]>([]);
   const [currentSection, setCurrentSection] = useState(0);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
@@ -63,10 +65,10 @@ export default function HomePage() {
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const SECTION_NAMES = [
-    'Trang chủ',
-    'Về chúng tôi',
-    'Đội ngũ Vista',
-    'Tại sao chọn Vista'
+    t('nav.home'),
+    t('home.whyChoose.badge'),
+    'VISTA Team',
+    t('home.features.title')
   ];
 
   useEffect(() => {
@@ -122,6 +124,10 @@ export default function HomePage() {
       
       setCurrentSection(foundSection);
       
+      // Only enable auto-snap on desktop
+      const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+      if (!isDesktop) return;
+
       // Auto-snap to nearest section after scroll stops
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
       scrollTimeout.current = setTimeout(() => {
@@ -178,6 +184,10 @@ export default function HomePage() {
   }, [currentSection, scrollToSection]);
 
   useEffect(() => {
+    // Only enable snap scroll on desktop (lg breakpoint and above)
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+    if (!isDesktop) return;
+
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now();
       // Shorter cooldown for more responsive scrolling
@@ -245,25 +255,25 @@ export default function HomePage() {
           <img 
             src={IMAGES.hero}
             alt="Nhóm VISTA"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-[50%_25%] md:object-[50%_35%]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-slate-900/30" />
         </div>
         
-        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 flex items-end pb-20">
+        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 flex items-end pb-24 sm:pb-20">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-2xl"
+            className="max-w-2xl mb-4 sm:mb-0"
           >
-            <p className="text-blue-400 font-semibold mb-4 tracking-wide text-sm uppercase">
+            <p className="text-blue-400 font-semibold mb-3 sm:mb-4 tracking-wide text-xs sm:text-sm uppercase">
               VISTA - PATIENT JOURNEY
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Khi đôi mắt
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
+              {t('home.hero.title2')}
               <br />
-              <span className="text-blue-400">được thấu hiểu</span>
+              <span className="text-blue-400">{t('home.hero.subtitle2')}</span>
             </h1>
           </motion.div>
         </div>
@@ -351,60 +361,59 @@ export default function HomePage() {
       </section> */}
 
       {/* About / Image Gallery Section */}
-      <section ref={setSectionRef(1)} className="py-20 min-h-screen flex flex-col justify-center">
+      <section ref={setSectionRef(1)} className="py-12 sm:py-16 md:py-20 min-h-screen flex flex-col justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             {/* Image Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="space-y-3 sm:space-y-4">
                 <img 
                   src={IMAGES.eyeExam}
                   alt="Khám mắt"
-                  className="w-full h-48 object-cover rounded-xl"
+                  className="w-full h-36 sm:h-48 object-cover rounded-lg sm:rounded-xl"
                 />
                 <img 
                   src={IMAGES.equipment}
                   alt="Thiết bị hiện đại"
-                  className="w-full h-64 object-cover rounded-xl"
+                  className="w-full h-48 sm:h-64 object-cover rounded-lg sm:rounded-xl"
                 />
               </div>
-              <div className="space-y-4 pt-8">
+              <div className="space-y-3 sm:space-y-4 pt-6 sm:pt-8">
                 <img 
                   src={IMAGES.clinic}
                   alt="Phòng khám"
-                  className="w-full h-64 object-cover rounded-xl"
+                  className="w-full h-48 sm:h-64 object-cover rounded-lg sm:rounded-xl"
                 />
                 <img 
                   src={IMAGES.patient}
                   alt="Chăm sóc bệnh nhân"
-                  className="w-full h-48 object-cover rounded-xl"
+                  className="w-full h-36 sm:h-48 object-cover rounded-lg sm:rounded-xl"
                 />
               </div>
             </div>
 
             {/* Content */}
             <div>
-              <p className="text-blue-600 font-medium mb-2">VỀ CHÚNG TÔI</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Nhóm sinh viên Đại học FPT Cần Thơ
+              <p className="text-blue-600 font-medium mb-2 text-sm">{t('home.whyChoose.badge')}</p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
+                {t('home.whyChoose.title')}
               </h2>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                VISTA - Patient Journey là dự án do nhóm sinh viên phát triển với mục tiêu nâng cao nhận thức cộng đồng về sức khỏe mắt và các vấn đề nhãn khoa thường gặp.
-                Thông qua việc hỗ trợ bệnh viện và đơn vị đối tác truyền tải thông tin một cách rõ ràng, dễ tiếp cận, dự án hướng đến việc giúp người dùng hiểu đúng, chăm sóc đúng và bảo vệ đôi mắt khỏe mạnh mỗi ngày, đặc biệt là trong thời đại số ngày nay.
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+                {t('home.whyChoose.description')}
               </p>
               
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                 {[
-                  'Kiến thức về mắt',
-                  'Chăm sóc sức khỏe mắt',
-                  'Các vấn đề thường gặp về mắt',
-                  'Kiến thức xác thực từ tổ chức chuyên môn',
+                  t('home.whyChoose.list1'),
+                  t('home.whyChoose.list2'),
+                  t('home.whyChoose.list3'),
+                  t('home.whyChoose.list4'),
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <li key={item} className="flex items-start gap-2 sm:gap-3">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-gray-700">{item}</span>
+                    <span className="text-sm sm:text-base text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -422,7 +431,7 @@ export default function HomePage() {
       </section>
 
       {/* Vista Team Section */}
-      <section ref={setSectionRef(2)} className="relative py-20 overflow-hidden min-h-screen flex flex-col justify-center">
+      <section ref={setSectionRef(2)} className="relative py-12 sm:py-16 md:py-20 overflow-hidden min-h-screen flex flex-col justify-center">
         {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-sky-50 to-purple-50"></div>
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent"></div>
@@ -436,14 +445,14 @@ export default function HomePage() {
         />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <p className="text-blue-600 font-semibold mb-2 tracking-wide uppercase text-sm">Đội ngũ Vista</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Những thành viên của dự án
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <p className="text-blue-600 font-semibold mb-2 tracking-wide uppercase text-xs sm:text-sm">{t('home.team.badge')}</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
+              {t('home.team.title')}
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {VISTA_TEAM.map((member, index) => (
               <motion.div
                 key={member.name}
@@ -474,13 +483,13 @@ export default function HomePage() {
                   </div>
 
                   <div className="mt-4 text-center">
-                    <div className="flex items-center justify-center gap-3 flex-wrap">
-                      <h3 className="font-semibold text-gray-900">{member.name}</h3>
-                      <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
+                    <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+                      <h3 className="font-semibold text-sm sm:text-base text-gray-900">{member.name}</h3>
+                      <span className="px-2 sm:px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
                         {member.title}
                       </span>
                     </div>
-                    <p className="text-gray-600 text-sm mt-2">{member.major}</p>
+                    <p className="text-gray-600 text-xs sm:text-sm mt-2">{member.major}</p>
                   </div>
                 </div>
               </motion.div>
@@ -490,69 +499,54 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose Us */}
-      <section ref={setSectionRef(3)} className="py-20 min-h-screen flex flex-col justify-center">
+      <section ref={setSectionRef(3)} className="py-12 sm:py-16 md:py-20 min-h-screen flex flex-col justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <p className="text-blue-600 font-medium mb-2">TẠI SAO CHỌN VISTA?</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Vì sao chọn giải pháp này?
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <p className="text-blue-600 font-medium mb-2 text-xs sm:text-sm">{t('home.features.badge')}</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
+              {t('home.features.title')}
             </h2>
-            <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-              VISTA là dự án với sứ mệnh nâng cao nhận thức cộng đồng về sức khỏe của mắt – những vấn đề tưởng chừng nhỏ nhưng ảnh hưởng lớn đến chất lượng sống.
-              Chúng tôi tin rằng khi mỗi người hiểu đúng về đôi mắt của mình, họ sẽ nhìn rõ hơn không chỉ thế giới, mà cả tương lai phía trước.
+            <p className="text-sm sm:text-base md:text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              {t('home.features.description')}
             </p>
           </div>
               {/* grid md:grid-cols-2 lg:grid-cols-4 gap-8  */}
               {/* flex flex-wrap justify-center gap-8 */}
-          <div className="flex flex-wrap justify-center gap-16">
+          <div className="flex flex-wrap justify-center gap-8 sm:gap-12 md:gap-16">
             {[
               {
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
                       d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 ),
-                title: 'Thông tin xác thực',
-                // description: 'Giao diện rõ ràng, ưu tiên trải nghiệm người dùng',
+                title: t('home.features.feature1'),
               },
-              // {
-              //   icon: (
-              //     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              //       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
-              //         d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-              //     </svg>
-              //   ),
-              //   title: 'Dễ phát triển',
-              //   description: 'Kiến trúc web + API, thuận tiện mở rộng tính năng',
-              // },
               {
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
                       d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 ),
-                title: 'Vì sức khỏe cộng đồng',
-                // description: 'Tổ chức kiến thức, dịch vụ và hướng dẫn theo luồng',
+                title: t('home.features.feature2'),
               },
               {
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
                       d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 ),
-                title: 'Đối tác chuyên môn cao',
-                // description: 'Tối ưu truyền thông và chuyển đổi người dùng (demo)',
+                title: t('home.features.feature3'),
               },
             ].map((item) => (
-              <div key={item.title} className="text-center">
-                <div className="w-16 h-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mb-4">
+              <div key={item.title} className="text-center max-w-[140px] sm:max-w-none">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mb-3 sm:mb-4">
                   {item.icon}
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                {/* <p className="text-gray-600 text-sm">{item.description}</p> */}
+                <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{item.title}</h3>
               </div>
             ))}
           </div>
@@ -630,18 +624,18 @@ export default function HomePage() {
       </div>
 
       {/* Snap Scroll Navigation - Mobile/Tablet */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
-        <div className="bg-white/90 backdrop-blur-md rounded-full shadow-lg px-4 py-3 
+      <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
+        <div className="bg-white/95 backdrop-blur-md rounded-full shadow-lg px-3 sm:px-4 py-2.5 sm:py-3 
           border border-gray-200/50">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {SECTION_NAMES.map((name, index) => (
               <button
                 key={index}
                 onClick={() => scrollToSection(index)}
-                className={`relative transition-all duration-300 rounded-full
+                className={`relative transition-all duration-300 rounded-full touch-manipulation
                   ${currentSection === index 
-                    ? 'w-8 h-3 bg-blue-600' 
-                    : 'w-3 h-3 bg-gray-300 hover:bg-blue-400'
+                    ? 'w-7 sm:w-8 h-2.5 sm:h-3 bg-blue-600' 
+                    : 'w-2.5 sm:w-3 h-2.5 sm:h-3 bg-gray-300 active:bg-blue-400'
                   }`}
                 aria-label={`Go to ${name}`}
               >

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
+import { useLanguage } from '../contexts/LanguageContext';
 
 type ExploreItem = {
   id: 'quiz' | 'podcast' | 'video';
@@ -12,40 +13,41 @@ type ExploreItem = {
   accent: string;
 };
 
-const items: ExploreItem[] = [
-  {
-    id: 'quiz',
-    title: 'Quiz',
-    subtitle: 'Kiểm tra kiến thức',
-    description: 'Thử thách nhanh với các câu hỏi về sức khỏe mắt',
-    path: '/quiz',
-    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313620/VDZ08714_cxcixk.jpg',
-    accent: '#f59e0b',
-  },
-  {
-    id: 'podcast',
-    title: 'Podcast',
-    subtitle: 'Lắng nghe chuyên gia',
-    description: 'Nghe kiến thức dễ vào, mọi lúc mọi nơi',
-    path: '/podcast',
-    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313896/images_5_f9s2t4.jpg',
-    accent: '#8b5cf6',
-  },
-  {
-    id: 'video',
-    title: 'Video',
-    subtitle: 'Học qua hình ảnh',
-    description: 'Xem hướng dẫn trực quan và dễ thực hành',
-    path: '/video',
-    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313972/VDZ08640_rtfyh2.jpg',
-    accent: '#06b6d4',
-  },
-];
-
 export default function ExplorePage() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const items: ExploreItem[] = useMemo(() => [
+    {
+      id: 'quiz',
+      title: t('explore.quiz.title'),
+      subtitle: t('explore.quiz.subtitle'),
+      description: t('explore.quiz.description'),
+      path: '/quiz',
+      image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313620/VDZ08714_cxcixk.jpg',
+      accent: '#f59e0b',
+    },
+    {
+      id: 'podcast',
+      title: t('explore.podcast.title'),
+      subtitle: t('explore.podcast.subtitle'),
+      description: t('explore.podcast.description'),
+      path: '/podcast',
+      image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313896/images_5_f9s2t4.jpg',
+      accent: '#8b5cf6',
+    },
+    {
+      id: 'video',
+      title: t('explore.video.title'),
+      subtitle: t('explore.video.subtitle'),
+      description: t('explore.video.description'),
+      path: '/video',
+      image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313972/VDZ08640_rtfyh2.jpg',
+      accent: '#06b6d4',
+    },
+  ], [t]);
 
   const clipPaths = useMemo(
     () =>
@@ -84,9 +86,9 @@ export default function ExplorePage() {
         onMouseLeave={() => setActiveIndex(null)}
       >
         <div className="mx-auto max-w-7xl px-4 mb-6 md:mb-8">
-          <div className="text-xs uppercase tracking-[0.28em] text-white/60">Kiến thức</div>
+          <div className="text-xs uppercase tracking-[0.28em] text-white/60">{t('explore.header')}</div>
           <div className="mt-2 text-2xl md:text-4xl font-semibold tracking-tight text-white/95">
-            Chọn chế độ để bắt đầu
+            {t('explore.choose')}
           </div>
         </div>
 

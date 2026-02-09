@@ -8,6 +8,7 @@ import {
   useInView,
   AnimatePresence,
 } from 'framer-motion';
+import { useLanguage } from '../contexts/LanguageContext';
 
 /* ═══════════════════════════════════════════════════════
    JOURNEY PAGE — "Hồi ức" / Nostalgic Scrapbook Style
@@ -24,8 +25,9 @@ type Milestone = {
   quote: string;
   description: string;
   images: string[];
-  accent: 'amber' | 'rose' | 'teal';
+  accent: 'amber' | 'rose' | 'teal' | 'violet';
   highlights: string[];
+  fbLink?: string;
 };
 
 /* ─── warm accent palette ─── */
@@ -33,38 +35,66 @@ const warmPalette = {
   amber: {
     bg: 'bg-amber-50',
     border: 'border-amber-200',
-    dot: 'bg-amber-400',
+    dot: 'bg-amber-500',
     ring: 'ring-amber-300/50',
     pill: 'bg-amber-100 text-amber-700 border-amber-200',
     text: 'text-amber-600',
-    quote: 'border-amber-300 bg-amber-50/80',
+    quote: 'border-amber-400 bg-amber-50/80',
     tag: 'bg-amber-100/80 text-amber-700 border-amber-200/60',
     photoShadow: 'shadow-amber-200/40',
     gradient: 'from-amber-200 via-amber-100 to-orange-100',
+    from: '#fef3c7',      // amber-100
+    via: '#fef9e7',       // warm cream
+    to: '#fef3c7',        // amber-100
+    watermark: 'text-amber-200',
   },
   rose: {
     bg: 'bg-rose-50',
     border: 'border-rose-200',
-    dot: 'bg-rose-400',
+    dot: 'bg-rose-500',
     ring: 'ring-rose-300/50',
     pill: 'bg-rose-100 text-rose-700 border-rose-200',
     text: 'text-rose-600',
-    quote: 'border-rose-300 bg-rose-50/80',
+    quote: 'border-rose-400 bg-rose-50/80',
     tag: 'bg-rose-100/80 text-rose-700 border-rose-200/60',
     photoShadow: 'shadow-rose-200/40',
     gradient: 'from-rose-200 via-pink-100 to-rose-100',
+    from: '#ffe4e6',      // rose-100
+    via: '#fef2f2',       // warm pink
+    to: '#ffe4e6',        // rose-100
+    watermark: 'text-rose-200',
   },
   teal: {
     bg: 'bg-teal-50',
     border: 'border-teal-200',
-    dot: 'bg-teal-400',
+    dot: 'bg-teal-500',
     ring: 'ring-teal-300/50',
     pill: 'bg-teal-100 text-teal-700 border-teal-200',
     text: 'text-teal-600',
-    quote: 'border-teal-300 bg-teal-50/80',
+    quote: 'border-teal-400 bg-teal-50/80',
     tag: 'bg-teal-100/80 text-teal-700 border-teal-200/60',
     photoShadow: 'shadow-teal-200/40',
     gradient: 'from-teal-200 via-cyan-100 to-teal-100',
+    from: '#ccfbf1',      // teal-100
+    via: '#f0fdfa',       // teal-50
+    to: '#ccfbf1',        // teal-100
+    watermark: 'text-teal-200',
+  },
+  violet: {
+    bg: 'bg-violet-50',
+    border: 'border-violet-200',
+    dot: 'bg-violet-500',
+    ring: 'ring-violet-300/50',
+    pill: 'bg-violet-100 text-violet-700 border-violet-200',
+    text: 'text-violet-600',
+    quote: 'border-violet-400 bg-violet-50/80',
+    tag: 'bg-violet-100/80 text-violet-700 border-violet-200/60',
+    photoShadow: 'shadow-violet-200/40',
+    gradient: 'from-violet-200 via-purple-100 to-violet-100',
+    from: '#ede9fe',      // violet-100
+    via: '#faf5ff',       // violet-50
+    to: '#ede9fe',        // violet-100
+    watermark: 'text-violet-200',
   },
 };
 
@@ -197,82 +227,14 @@ function TypewriterText({ text, className = '' }: { text: string; className?: st
   );
 }
 
-/* ─── data ─── */
-const MILESTONES: Milestone[] = [
-  {
-    id: 'exhibition',
-    chapter: 'Chương 01',
-    date: '2024',
-    title: 'Triển lãm mắt lần đầu',
-    subtitle: 'Bước đầu tiên cùng nhau',
-    quote: 'Hồi hộp, bỡ ngỡ nhưng không ai bỏ cuộc.',
-    description:
-      'Những ngày đầu tiên khi nhóm bắt tay vào làm triển lãm mắt. Tinh thần "cùng nhau làm cho ra một trải nghiệm thật tử tế" đã gắn kết tụi mình từ đây.',
-    images: [
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/a_xnxud3.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710325/z7187641781717_35e4a88e7c6e52e45478bc4761b36cbf_uwiuar.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/d_cuvmbv.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/c_kxm0nd.jpg',
-    ],
-    accent: 'amber',
-    highlights: ['Khởi đầu', 'Cộng tác', 'Trải nghiệm thực tế'],
-  },
-  {
-    id: 'seminar',
-    chapter: 'Chương 02',
-    date: '2025',
-    title: 'Hội thảo "Phương pháp xoá cận nào phù hợp với bạn"',
-    subtitle: 'Tại Bệnh viện Mắt VISI TP.HCM',
-    quote: 'Nghe chuyên gia chia sẻ, tụi mình hiểu thêm nhu cầu thực sự.',
-    description:
-      'VISTA tham dự buổi hội thảo chuyên đề với sự chia sẻ chuyên môn từ diễn giả: BS CKII Trần Bá Kiền. Đây là khoảnh khắc tụi mình học thêm, hiểu sâu hơn để làm tốt hơn.',
-    images: [
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316801/617288450_122119025229062997_6837418133007770989_n_dtfvs0.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316796/625082181_122119025301062997_6476179986474380358_n_sknls1.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316796/624693981_122119025295062997_3091587328736484852_n_e0qyvt.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316797/625104173_122119025259062997_6441979336655487674_n_etbvcl.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316798/624494951_122119025163062997_1900920309973079511_n_jwqt0g.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316799/623008038_122119025115062997_1290174103381862566_n_qdowzu.jpg',
-    ],
-    accent: 'rose',
-    highlights: ['Chuyên môn', 'Lắng nghe', 'Học hỏi'],
-  },
-  {
-    id: 'technology-handover',
-    chapter: 'Chương 03',
-    date: '2025',
-    title: 'Bàn giao công nghệ trải nghiệm thị giác',
-    subtitle: 'Cho Bệnh viện VISI',
-    quote: 'Từ ý tưởng đến thực tế — khoảnh khắc rất thật.',
-    description:
-      'Cột mốc bàn giao công nghệ "Trải nghiệm thị giác" cho Bệnh viện VISI. Từ ý tưởng và những buổi làm việc đầu tiên, tụi mình đi đến một khoảnh khắc tự hào: công nghệ được mang vào môi trường thực tế.',
-    images: [
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/625150519_122119516461062997_3033367744691987602_n_socdyf.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/627256193_122119516365062997_6305196475481639092_n_fnxod9.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/627797492_122119516479062997_8235468441699454425_n_yeewjr.jpg',
-      'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/626784497_122119516335062997_710351683700892706_n_wsoxsy.jpg',
-    ],
-    accent: 'teal',
-    highlights: ['Hợp tác', 'Ứng dụng thực tiễn', 'Tự hào'],
-  },
-];
-
 /* ═══════════════════════════════════════════════════════
    MAIN COMPONENT
    ═══════════════════════════════════════════════════════ */
 export default function JourneyPage() {
+  const { t } = useLanguage();
   const [lightboxIdx, setLightboxIdx] = useState<{ ms: number; img: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  /* parallax */
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end start'] });
-  const heroY = useSpring(useTransform(scrollYProgress, [0, 0.3], [0, -120]), { stiffness: 80, damping: 25 });
-  const heroScale = useTransform(scrollYProgress, [0, 0.25], [1, 0.96]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0]);
-
-  /* progress bar */
-  const { scrollYProgress: pageProgress } = useScroll();
-  const scaleX = useSpring(pageProgress, { stiffness: 100, damping: 30 });
+  const [currentMilestone, setCurrentMilestone] = useState(0);
 
   /* lightbox keyboard nav */
   const closeLightbox = useCallback(() => setLightboxIdx(null), []);
@@ -301,309 +263,369 @@ export default function JourneyPage() {
     };
   }, [lightboxIdx, closeLightbox, navigateLightbox]);
 
-  const totalImages = useMemo(() => MILESTONES.reduce((s, m) => s + m.images.length, 0), []);
+  /* Track scroll position for navigation dots */
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const sections = [
+        document.getElementById('hero'),
+        ...MILESTONES.map((_, i) => document.getElementById(`milestone-${i}`))
+      ];
+
+      const scrollPosition = container.scrollTop + window.innerHeight / 2;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        if (section && section.offsetTop <= scrollPosition) {
+          setCurrentMilestone(i);
+          break;
+        }
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const openLightbox = useCallback((msIdx: number, imgIdx: number) => {
+    setLightboxIdx({ ms: msIdx, img: imgIdx });
+  }, []);
+
+  const MILESTONES = useMemo(() => [
+    {
+      id: 'exhibition',
+      chapter: t('journey.milestone1.chapter'),
+      date: '04/11/2025',
+      title: t('journey.milestone1.title'),
+      subtitle: t('journey.milestone1.subtitle'),
+      quote: t('journey.milestone1.quote'),
+      description: t('journey.milestone1.description'),
+      images: [
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/a_xnxud3.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710325/z7187641781717_35e4a88e7c6e52e45478bc4761b36cbf_uwiuar.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/d_cuvmbv.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/c_kxm0nd.jpg',
+      ],
+      accent: 'amber' as const,
+      highlights: [t('journey.milestone1.highlight1'), t('journey.milestone1.highlight2'), t('journey.milestone1.highlight3')],
+      fbLink: 'https://www.facebook.com/share/p/183ujv2EKr/',
+    },
+    {
+      id: 'scholarship',
+      chapter: t('journey.milestone2.chapter'),
+      date: '29/11/2025',
+      title: t('journey.milestone2.title'),
+      subtitle: t('journey.milestone2.subtitle'),
+      quote: t('journey.milestone2.quote'),
+      description: t('journey.milestone2.description'),
+      images: [
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770625743/z7219755559586_51bdad322f8062ffe4b676bac21b5fc2_q5fx7b.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770625743/z7219755544557_304e3abccd6f49d873921f9f64e38789_zv8rde.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770625749/z7219755709277_5d46ea09a51f32be0108c77ac6855769_ftcwbp.jpg',
+      ],
+      accent: 'violet' as const,
+      highlights: [t('journey.milestone2.highlight1'), t('journey.milestone2.highlight2'), t('journey.milestone2.highlight3')],
+    },
+    {
+      id: 'seminar',
+      chapter: t('journey.milestone3.chapter'),
+      date: '24/01/2026',
+      title: t('journey.milestone3.title'),
+      subtitle: t('journey.milestone3.subtitle'),
+      quote: t('journey.milestone3.quote'),
+      description: t('journey.milestone3.description'),
+      images: [
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316801/617288450_122119025229062997_6837418133007770989_n_dtfvs0.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316796/625082181_122119025301062997_6476179986474380358_n_sknls1.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316796/624693981_122119025295062997_3091587328736484852_n_e0qyvt.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316797/625104173_122119025259062997_6441979336655487674_n_etbvcl.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316798/624494951_122119025163062997_1900920309973079511_n_jwqt0g.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316799/623008038_122119025115062997_1290174103381862566_n_qdowzu.jpg',
+      ],
+      accent: 'rose' as const,
+      highlights: [t('journey.milestone3.highlight1'), t('journey.milestone3.highlight2'), t('journey.milestone3.highlight3')],
+    },
+    {
+      id: 'technology-handover',
+      chapter: t('journey.milestone4.chapter'),
+      date: '02/02/2026',
+      title: t('journey.milestone4.title'),
+      subtitle: t('journey.milestone4.subtitle'),
+      quote: t('journey.milestone4.quote'),
+      description: t('journey.milestone4.description'),
+      images: [
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/625150519_122119516461062997_3033367744691987602_n_socdyf.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/627256193_122119516365062997_6305196475481639092_n_fnxod9.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/627797492_122119516479062997_8235468441699454425_n_yeewjr.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/626784497_122119516335062997_710351683700892706_n_wsoxsy.jpg',
+      ],
+      accent: 'teal' as const,
+      highlights: [t('journey.milestone4.highlight1'), t('journey.milestone4.highlight2'), t('journey.milestone4.highlight3')],
+      fbLink: 'https://www.facebook.com/share/p/1DkUNs66NB/',
+    },
+  ], [t]);
+
+  const totalImages = useMemo(() => MILESTONES.reduce((s, m) => s + m.images.length, 0), [MILESTONES]);
 
   return (
     <div
       ref={containerRef}
-      className="relative min-h-screen overflow-hidden bg-white"
+      className="relative lg:snap-y lg:snap-mandatory h-screen overflow-y-scroll"
+      style={{ scrollBehavior: 'smooth' }}
     >
-      {/* ── Scroll progress ── */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-[3px] z-50 origin-left bg-blue-600"
-        style={{ scaleX }}
-      />
+      {/* Navigation dots */}
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+        {[0, ...MILESTONES.map((_, i) => i + 1)].map((idx) => (
+          <button
+            key={idx}
+            onClick={() => {
+              const section = document.getElementById(idx === 0 ? 'hero' : `milestone-${idx - 1}`);
+              section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              currentMilestone === idx
+                ? 'bg-blue-600 scale-125'
+                : 'bg-gray-300 hover:bg-gray-400'
+            }`}
+          />
+        ))}
+      </div>
 
-      {/* ═══════ HERO ═══════ */}
-      <motion.section
-        style={{ y: heroY, scale: heroScale, opacity: heroOpacity }}
-        className="relative pt-32 md:pt-40 pb-16 px-6 md:px-10 max-w-5xl mx-auto"
+      {/* ═══════ HERO BANNER ═══════ */}
+      <section
+        id="hero"
+        className="relative h-screen lg:snap-start lg:snap-always flex items-center justify-center pt-16"
       >
-        <div className="text-center">
-          {/* Badge */}
+        {/* Background Image */}
+        <div className="absolute inset-0 top-16">
+          <img
+            src="https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/a_xnxud3.jpg"
+            alt="VISTA Journey"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 rounded-full bg-blue-50 px-5 py-2.5 text-sm text-blue-700 font-semibold"
+            transition={{ duration: 1, delay: 0.2 }}
+            className="mb-4 sm:mb-6"
           >
-            <motion.span
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              className="text-base"
-            >
-              ✨
-            </motion.span>
-            Hành trình vẫn đang tiếp tục…
+            <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs sm:text-sm font-semibold">
+              ✨ {t('journey.badge')}
+            </span>
           </motion.div>
 
-          {/* Title */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 text-5xl md:text-6xl font-extrabold leading-tight text-gray-900"
+            transition={{ duration: 1, delay: 0.4 }}
+            className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight mb-4 sm:mb-6"
           >
-            Hành trình của
+            {t('journey.title')}
             <br />
-            <span className="text-blue-600">
-              nhóm VISTA
-            </span>
+            <span className="text-blue-400">{t('journey.subtitle')}</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-5 text-xl text-gray-700 leading-relaxed max-w-4xl mx-auto font-normal"
+            transition={{ duration: 1, delay: 0.6 }}
+            className="text-lg sm:text-xl text-gray-200 mb-6 sm:mb-8"
           >
-            Từ những ngày đầu triển lãm, qua hội thảo chuyên môn, đến bàn giao công nghệ — mỗi bước là một kỷ niệm đáng nhớ.
+            {MILESTONES.length} {t('journey.milestones')}
           </motion.p>
 
-          {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-8 flex flex-wrap gap-3 justify-center"
+            transition={{ duration: 1, delay: 0.8 }}
           >
-            <a
-              href="#chapters"
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-700 active:scale-[0.98]"
+            <button
+              onClick={() => {
+                document.getElementById('milestone-0')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 hover:scale-105"
             >
-              Xem các cột mốc
+              {t('journey.exploreCta')}
               <motion.span
-                animate={{ y: [0, 3, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                animate={{ y: [0, 4, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
               >
                 ↓
               </motion.span>
-            </a>
-            <Link
-              to="/explore"
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:bg-gray-50 active:scale-[0.98]"
-            >
-              Khám phá VISTA
-            </Link>
+            </button>
           </motion.div>
         </div>
-
-        {/* Journey summary - more natural */}
-        <Reveal delay={0.4} className="mt-12">
-          <div className="max-w-4xl mx-auto">
-            <p className="text-center text-base text-gray-600 leading-relaxed">
-              <span className="font-semibold text-gray-900">{MILESTONES.length} cột mốc quan trọng</span> với hơn{' '}
-              <span className="font-semibold text-gray-900">{totalImages} khoảnh khắc</span> đáng nhớ,{' '}
-              cùng sự hợp tác của{' '}
-              <span className="font-semibold text-blue-600">Bệnh viện VISI</span> và toàn bộ thành viên nhóm VISTA.
-            </p>
-          </div>
-        </Reveal>
 
         {/* Scroll hint */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="mt-14 flex flex-col items-center gap-2"
+          animate={{ opacity: [1, 0.3, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 text-white/60 text-xs sm:text-sm"
         >
-          <span className="text-sm text-gray-500 font-medium">Cuộn xuống để xem thêm</span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-gray-400"
-          >
-            ↓
-          </motion.div>
+          {t('journey.scrollHint')}
         </motion.div>
-      </motion.section>
-
-      {/* ═══════ CHAPTERS ═══════ */}
-      <section id="chapters" className="relative px-6 md:px-10 py-16 bg-gray-50">
-        {/* Timeline line */}
-        <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 -translate-x-1/2" />
-
-        <div className="max-w-7xl mx-auto space-y-28 md:space-y-36">
-          {MILESTONES.map((ms, idx) => {
-            const c = warmPalette[ms.accent];
-            const isEven = idx % 2 === 0;
-            const imgCols = ms.images.length === 6 ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2';
-
-            return (
-              <div key={ms.id} className="relative">
-                {/* Timeline dot */}
-                <div className="hidden lg:flex absolute left-1/2 top-10 -translate-x-1/2 z-20 items-center justify-center">
-                  <Reveal>
-                    <div className="relative">
-                      <motion.div
-                        className={`h-6 w-6 rounded-full ${c.dot} ring-4 ${c.ring} shadow-lg`}
-                        whileInView={{ scale: [0, 1.3, 1] }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, ease: 'easeOut' }}
-                      />
-                    </div>
-                  </Reveal>
-                </div>
-
-                <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-                  {/* ─── Text side ─── */}
-                  <div
-                    className={isEven ? 'lg:pr-16 lg:text-right' : 'lg:order-2 lg:pl-16'}
-                  >
-                    {/* Chapter pill */}
-                    <Reveal delay={0.05}>
-                      <div className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold ${c.pill} mb-4`}>
-                        {ms.chapter}
-                        <span>•</span>
-                        {ms.date}
-                      </div>
-                    </Reveal>
-
-                    <Reveal delay={0.12}>
-                      <h3 className="text-3xl md:text-4xl font-bold leading-tight text-gray-900">
-                        {ms.title}
-                      </h3>
-                    </Reveal>
-
-                    <Reveal delay={0.18}>
-                      <p className={`mt-3 text-lg font-semibold ${c.text}`}>
-                        {ms.subtitle}
-                      </p>
-                    </Reveal>
-
-                    <Reveal delay={0.24}>
-                      <p className="mt-4 text-base text-gray-700 leading-relaxed">
-                        {ms.description}
-                      </p>
-                    </Reveal>
-
-                    {/* Quote */}
-                    <Reveal delay={0.3}>
-                      <div className={`mt-6 rounded-lg border-l-4 ${c.quote} p-4`}>
-                        <p className="text-gray-700 italic text-base leading-relaxed">
-                          "{ms.quote}"
-                        </p>
-                        <p className="mt-2 text-sm text-gray-500 font-medium">— Nhóm VISTA</p>
-                      </div>
-                    </Reveal>
-
-                    {/* Tags */}
-                    <Reveal delay={0.35}>
-                      <div className={`mt-5 flex flex-wrap gap-2 ${isEven ? 'lg:justify-end' : ''}`}>
-                        {ms.highlights.map((t) => (
-                          <span
-                            key={t}
-                            className={`rounded-md border px-3 py-1.5 text-sm font-medium ${c.tag}`}
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </Reveal>
-                  </div>
-
-                  {/* ─── Gallery ─── */}
-                  <div className={isEven ? 'lg:order-2 lg:pl-16' : 'lg:pr-16'}>
-                    <Reveal delay={0.1}>
-                      <div className="relative rounded-2xl bg-white border border-gray-200 p-4 md:p-5 shadow-sm">
-                        <StaggerContainer className={`grid gap-3 ${imgCols}`} stagger={0.08}>
-                          {ms.images.map((img, imgIdx) => (
-                            <motion.button
-                              key={imgIdx}
-                              variants={polaroidReveal}
-                              onClick={() => setLightboxIdx({ ms: idx, img: imgIdx })}
-                              className="group relative rounded-lg overflow-hidden bg-gray-100 shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                              whileHover={{ y: -4, scale: 1.02 }}
-                              transition={{ duration: 0.2, ease: 'easeOut' }}
-                            >
-                              <div className="relative aspect-square">
-                                <img
-                                  src={img}
-                                  alt={`${ms.title} - ${imgIdx + 1}`}
-                                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
-                                  loading="lazy"
-                                  decoding="async"
-                                />
-                                {/* Hover overlay */}
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                                  <div className="h-12 w-12 rounded-full bg-white flex items-center justify-center">
-                                    <svg className="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                                    </svg>
-                                  </div>
-                                </div>
-                              </div>
-                            </motion.button>
-                          ))}
-                        </StaggerContainer>
-                      </div>
-                    </Reveal>
-                  </div>
-                </div>
-
-                {/* Chapter divider (mobile) */}
-                {idx < MILESTONES.length - 1 && (
-                  <Reveal className="lg:hidden mt-16 flex justify-center">
-                    <div className="h-16 w-px bg-gray-200" />
-                  </Reveal>
-                )}
-              </div>
-            );
-          })}
-        </div>
       </section>
 
-      {/* ═══════ "To be continued" ═══════ */}
-      <section className="relative px-6 md:px-10 py-20 bg-white">
-        <Reveal>
-          <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl border border-gray-200 bg-white p-8 md:p-12 text-center shadow-sm">
+      {/* ═══════ MILESTONES - SNAP SCROLL ═══════ */}
+      {MILESTONES.map((ms, idx) => {
+        const c = warmPalette[ms.accent];
+        const imgCols = ms.images.length === 6 ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2';
+        
+        return (
+          <section
+            key={ms.id}
+            id={`milestone-${idx}`}
+            className="relative min-h-screen lg:h-screen lg:snap-start lg:snap-always flex items-center justify-center overflow-hidden py-12 sm:py-16 lg:py-0"
+            style={{
+              background: `linear-gradient(135deg, ${c.from} 0%, ${c.via} 50%, ${c.to} 100%)`
+            }}
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 w-full grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-center">
+              {/* Left: Content */}
               <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ type: 'spring', stiffness: 180, damping: 15 }}
-                className="mb-5 text-5xl"
+                initial={{ opacity: 0, x: -60 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="space-y-4 sm:space-y-6"
               >
-                🚀
+                {/* Badge */}
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <span className={`inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-bold ${c.pill}`}>
+                    {ms.date}
+                  </span>
+                  <span className="text-gray-700 font-semibold text-xs sm:text-sm">
+                    {ms.chapter}
+                  </span>
+                </div>
+
+                {/* Title */}
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
+                  {ms.title}
+                </h2>
+
+                <p className={`text-lg sm:text-xl font-semibold ${c.text}`}>
+                  {ms.subtitle}
+                </p>
+
+                {/* Quote */}
+                <div className={`pl-4 sm:pl-5 border-l-4 ${c.quote} py-2`}>
+                  <p className="text-gray-700 text-sm sm:text-base leading-relaxed font-medium italic">
+                    "{ms.quote}"
+                  </p>
+                  <p className="mt-2 text-xs sm:text-sm text-gray-500 font-medium">— Nhóm VISTA</p>
+                </div>
+
+                {/* Description */}
+                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+                  {ms.description}
+                </p>
+
+                {/* Highlights */}
+                {ms.highlights.length > 0 && (
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold text-gray-900 mb-2 sm:mb-3 uppercase tracking-wide">
+                      {t('journey.highlights')}
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {ms.highlights.map((item, i) => (
+                        <span
+                          key={i}
+                          className={`rounded-md border px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-medium ${c.tag}`}
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* CTA */}
+                {ms.fbLink && (
+                  <a
+                    href={ms.fbLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-all duration-200 hover:scale-105 shadow-lg"
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    {t('journey.fbLink')}
+                  </a>
+                )}
               </motion.div>
 
-              <Reveal>
-                <p className="text-sm uppercase tracking-wider text-gray-500 font-semibold mb-3">Hành trình vẫn tiếp tục</p>
-                <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
-                  Câu chuyện chưa kết thúc
-                </h3>
-                <p className="mt-4 text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed">
-                  Nhóm VISTA vẫn đang tiếp tục bước đi, vẫn đang làm những điều ý nghĩa và tạo ra những kỷ niệm mới. Nếu bạn muốn tìm hiểu thêm về các dịch vụ và kiến thức chăm sóc mắt…
-                </p>
-              </Reveal>
-
-              <Reveal delay={0.2}>
-                <div className="mt-8 flex flex-wrap gap-3 justify-center">
-                  <Link
-                    to="/explore"
-                    className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-700 active:scale-[0.98]"
-                  >
-                    Khám phá dịch vụ
-                  </Link>
-                  <Link
-                    to="/knowledge"
-                    className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:bg-gray-50 active:scale-[0.98]"
-                  >
-                    Xem kiến thức
-                  </Link>
-                  <Link
-                    to="/"
-                    className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 transition-all duration-200 hover:bg-gray-50 active:scale-[0.98]"
-                  >
-                    Trang chủ
-                  </Link>
+              {/* Right: Image Gallery */}
+              <motion.div
+                initial={{ opacity: 0, x: 60 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="relative mt-8 lg:mt-0"
+              >
+                <div className="relative rounded-2xl bg-white/80 backdrop-blur-sm border border-white/40 p-3 sm:p-4 md:p-5 shadow-2xl">
+                  <div className={`grid gap-2 sm:gap-3 ${imgCols}`}>
+                    {ms.images.map((img, imgIdx) => (
+                      <motion.button
+                        key={imgIdx}
+                        onClick={() => setLightboxIdx({ ms: idx, img: imgIdx })}
+                        className="group relative rounded-lg overflow-hidden bg-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                        whileHover={{ y: -6, scale: 1.03 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                      >
+                        <div className="relative aspect-square">
+                          <img
+                            src={img}
+                            alt={`${ms.title} - ${imgIdx + 1}`}
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          {/* Hover overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <div className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 rounded-full bg-white flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.button>
+                    ))}
+                  </div>
                 </div>
-              </Reveal>
+              </motion.div>
             </div>
-          </div>
-        </Reveal>
-      </section>
+
+            {/* Milestone number watermark */}
+            <div 
+              className={`absolute bottom-8 right-8 text-9xl md:text-[12rem] font-black ${c.watermark} select-none pointer-events-none opacity-30`}
+            >
+              {String(idx + 1).padStart(2, '0')}
+            </div>
+
+            {/* Progress indicator for this section */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+              {MILESTONES.map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === idx ? 'w-8 bg-gray-900' : 'w-1.5 bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
+          </section>
+        );
+      })}
 
       {/* ═══════ LIGHTBOX ═══════ */}
       <AnimatePresence>

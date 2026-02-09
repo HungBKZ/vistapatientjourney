@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const LOGO_URL = 'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/567696130_122104196085062997_7245508250228661975_n_nu6jbt.jpg';
-
-const navItems = [
-  { href: '/', label: 'Trang chủ' },
-  // { href: '/services', label: 'Dịch vụ' },
-  // { href: '/booking', label: 'Đặt lịch' },
-  { href: '/knowledge', label: 'Mắt ảo' },
-  { href: '/explore', label: 'Kiến thức' },
-  { href: '/journey', label: 'Hành trình' },
-];
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { language, setLanguage, t } = useLanguage();
+
+  const navItems = [
+    { href: '/', label: t('nav.home') },
+    { href: '/knowledge', label: t('nav.knowledge') },
+    { href: '/explore', label: t('nav.explore') },
+    { href: '/journey', label: t('nav.journey') },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,6 +70,20 @@ export default function Header() {
               ))}
             </nav>
 
+            {/* Language Toggle - Far Right */}
+            <button
+              onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
+              className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all hover:scale-105 ${
+                isHomePage && !isScrolled 
+                  ? 'bg-white/10 text-white hover:bg-white/20' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              title={language === 'vi' ? 'Switch to English' : 'Chuyển sang tiếng Việt'}
+            >
+              <span className="text-lg">{language === 'vi' ? '🇻🇳' : '🇬🇧'}</span>
+              <span>{language === 'vi' ? 'VI' : 'EN'}</span>
+            </button>
+
             {/* CTA Button */}
             <div className="hidden md:block">
               {/* <Link 
@@ -116,14 +130,15 @@ export default function Header() {
                   {item.label}
                 </Link>
               ))}
-              <div className="pt-3 border-t border-gray-100 mt-3">
-                <Link 
-                  to="/booking" 
-                  className="block w-full text-center px-4 py-3 bg-blue-600 text-white font-medium rounded-lg"
-                >
-                  Đặt lịch khám
-                </Link>
-              </div>
+              
+              {/* Language Toggle */}
+              <button
+                onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
+                className="w-full px-4 py-3 rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+              >
+                <span className="text-lg">{language === 'vi' ? '🇻🇳' : '🇬🇧'}</span>
+                <span>{language === 'vi' ? 'Tiếng Việt' : 'English'}</span>
+              </button>
             </nav>
           </div>
         </div>
