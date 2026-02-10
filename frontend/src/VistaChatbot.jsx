@@ -31,7 +31,7 @@ const VistaChatbot = () => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      text: 'Xin chào! 👁️ Mình là trợ lý Vista Eye Care. Bạn có thể hỏi mình về:\n• Các bệnh lý về mắt\n• Dịch vụ khám & điều trị\n• Đặt lịch hẹn\n• Giá cả & thời gian\n\nBạn cần tư vấn gì không? 😊'
+      text: 'Xin chào! Mình là trợ lý Vista Eye Care. Bạn có thể hỏi mình các bệnh lý về mắt😊'
     }
   ])
   const [input, setInput] = useState('')
@@ -315,7 +315,7 @@ const VistaChatbot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="w-80 sm:w-96 max-h-[75vh] bg-white/80 backdrop-blur-2xl border border-sky-200/60 rounded-3xl shadow-2xl shadow-sky-500/20 flex flex-col overflow-hidden"
+            className="w-80 sm:w-96 h-[600px] max-h-[85vh] bg-white/80 backdrop-blur-2xl border border-sky-200/60 rounded-3xl shadow-2xl shadow-sky-500/20 flex flex-col overflow-hidden"
             style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(240,249,255,0.95) 100%)'
             }}
@@ -405,7 +405,9 @@ const VistaChatbot = () => {
             {/* Quick suggestion chips */}
             <div className="px-5 py-3 border-t border-sky-200/40 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
               <p className="text-xs text-gray-600 font-medium mb-2">💡 Gợi ý câu hỏi:</p>
-              <div className="flex flex-wrap gap-2">
+              
+              {/* Container: flex (mặc định là row), overflow-x-auto để cuộn ngang */}
+              <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar touch-pan-x px-1">
                 {QUICK_SUGGESTIONS.map((suggestion, idx) => (
                   <Motion.button
                     key={idx}
@@ -413,7 +415,8 @@ const VistaChatbot = () => {
                     onClick={() => handleQuickSuggestion(suggestion)}
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-sky-300/40 text-xs text-sky-700 hover:bg-sky-50 hover:border-sky-400/60 transition-all shadow-sm hover:shadow-md"
+                    // Đã thêm: flex-shrink-0 và whitespace-nowrap
+                    className="flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-sky-300/40 text-xs text-sky-700 hover:bg-sky-50 hover:border-sky-400/60 transition-all shadow-sm hover:shadow-md"
                   >
                     {suggestion}
                   </Motion.button>
@@ -428,7 +431,7 @@ const VistaChatbot = () => {
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 disabled={isBlocked}
-                placeholder={isBlocked ? "Đang bị chặn do spam..." : "Nhập câu hỏi về mắt, dịch vụ..."}
+                placeholder={isBlocked ? "Đang bị chặn do spam..." : "Nhập câu hỏi..."}
                 className="flex-1 rounded-full bg-white/80 backdrop-blur-sm border border-sky-300/50 px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400 shadow-inner disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <Motion.button
