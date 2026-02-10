@@ -104,18 +104,19 @@ export const api = {
   getArticle: (slug: string) => request(`/articles/${slug}`),
 
   // Quiz
-  getQuizQuestions: (params?: { category?: string; difficulty?: string; limit?: number }) => {
+  getQuizQuestions: (params?: { category?: string; difficulty?: string; limit?: number; lang?: 'vi' | 'en' }) => {
     const searchParams = new URLSearchParams();
     if (params?.category) searchParams.set('category', params.category);
     if (params?.difficulty) searchParams.set('difficulty', params.difficulty);
     if (params?.limit) searchParams.set('limit', String(params.limit));
+    if (params?.lang) searchParams.set('lang', params.lang);
     return request(`/quiz/questions?${searchParams}`);
   },
 
-  checkQuizAnswers: (answers: { questionId: number; answer: string }[]) =>
+  checkQuizAnswers: (answers: { questionId: number; answer: string }[], lang?: 'vi' | 'en') =>
     request('/quiz/check', {
       method: 'POST',
-      body: JSON.stringify({ answers }),
+      body: JSON.stringify({ answers, lang }),
     }),
 
   // Contact

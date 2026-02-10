@@ -200,6 +200,10 @@ const seed = async () => {
     console.log('✅ Seeded sample user (email: test@vista.com, password: 123456)');
 
     // Seed Quiz Questions
+    // Ensure we don't keep old rows (which may not have English fields)
+    await connection.query('DELETE FROM quiz_questions');
+    await connection.query('ALTER TABLE quiz_questions AUTO_INCREMENT = 1');
+
     const questions = [
       {
         question: 'Khoảng cách an toàn khi nhìn màn hình máy tính là bao nhiêu?',
@@ -210,7 +214,14 @@ const seed = async () => {
         correct_answer: 'b',
         explanation: 'Khoảng cách lý tưởng khi nhìn màn hình máy tính là 40-70 cm để giảm mỏi mắt.',
         category: 'Bảo vệ mắt',
-        difficulty: 'easy'
+        difficulty: 'easy',
+        question_en: 'What is the safe distance when viewing a computer screen?',
+        option_a_en: '20-30 cm',
+        option_b_en: '40-70 cm',
+        option_c_en: '80-100 cm',
+        option_d_en: '10-20 cm',
+        explanation_en: 'The ideal distance when viewing a computer screen is 40-70 cm to reduce eye strain.',
+        category_en: 'Eye Protection'
       },
       {
         question: 'Quy tắc 20-20-20 trong chăm sóc mắt là gì?',
@@ -221,7 +232,14 @@ const seed = async () => {
         correct_answer: 'b',
         explanation: 'Quy tắc 20-20-20: Mỗi 20 phút làm việc với màn hình, hãy nhìn xa 20 feet (khoảng 6m) trong 20 giây.',
         category: 'Bảo vệ mắt',
-        difficulty: 'easy'
+        difficulty: 'easy',
+        question_en: 'What is the 20-20-20 rule in eye care?',
+        option_a_en: 'Sleep 20 hours, wake 20 hours, rest 20 minutes',
+        option_b_en: 'Every 20 minutes look 20 feet away for 20 seconds',
+        option_c_en: 'Check eyes 20 times in 20 days',
+        option_d_en: 'Apply 20 eye drops every 20 minutes',
+        explanation_en: 'The 20-20-20 rule: Every 20 minutes of screen work, look 20 feet (about 6m) away for 20 seconds.',
+        category_en: 'Eye Protection'
       },
       {
         question: 'Bệnh Glaucoma (Cườm nước) ảnh hưởng chủ yếu đến bộ phận nào của mắt?',
@@ -232,7 +250,14 @@ const seed = async () => {
         correct_answer: 'c',
         explanation: 'Glaucoma gây tổn thương thần kinh thị giác, thường do tăng nhãn áp.',
         category: 'Bệnh về mắt',
-        difficulty: 'medium'
+        difficulty: 'medium',
+        question_en: 'Glaucoma primarily affects which part of the eye?',
+        option_a_en: 'Cornea',
+        option_b_en: 'Lens',
+        option_c_en: 'Optic nerve',
+        option_d_en: 'Retina',
+        explanation_en: 'Glaucoma damages the optic nerve, usually caused by increased intraocular pressure.',
+        category_en: 'Eye Diseases'
       },
       {
         question: 'Vitamin nào quan trọng nhất cho sức khỏe mắt?',
@@ -243,7 +268,14 @@ const seed = async () => {
         correct_answer: 'b',
         explanation: 'Vitamin A rất quan trọng cho thị lực, đặc biệt giúp nhìn trong điều kiện ánh sáng yếu.',
         category: 'Dinh dưỡng',
-        difficulty: 'easy'
+        difficulty: 'easy',
+        question_en: 'Which vitamin is most important for eye health?',
+        option_a_en: 'Vitamin C',
+        option_b_en: 'Vitamin A',
+        option_c_en: 'Vitamin D',
+        option_d_en: 'Vitamin B12',
+        explanation_en: 'Vitamin A is crucial for vision, especially helping to see in low light conditions.',
+        category_en: 'Nutrition'
       },
       {
         question: 'Đục thủy tinh thể thường gặp ở độ tuổi nào?',
@@ -254,7 +286,14 @@ const seed = async () => {
         correct_answer: 'd',
         explanation: 'Đục thủy tinh thể do lão hóa thường xuất hiện ở người trên 60 tuổi.',
         category: 'Bệnh về mắt',
-        difficulty: 'easy'
+        difficulty: 'easy',
+        question_en: 'At what age are cataracts most common?',
+        option_a_en: 'Under 20 years old',
+        option_b_en: '20-40 years old',
+        option_c_en: '40-60 years old',
+        option_d_en: 'Over 60 years old',
+        explanation_en: 'Age-related cataracts typically appear in people over 60 years old.',
+        category_en: 'Eye Diseases'
       },
       {
         question: 'Phẫu thuật LASIK điều trị được những tật khúc xạ nào?',
@@ -265,7 +304,14 @@ const seed = async () => {
         correct_answer: 'c',
         explanation: 'LASIK có thể điều trị cả ba tật khúc xạ: cận thị, viễn thị và loạn thị.',
         category: 'Phẫu thuật',
-        difficulty: 'medium'
+        difficulty: 'medium',
+        question_en: 'What refractive errors can LASIK surgery treat?',
+        option_a_en: 'Myopia only',
+        option_b_en: 'Myopia and hyperopia',
+        option_c_en: 'Myopia, hyperopia, and astigmatism',
+        option_d_en: 'Astigmatism only',
+        explanation_en: 'LASIK can treat all three refractive errors: myopia, hyperopia, and astigmatism.',
+        category_en: 'Surgery'
       },
       {
         question: 'Triệu chứng nào KHÔNG phải là dấu hiệu của khô mắt?',
@@ -276,7 +322,14 @@ const seed = async () => {
         correct_answer: 'c',
         explanation: 'Nhìn đôi thường liên quan đến vấn đề thần kinh hoặc cơ mắt, không phải triệu chứng của khô mắt.',
         category: 'Bệnh về mắt',
-        difficulty: 'medium'
+        difficulty: 'medium',
+        question_en: 'Which symptom is NOT a sign of dry eye?',
+        option_a_en: 'Gritty, burning sensation',
+        option_b_en: 'Red eyes',
+        option_c_en: 'Double vision',
+        option_d_en: 'Reflex tearing',
+        explanation_en: 'Double vision is usually related to nerve or eye muscle problems, not a symptom of dry eye.',
+        category_en: 'Eye Diseases'
       },
       {
         question: 'Ánh sáng xanh từ màn hình điện tử có thể gây ra vấn đề gì?',
@@ -287,7 +340,14 @@ const seed = async () => {
         correct_answer: 'b',
         explanation: 'Ánh sáng xanh có thể gây mỏi mắt kỹ thuật số và ảnh hưởng đến nhịp sinh học, gây rối loạn giấc ngủ.',
         category: 'Bảo vệ mắt',
-        difficulty: 'easy'
+        difficulty: 'easy',
+        question_en: 'What problems can blue light from digital screens cause?',
+        option_a_en: 'Increased eye pressure',
+        option_b_en: 'Eye strain and sleep disruption',
+        option_c_en: 'Cataracts',
+        option_d_en: 'Astigmatism',
+        explanation_en: 'Blue light can cause digital eye strain and affect circadian rhythms, leading to sleep disruption.',
+        category_en: 'Eye Protection'
       },
       {
         question: 'Bệnh võng mạc tiểu đường có thể phòng ngừa bằng cách nào tốt nhất?',
@@ -298,7 +358,14 @@ const seed = async () => {
         correct_answer: 'b',
         explanation: 'Kiểm soát đường huyết ổn định là cách tốt nhất để phòng ngừa và làm chậm tiến triển bệnh võng mạc tiểu đường.',
         category: 'Bệnh về mắt',
-        difficulty: 'medium'
+        difficulty: 'medium',
+        question_en: 'How can diabetic retinopathy be best prevented?',
+        option_a_en: 'Wear sunglasses regularly',
+        option_b_en: 'Good blood sugar control',
+        option_c_en: 'Drink plenty of water',
+        option_d_en: 'Use eye drops daily',
+        explanation_en: 'Stable blood sugar control is the best way to prevent and slow the progression of diabetic retinopathy.',
+        category_en: 'Eye Diseases'
       },
       {
         question: 'Trẻ em nên được khám mắt định kỳ từ độ tuổi nào?',
@@ -309,15 +376,22 @@ const seed = async () => {
         correct_answer: 'a',
         explanation: 'Trẻ nên được khám mắt lần đầu từ 6 tháng tuổi để phát hiện sớm các vấn đề về mắt.',
         category: 'Nhãn khoa nhi',
-        difficulty: 'medium'
+        difficulty: 'medium',
+        question_en: 'At what age should children have regular eye exams?',
+        option_a_en: '6 months old',
+        option_b_en: '3 years old',
+        option_c_en: '6 years old',
+        option_d_en: '10 years old',
+        explanation_en: 'Children should have their first eye exam at 6 months to detect early eye problems.',
+        category_en: 'Pediatric Ophthalmology'
       }
     ];
 
     for (const q of questions) {
       await connection.query(
-        `INSERT INTO quiz_questions (question, option_a, option_b, option_c, option_d, correct_answer, explanation, category, difficulty, is_active)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE)`,
-        [q.question, q.option_a, q.option_b, q.option_c, q.option_d, q.correct_answer, q.explanation, q.category, q.difficulty]
+        `INSERT INTO quiz_questions (question, option_a, option_b, option_c, option_d, correct_answer, explanation, category, difficulty, is_active, question_en, option_a_en, option_b_en, option_c_en, option_d_en, explanation_en, category_en)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE, ?, ?, ?, ?, ?, ?, ?)`,
+        [q.question, q.option_a, q.option_b, q.option_c, q.option_d, q.correct_answer, q.explanation, q.category, q.difficulty, q.question_en, q.option_a_en, q.option_b_en, q.option_c_en, q.option_d_en, q.explanation_en, q.category_en]
       );
     }
     console.log('✅ Seeded 10 quiz questions');

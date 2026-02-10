@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import type { QuizQuestion } from '../types';
 import api from '../services/api';
+import { useLanguage } from '../contexts/LanguageContext';
 
 type State = 'intro' | 'playing' | 'result';
 
@@ -15,6 +16,7 @@ interface Result {
 }
 
 export default function QuizPage() {
+  const { t, language } = useLanguage();
   const [state, setState] = useState<State>('intro');
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -27,7 +29,7 @@ export default function QuizPage() {
   const startQuiz = async () => {
     setLoading(true);
     try {
-      const res = await api.getQuizQuestions({ limit: 10 }) as { data: QuizQuestion[] };
+      const res = await api.getQuizQuestions({ limit: 10, lang: language }) as { data: QuizQuestion[] };
       setQuestions(res.data || []);
       setAnswers([]);
       setCurrentIndex(0);
@@ -58,7 +60,7 @@ export default function QuizPage() {
   const submitQuiz = async (finalAnswers: { questionId: number; answer: string }[]) => {
     setLoading(true);
     try {
-      const res = await api.checkQuizAnswers(finalAnswers) as {
+      const res = await api.checkQuizAnswers(finalAnswers, language) as {
         data: { results: Result[]; score: { correct: number; total: number; percentage: number } };
       };
       setResults(res.data.results);
@@ -86,17 +88,17 @@ export default function QuizPage() {
                   d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Kiểm tra kiến thức về mắt</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('quizPage.title')}</h1>
             <p className="text-gray-600 mb-8">
-              Trả lời 10 câu hỏi để kiểm tra hiểu biết của bạn về sức khỏe mắt
+              {t('quizPage.description')}
             </p>
             <div className="flex justify-center gap-8 mb-8 text-sm text-gray-500">
-              <span>10 câu hỏi</span>
-              <span>Không giới hạn thời gian</span>
+              <span>{t('quizPage.meta.questions')}</span>
+              <span>{t('quizPage.meta.time')}</span>
             </div>
             <button onClick={startQuiz} disabled={loading}
               className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg disabled:opacity-50">
-              {loading ? 'Đang tải...' : 'Bắt đầu'}
+              {loading ? t('common.loading') : t('quizPage.actions.start')}
             </button>
           </motion.div>
         )}
@@ -106,7 +108,7 @@ export default function QuizPage() {
             {/* Progress */}
             <div className="mb-6">
               <div className="flex justify-between text-sm text-gray-600 mb-2">
-                <span>Câu {currentIndex + 1} / {questions.length}</span>
+                <span>{t('quizPage.questionLabel')} {currentIndex + 1} / {questions.length}</span>
                 <span>{Math.round(progress)}%</span>
               </div>
               <div className="h-2 bg-gray-200 rounded-full">
@@ -157,20 +159,22 @@ export default function QuizPage() {
                 <span className="text-3xl font-bold">{score.percentage}%</span>
               </div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">
-                {score.percentage >= 70 ? 'Xuất sắc!' : score.percentage >= 50 ? 'Khá tốt!' : 'Cần cải thiện!'}
+                {score.percentage >= 70 ? t('quizPage.result.excellent') : score.percentage >= 50 ? t('quizPage.result.good') : t('quizPage.result.improve')}
               </h2>
-              <p className="text-gray-600 mb-6">Bạn trả lời đúng {score.correct} / {score.total} câu</p>
+              <p className="text-gray-600 mb-6">
+                {t('quizPage.result.summaryPrefix')} {score.correct} / {score.total} {t('quizPage.result.summarySuffix')}
+              </p>
               <div className="flex justify-center gap-4">
                 <button onClick={startQuiz} className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg">
-                  Làm lại
+                  {t('quizPage.actions.retry')}
                 </button>
                 <Link to="/" className="px-6 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg">
-                  Về trang chủ
+                  {t('quizPage.actions.home')}
                 </Link>
               </div>
             </div>
 
-            <h3 className="font-semibold text-gray-900 mb-4">Chi tiết kết quả</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">{t('quizPage.detailsTitle')}</h3>
             <div className="space-y-3">
               {results.map((result, index) => {
                 const question = questions.find(q => q.id === result.questionId);
@@ -187,10 +191,10 @@ export default function QuizPage() {
                           {index + 1}. {question.question}
                         </p>
                         <p className={`text-sm ${result.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                          Đáp án của bạn: {result.userAnswer.toUpperCase()}
+                          {t('quizPage.answers.yours')} {result.userAnswer.toUpperCase()}
                         </p>
                         {!result.isCorrect && (
-                          <p className="text-sm text-green-600">Đáp án đúng: {result.correctAnswer.toUpperCase()}</p>
+                          <p className="text-sm text-green-600">{t('quizPage.answers.correct')} {result.correctAnswer.toUpperCase()}</p>
                         )}
                         {result.explanation && (
                           <p className="text-sm text-gray-500 mt-2 bg-gray-50 p-2 rounded">{result.explanation}</p>

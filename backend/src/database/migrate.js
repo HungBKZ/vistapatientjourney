@@ -3,6 +3,25 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const ensureColumns = async (connection, dbName, tableName, columns) => {
+  const [existing] = await connection.query(
+    `SELECT COLUMN_NAME
+     FROM INFORMATION_SCHEMA.COLUMNS
+     WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME IN (${columns
+       .map(() => '?')
+       .join(',')})`,
+    [dbName, tableName, ...columns.map(c => c.name)]
+  );
+
+  const existingSet = new Set(existing.map(r => r.COLUMN_NAME));
+
+  for (const col of columns) {
+    if (existingSet.has(col.name)) continue;
+    await connection.query(`ALTER TABLE \`${tableName}\` ADD COLUMN ${col.sql}`);
+    console.log(`✅ Added column ${tableName}.${col.name}`);
+  }
+};
+
 const migrate = async () => {
   let connection;
   
@@ -155,6 +174,13 @@ const migrate = async () => {
         category VARCHAR(100),
         difficulty ENUM('easy', 'medium', 'hard') DEFAULT 'medium',
         is_active BOOLEAN DEFAULT TRUE,
+        question_en TEXT,
+        option_a_en VARCHAR(500),
+        option_b_en VARCHAR(500),
+        option_c_en VARCHAR(500),
+        option_d_en VARCHAR(500),
+        explanation_en TEXT,
+        category_en VARCHAR(100),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         INDEX idx_category (category),
         INDEX idx_difficulty (difficulty)
@@ -211,6 +237,17 @@ const migrate = async () => {
     for (const sql of tables) {
       await connection.query(sql);
     }
+
+    // Ensure new columns exist even if the table was created previously
+    await ensureColumns(connection, dbName, 'quiz_questions', [
+      { name: 'question_en', sql: '`question_en` TEXT' },
+      { name: 'option_a_en', sql: '`option_a_en` VARCHAR(500)' },
+      { name: 'option_b_en', sql: '`option_b_en` VARCHAR(500)' },
+      { name: 'option_c_en', sql: '`option_c_en` VARCHAR(500)' },
+      { name: 'option_d_en', sql: '`option_d_en` VARCHAR(500)' },
+      { name: 'explanation_en', sql: '`explanation_en` TEXT' },
+      { name: 'category_en', sql: '`category_en` VARCHAR(100)' },
+    ]);
 
     console.log('✅ All tables created successfully');
     console.log('📋 Tables: users, doctors, services, time_slots, appointments, articles, quiz_questions, contact_messages');

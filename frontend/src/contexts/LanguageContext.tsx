@@ -108,7 +108,7 @@ const translations = {
       virtualTryOn: {
         title: 'Trải nghiệm mắt kính',
         subtitle: 'Virtual Try-On',
-        description: 'Lựa chọn mắt kính phù hợp với gương mặt của bạn qua công nghệ AR',
+        description: 'Lựa chọn mắt kính phù hợp với gương mặt của bạn qua công nghệ của máy ảnh thị giác',
       },
       visualSimulation: {
         title: 'Trải nghiệm thị giác',
@@ -118,7 +118,7 @@ const translations = {
       visionTest: {
         title: 'Kiểm tra thị lực',
         subtitle: 'Vision Test',
-        description: 'Kiểm tra thị lực của đôi mắt bạn ngay tại nhà một cách nhanh chóng',
+        description: 'Kiểm tra mù màu của đôi mắt bạn ngay tại nhà một cách nhanh chóng qua máy ảnh thị giác',
       },
       cta: 'Trải nghiệm ngay',
       bottomTitle: 'Sẵn sàng trải nghiệm?',
@@ -207,6 +207,32 @@ const translations = {
       },
       cta: 'Khám phá ngay',
     },
+    quizPage: {
+      title: 'Kiểm tra kiến thức về mắt',
+      description: 'Trả lời 10 câu hỏi để kiểm tra hiểu biết của bạn về sức khỏe mắt',
+      meta: {
+        questions: '10 câu hỏi',
+        time: 'Không giới hạn thời gian',
+      },
+      actions: {
+        start: 'Bắt đầu',
+        retry: 'Làm lại',
+        home: 'Về trang chủ',
+      },
+      questionLabel: 'Câu',
+      detailsTitle: 'Chi tiết kết quả',
+      result: {
+        excellent: 'Xuất sắc!',
+        good: 'Khá tốt!',
+        improve: 'Cần cải thiện!',
+        summaryPrefix: 'Bạn trả lời đúng',
+        summarySuffix: 'câu',
+      },
+      answers: {
+        yours: 'Đáp án của bạn:',
+        correct: 'Đáp án đúng:',
+      },
+    },
     common: {
       loading: 'Đang tải...',
       error: 'Đã có lỗi xảy ra',
@@ -262,7 +288,7 @@ const translations = {
       virtualTryOn: {
         title: 'Virtual Eyewear Experience',
         subtitle: 'Virtual Try-On',
-        description: 'Choose the right eyewear for your face with AR technology',
+        description: 'Choose eyewear that fits your face using computer-vision camera technology',
       },
       visualSimulation: {
         title: 'Visual Experience',
@@ -272,7 +298,7 @@ const translations = {
       visionTest: {
         title: 'Vision Test',
         subtitle: 'Vision Test',
-        description: 'Check your vision quickly at home',
+        description: 'Quickly check for color blindness at home using a computer-vision camera',
       },
       cta: 'Try Now',
       bottomTitle: 'Ready to experience?',
@@ -360,6 +386,32 @@ const translations = {
         description: 'Watch intuitive and practical guides',
       },
       cta: 'Explore Now',
+    },
+    quizPage: {
+      title: 'Eye Knowledge Quiz',
+      description: 'Answer 10 questions to test your understanding of eye health',
+      meta: {
+        questions: '10 questions',
+        time: 'No time limit',
+      },
+      actions: {
+        start: 'Start',
+        retry: 'Retry',
+        home: 'Back to Home',
+      },
+      questionLabel: 'Question',
+      detailsTitle: 'Result Details',
+      result: {
+        excellent: 'Excellent!',
+        good: 'Good job!',
+        improve: 'Needs improvement!',
+        summaryPrefix: 'You answered correctly',
+        summarySuffix: 'questions',
+      },
+      answers: {
+        yours: 'Your answer:',
+        correct: 'Correct answer:',
+      },
     },
     common: {
       loading: 'Loading...',
