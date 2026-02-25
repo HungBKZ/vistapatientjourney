@@ -63,91 +63,91 @@ export default function MobileNavBar() {
   const location = useLocation();
   const { t } = useLanguage();
 
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-50 safe-area-bottom">
-      <div className="flex justify-around items-center h-16 px-2">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
+  // return (
+  //   <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-50 safe-area-bottom">
+  //     <div className="flex justify-around items-center h-16 px-2">
+  //       {navItems.map((item) => {
+  //         const isActive = location.pathname === item.path;
           
-          if (item.external) {
-            return (
-              <a
-                key={item.path}
-                href={item.path}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.open(item.path, '_blank', 'noopener,noreferrer');
-                }}
-                className={`flex flex-col items-center justify-center flex-1 py-2 px-1 transition-colors ${
-                  item.highlight
-                    ? 'relative -top-3'
-                    : ''
-                }`}
-              >
-                {item.highlight ? (
-                  <div className={`flex flex-col items-center justify-center w-14 h-14 rounded-full shadow-lg ${
-                    isActive 
-                      ? 'bg-sky-500 text-white' 
-                      : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white'
-                  }`}>
-                    {item.icon}
-                  </div>
-                ) : (
-                  <div className={`${isActive ? 'text-sky-500' : 'text-gray-500'}`}>
-                    {item.icon}
-                  </div>
-                )}
-                <span className={`text-xs mt-1 ${
-                  item.highlight 
-                    ? 'text-sky-600 font-medium' 
-                    : isActive 
-                      ? 'text-sky-500 font-medium' 
-                      : 'text-gray-500'
-                }`}>
-                  {t(item.labelKey)}
-                </span>
-              </a>
-            );
-          }
+  //         if (item.external) {
+  //           return (
+  //             <a
+  //               key={item.path}
+  //               href={item.path}
+  //               target="_blank"
+  //               rel="noopener noreferrer"
+  //               onClick={(e) => {
+  //                 e.preventDefault();
+  //                 window.open(item.path, '_blank', 'noopener,noreferrer');
+  //               }}
+  //               className={`flex flex-col items-center justify-center flex-1 py-2 px-1 transition-colors ${
+  //                 item.highlight
+  //                   ? 'relative -top-3'
+  //                   : ''
+  //               }`}
+  //             >
+  //               {item.highlight ? (
+  //                 <div className={`flex flex-col items-center justify-center w-14 h-14 rounded-full shadow-lg ${
+  //                   isActive 
+  //                     ? 'bg-sky-500 text-white' 
+  //                     : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white'
+  //                 }`}>
+  //                   {item.icon}
+  //                 </div>
+  //               ) : (
+  //                 <div className={`${isActive ? 'text-sky-500' : 'text-gray-500'}`}>
+  //                   {item.icon}
+  //                 </div>
+  //               )}
+  //               <span className={`text-xs mt-1 ${
+  //                 item.highlight 
+  //                   ? 'text-sky-600 font-medium' 
+  //                   : isActive 
+  //                     ? 'text-sky-500 font-medium' 
+  //                     : 'text-gray-500'
+  //               }`}>
+  //                 {t(item.labelKey)}
+  //               </span>
+  //             </a>
+  //           );
+  //         }
           
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`flex flex-col items-center justify-center flex-1 py-2 px-1 transition-colors ${
-                item.highlight
-                  ? 'relative -top-3'
-                  : ''
-              }`}
-            >
-              {item.highlight ? (
-                <div className={`flex flex-col items-center justify-center w-14 h-14 rounded-full shadow-lg ${
-                  isActive 
-                    ? 'bg-sky-500 text-white' 
-                    : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white'
-                }`}>
-                  {item.icon}
-                </div>
-              ) : (
-                <div className={`${isActive ? 'text-sky-500' : 'text-gray-500'}`}>
-                  {item.icon}
-                </div>
-              )}
-              <span className={`text-xs mt-1 ${
-                item.highlight 
-                  ? 'text-sky-600 font-medium' 
-                  : isActive 
-                    ? 'text-sky-500 font-medium' 
-                    : 'text-gray-500'
-              }`}>
-                {t(item.labelKey)}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
-  );
+  //         return (
+  //           <Link
+  //             key={item.path}
+  //             to={item.path}
+  //             className={`flex flex-col items-center justify-center flex-1 py-2 px-1 transition-colors ${
+  //               item.highlight
+  //                 ? 'relative -top-3'
+  //                 : ''
+  //             }`}
+  //           >
+  //             {item.highlight ? (
+  //               <div className={`flex flex-col items-center justify-center w-14 h-14 rounded-full shadow-lg ${
+  //                 isActive 
+  //                   ? 'bg-sky-500 text-white' 
+  //                   : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white'
+  //               }`}>
+  //                 {item.icon}
+  //               </div>
+  //             ) : (
+  //               <div className={`${isActive ? 'text-sky-500' : 'text-gray-500'}`}>
+  //                 {item.icon}
+  //               </div>
+  //             )}
+  //             <span className={`text-xs mt-1 ${
+  //               item.highlight 
+  //                 ? 'text-sky-600 font-medium' 
+  //                 : isActive 
+  //                   ? 'text-sky-500 font-medium' 
+  //                   : 'text-gray-500'
+  //             }`}>
+  //               {t(item.labelKey)}
+  //             </span>
+  //           </Link>
+  //         );
+  //       })}
+  //     </div>
+  //   </nav>
+  // );
 }

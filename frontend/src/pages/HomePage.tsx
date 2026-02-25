@@ -250,53 +250,49 @@ export default function HomePage() {
   return (
     <div className="bg-white">
       {/* Hero Section - Full width team image */}
-      <section ref={setSectionRef(0)} className="relative h-screen">
-        <div className="absolute inset-0">
-          <img 
-            src={IMAGES.hero}
-            alt="Nhóm VISTA"
-            className="w-full h-full object-cover object-[50%_25%] md:object-[50%_35%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-slate-900/30" />
-        </div>
-        
-        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 flex items-end pb-24 sm:pb-20">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-2xl mb-4 sm:mb-0"
-          >
-            <p className="text-blue-400 font-semibold mb-3 sm:mb-4 tracking-wide text-xs sm:text-sm uppercase">
-              VISTA - PATIENT JOURNEY
-            </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
-              {t('home.hero.title2')}
-              <br />
-              <span className="text-blue-400">{t('home.hero.subtitle2')}</span>
-            </h1>
-          </motion.div>
-        </div>
+      <section ref={setSectionRef(0)} className="relative w-full md:h-screen">
+      {/* WRAPPER ẢNH:
+         - Mobile: relative (để height tự giãn theo ảnh), w-full.
+         - PC: absolute inset-0 (để phủ kín background h-screen như cũ).
+      */}
+      <div className="relative w-full md:absolute md:inset-0 md:h-full">
+        <img 
+          src={IMAGES.hero}
+          alt="Nhóm VISTA"
+          // Mobile: h-auto (chiều cao tự nhiên), object-contain (đủ nội dung).
+          // PC: h-full, object-cover, object-[50%_35%] (Giữ nguyên như cũ).
+          className="w-full h-auto md:h-full md:object-cover md:object-[50%_35%]"
+        />
+        {/* Gradient phủ lên ảnh */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-slate-900/30" />
+      </div>
 
-        {/* Quick Stats Bar */}
-        {/* <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { value: '6', label: 'Thành viên dự án' },
-                { value: 'FA25', label: 'Học kỳ triển khai' },
-                { value: 'Web + API', label: 'Sản phẩm demo' },
-                { value: 'V1', label: 'Bản thử nghiệm' },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-2xl md:text-3xl font-bold text-blue-600">{stat.value}</div>
-                  <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div> */}
-      </section>
+      {/* WRAPPER NỘI DUNG:
+         - Mobile: absolute inset-0 (đè lên ảnh), padding tính theo % để scale.
+         - PC: Giữ nguyên max-w-7xl, padding px-4...
+      */}
+      <div className="absolute inset-0 flex items-end pb-[8%] px-[5%] md:relative md:h-full md:max-w-7xl md:mx-auto md:px-6 md:pb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="w-full md:max-w-2xl md:mb-0"
+        >
+          {/* TEXT RESPONSIVE:
+             - Mobile: Dùng text-[Xvw] (ví dụ 3.5vw) -> Màn hình nhỏ chữ tự bé lại.
+             - PC (md:): Quay về text-sm, text-6xl cố định như cũ.
+          */}
+          <p className="text-blue-400 font-semibold mb-[2%] md:mb-4 tracking-wide text-[3.5vw] md:text-sm uppercase">
+            VISTA - PATIENT JOURNEY
+          </p>
+          <h1 className="font-bold text-white leading-tight mb-[4%] md:mb-6 text-[4vw] md:text-5xl lg:text-6xl">
+            {t('home.hero.title2')}
+            <br />
+            <span className="text-blue-400">{t('home.hero.subtitle2')}</span>
+          </h1>
+        </motion.div>
+      </div>
+    </section>
 
       {/* Services Section */}
       {/* <section ref={setSectionRef(1)} className="py-20 bg-gray-50 min-h-screen flex flex-col justify-center">
@@ -624,7 +620,7 @@ export default function HomePage() {
       </div>
 
       {/* Snap Scroll Navigation - Mobile/Tablet */}
-      <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
+      {/* <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
         <div className="bg-white/95 backdrop-blur-md rounded-full shadow-lg px-3 sm:px-4 py-2.5 sm:py-3 
           border border-gray-200/50">
           <div className="flex items-center gap-2 sm:gap-3">
@@ -647,7 +643,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
     </div>
   );

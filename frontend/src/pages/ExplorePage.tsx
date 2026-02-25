@@ -95,10 +95,10 @@ export default function ExplorePage() {
         {/* Full-bleed frame (stretches to both sides) */}
         <div className="w-screen relative left-1/2 -translate-x-1/2">
           <div
-            className="relative overflow-hidden md:rounded-3xl border border-white/10 bg-black/30"
+            className="relative overflow-hidden md:rounded-3xl border border-white/10 bg-black/30 h-[80svh] md:h-[calc(100svh-15.25rem)]"
             style={{
-              height: 'calc(100svh - 5rem - 10.25rem)',
-              minHeight: 520,
+              // Xóa thuộc tính height cứng ở đây để class Tailwind phía trên có tác dụng
+              minHeight: 520, 
             }}
           >
           <div className="absolute inset-0">
