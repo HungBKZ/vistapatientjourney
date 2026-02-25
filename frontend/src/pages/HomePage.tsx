@@ -583,41 +583,7 @@ export default function HomePage() {
       </section> */}
 
       {/* Snap Scroll Navigation - Desktop */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block">
-        <div className="flex flex-col gap-4">
-          {SECTION_NAMES.map((name, index) => (
-            <div key={index} className="group relative">
-              {/* Tooltip */}
-              <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 opacity-0 
-                group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                <div className="bg-gray-900 text-white text-sm px-3 py-2 rounded-lg 
-                  whitespace-nowrap shadow-lg">
-                  {name}
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full 
-                    border-8 border-transparent border-l-gray-900" />
-                </div>
-              </div>
-              
-              {/* Dot Button */}
-              <button
-                onClick={() => scrollToSection(index)}
-                className={`relative w-3 h-3 rounded-full transition-all duration-300 
-                  ${currentSection === index 
-                    ? 'bg-blue-600 scale-125 shadow-lg shadow-blue-600/50' 
-                    : 'bg-gray-300 hover:bg-blue-400 hover:scale-110'
-                  }`}
-                aria-label={`Go to ${name}`}
-              >
-                {/* Pulse animation for active section */}
-                {currentSection === index && (
-                  <span className="absolute inset-0 rounded-full bg-blue-600 
-                    animate-ping opacity-75" />
-                )}
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
+      
 
       {/* Snap Scroll Navigation - Mobile/Tablet */}
       {/* <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
