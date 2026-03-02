@@ -84,7 +84,7 @@ export default function Header() {
                 onChange={(e) => setLanguage(e.target.value as 'vi' | 'en')}
                 aria-label="Language"
                 className={`appearance-none bg-transparent cursor-pointer px-3 py-2 pr-8 rounded-lg font-medium text-sm focus:outline-none ${
-                  isHomePage && !isScrolled ? 'text-white' : 'text-gray-700'
+                  isHomePage && !isScrolled ? '' : 'text-gray-700'
                 }`}
               >
                 <option value="vi">VI</option>
@@ -92,7 +92,7 @@ export default function Header() {
               </select>
               <svg
                 className={`pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 ${
-                  isHomePage && !isScrolled ? 'text-white' : 'text-gray-600'
+                  isHomePage && !isScrolled ? '' : 'text-gray-600'
                 }`}
                 viewBox="0 0 20 20"
                 fill="currentColor"

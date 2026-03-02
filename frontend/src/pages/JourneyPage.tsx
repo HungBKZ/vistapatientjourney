@@ -265,8 +265,6 @@ export default function JourneyPage() {
 
   /* Track scroll position for navigation dots */
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
 
     const handleScroll = () => {
       const sections = [
@@ -274,7 +272,7 @@ export default function JourneyPage() {
         ...MILESTONES.map((_, i) => document.getElementById(`milestone-${i}`))
       ];
 
-      const scrollPosition = container.scrollTop + window.innerHeight / 2;
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
@@ -285,8 +283,8 @@ export default function JourneyPage() {
       }
     };
 
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const openLightbox = useCallback((msIdx: number, imgIdx: number) => {
@@ -372,11 +370,11 @@ export default function JourneyPage() {
   return (
     <div
       ref={containerRef}
-      className="relative lg:snap-y lg:snap-mandatory h-screen overflow-y-scroll"
+      className="relative"
       style={{ scrollBehavior: 'smooth' }}
     >
       {/* Navigation dots */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+      {/* <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
         {[0, ...MILESTONES.map((_, i) => i + 1)].map((idx) => (
           <button
             key={idx}
@@ -391,12 +389,12 @@ export default function JourneyPage() {
             }`}
           />
         ))}
-      </div>
+      </div> */}
 
       {/* ═══════ HERO BANNER ═══════ */}
       <section
         id="hero"
-        className="relative h-screen lg:snap-start lg:snap-always flex items-center justify-center pt-16"
+        className="relative min-h-screen lg:snap-start lg:snap-always flex items-center justify-center pt-16"
       >
         {/* Background Image */}
         <div className="absolute inset-0 top-16">
@@ -482,7 +480,7 @@ export default function JourneyPage() {
           <section
             key={ms.id}
             id={`milestone-${idx}`}
-            className="relative min-h-screen lg:h-screen lg:snap-start lg:snap-always flex items-center justify-center overflow-hidden py-12 sm:py-16 lg:py-0"
+            className="relative min-h-screen flex items-center justify-center overflow-hidden py-12 sm:py-16 lg:py-0"
             style={{
               background: `linear-gradient(135deg, ${c.from} 0%, ${c.via} 50%, ${c.to} 100%)`
             }}
@@ -613,7 +611,7 @@ export default function JourneyPage() {
             </div>
 
             {/* Progress indicator for this section */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+            {/* <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
               {MILESTONES.map((_, i) => (
                 <div
                   key={i}
@@ -622,7 +620,7 @@ export default function JourneyPage() {
                   }`}
                 />
               ))}
-            </div>
+            </div> */}
           </section>
         );
       })}

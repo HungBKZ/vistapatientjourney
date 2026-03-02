@@ -62,7 +62,7 @@ export default function HomePage() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const isScrollingRef = useRef(false);
   const lastScrollTime = useRef(0);
-  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+  // const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const SECTION_NAMES = [
     t('nav.home'),
@@ -84,18 +84,18 @@ export default function HomePage() {
   }, []);
 
   // Snap scroll logic
-  const scrollToSection = useCallback((index: number) => {
-    const section = sectionsRef.current[index];
-    if (section && !isScrollingRef.current) {
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-      isScrollingRef.current = true;
-      setCurrentSection(index);
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setTimeout(() => {
-        isScrollingRef.current = false;
-      }, 800);
-    }
-  }, []);
+  // const scrollToSection = useCallback((index: number) => {
+  //   const section = sectionsRef.current[index];
+  //   if (section && !isScrollingRef.current) {
+  //     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+  //     isScrollingRef.current = true;
+  //     setCurrentSection(index);
+  //     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //     setTimeout(() => {
+  //       isScrollingRef.current = false;
+  //     }, 800);
+  //   }
+  // }, []);
 
   // Track current section on scroll
   useEffect(() => {
@@ -125,123 +125,123 @@ export default function HomePage() {
       setCurrentSection(foundSection);
       
       // Only enable auto-snap on desktop
-      const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
-      if (!isDesktop) return;
+      // const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+      // if (!isDesktop) return;
 
       // Auto-snap to nearest section after scroll stops
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-      scrollTimeout.current = setTimeout(() => {
-        const section = sectionsRef.current[foundSection];
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          // If section is not perfectly aligned at top, snap to it
-          if (Math.abs(rect.top) > 5) {
-            isScrollingRef.current = true;
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setTimeout(() => {
-              isScrollingRef.current = false;
-            }, 600);
-          }
-        }
-      }, 150); // Wait 150ms after scroll stops
+      // if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+      // scrollTimeout.current = setTimeout(() => {
+      //   const section = sectionsRef.current[foundSection];
+      //   if (section) {
+      //     const rect = section.getBoundingClientRect();
+      //     // If section is not perfectly aligned at top, snap to it
+      //     if (Math.abs(rect.top) > 5) {
+      //       isScrollingRef.current = true;
+      //       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      //       setTimeout(() => {
+      //         isScrollingRef.current = false;
+      //       }, 600);
+      //     }
+      //   }
+      // }, 150); // Wait 150ms after scroll stops
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+      // if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     };
   }, []);
 
   // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isScrollingRef.current) return;
+  // useEffect(() => {
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     if (isScrollingRef.current) return;
       
-      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-        e.preventDefault();
-        const nextIndex = Math.min(SECTION_NAMES.length - 1, currentSection + 1);
-        if (nextIndex !== currentSection) {
-          scrollToSection(nextIndex);
-        }
-      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-        e.preventDefault();
-        const prevIndex = Math.max(0, currentSection - 1);
-        if (prevIndex !== currentSection) {
-          scrollToSection(prevIndex);
-        }
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        scrollToSection(0);
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        scrollToSection(SECTION_NAMES.length - 1);
-      }
-    };
+  //     if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+  //       e.preventDefault();
+  //       const nextIndex = Math.min(SECTION_NAMES.length - 1, currentSection + 1);
+  //       if (nextIndex !== currentSection) {
+  //         scrollToSection(nextIndex);
+  //       }
+  //     } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+  //       e.preventDefault();
+  //       const prevIndex = Math.max(0, currentSection - 1);
+  //       if (prevIndex !== currentSection) {
+  //         scrollToSection(prevIndex);
+  //       }
+  //     } else if (e.key === 'Home') {
+  //       e.preventDefault();
+  //       scrollToSection(0);
+  //     } else if (e.key === 'End') {
+  //       e.preventDefault();
+  //       scrollToSection(SECTION_NAMES.length - 1);
+  //     }
+  //   };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSection, scrollToSection]);
+  //   window.addEventListener('keydown', handleKeyDown);
+  //   return () => window.removeEventListener('keydown', handleKeyDown);
+  // }, [currentSection, scrollToSection]);
 
-  useEffect(() => {
-    // Only enable snap scroll on desktop (lg breakpoint and above)
-    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
-    if (!isDesktop) return;
+  // useEffect(() => {
+  //   // Only enable snap scroll on desktop (lg breakpoint and above)
+  //   const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+  //   if (!isDesktop) return;
 
-    const handleWheel = (e: WheelEvent) => {
-      const now = Date.now();
-      // Shorter cooldown for more responsive scrolling
-      if (now - lastScrollTime.current < 600 || isScrollingRef.current) return;
+  //   const handleWheel = (e: WheelEvent) => {
+  //     const now = Date.now();
+  //     // Shorter cooldown for more responsive scrolling
+  //     if (now - lastScrollTime.current < 600 || isScrollingRef.current) return;
       
-      const windowHeight = window.innerHeight;
+  //     const windowHeight = window.innerHeight;
       
-      // Find current section index - use closest section
-      let currentIndex = -1;
-      let closestDistance = Infinity;
+  //     // Find current section index - use closest section
+  //     let currentIndex = -1;
+  //     let closestDistance = Infinity;
       
-      for (let i = 0; i < sectionsRef.current.length; i++) {
-        const section = sectionsRef.current[i];
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          const sectionTop = rect.top;
-          const distance = Math.abs(sectionTop);
+  //     for (let i = 0; i < sectionsRef.current.length; i++) {
+  //       const section = sectionsRef.current[i];
+  //       if (section) {
+  //         const rect = section.getBoundingClientRect();
+  //         const sectionTop = rect.top;
+  //         const distance = Math.abs(sectionTop);
           
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            currentIndex = i;
-          }
-        }
-      }
+  //         if (distance < closestDistance) {
+  //           closestDistance = distance;
+  //           currentIndex = i;
+  //         }
+  //       }
+  //     }
       
-      // If not in snap sections, allow normal scroll
-      if (currentIndex === -1 || currentIndex >= SECTION_NAMES.length) return;
+  //     // If not in snap sections, allow normal scroll
+  //     if (currentIndex === -1 || currentIndex >= SECTION_NAMES.length) return;
       
-      // If at last snap section and scrolling down, allow normal scroll
-      if (currentIndex === SECTION_NAMES.length - 1 && e.deltaY > 0) return;
+  //     // If at last snap section and scrolling down, allow normal scroll
+  //     if (currentIndex === SECTION_NAMES.length - 1 && e.deltaY > 0) return;
       
-      // If at first section and scrolling up, allow normal scroll
-      if (currentIndex === 0 && e.deltaY < 0) return;
+  //     // If at first section and scrolling up, allow normal scroll
+  //     if (currentIndex === 0 && e.deltaY < 0) return;
       
-      // Very sensitive threshold - any intentional scroll will trigger
-      const threshold = 10;
-      if (Math.abs(e.deltaY) < threshold) return;
+  //     // Very sensitive threshold - any intentional scroll will trigger
+  //     const threshold = 10;
+  //     if (Math.abs(e.deltaY) < threshold) return;
       
-      // Prevent default scroll behavior
-      e.preventDefault();
+  //     // Prevent default scroll behavior
+  //     e.preventDefault();
       
-      // Determine direction
-      const direction = e.deltaY > 0 ? 1 : -1;
-      const nextIndex = Math.max(0, Math.min(SECTION_NAMES.length - 1, currentIndex + direction));
+  //     // Determine direction
+  //     const direction = e.deltaY > 0 ? 1 : -1;
+  //     const nextIndex = Math.max(0, Math.min(SECTION_NAMES.length - 1, currentIndex + direction));
       
-      if (nextIndex !== currentIndex) {
-        lastScrollTime.current = now;
-        scrollToSection(nextIndex);
-      }
-    };
+  //     if (nextIndex !== currentIndex) {
+  //       lastScrollTime.current = now;
+  //       scrollToSection(nextIndex);
+  //     }
+  //   };
 
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [scrollToSection]);
+  //   window.addEventListener('wheel', handleWheel, { passive: false });
+  //   return () => window.removeEventListener('wheel', handleWheel);
+  // }, [scrollToSection]);
 
   const setSectionRef = (index: number) => (el: HTMLElement | null) => {
     sectionsRef.current[index] = el;
