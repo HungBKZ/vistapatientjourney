@@ -6,6 +6,7 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  tArray: (key: string) => string[];
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -51,8 +52,23 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
     return typeof value === 'string' ? value : key;
   };
 
+  const tArray = (key: string): string[] => {
+    const keys = key.split('.');
+    let value: any = translations[language];
+    
+    for (const k of keys) {
+      if (value && typeof value === 'object') {
+        value = value[k];
+      } else {
+        return [];
+      }
+    }
+    
+    return Array.isArray(value) ? value : [];
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, tArray }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -238,6 +254,35 @@ const translations = {
       error: 'Đã có lỗi xảy ra',
       close: 'Đóng',
     },
+    chatbot: {
+      title: 'Vista Eye Care',
+      status: 'Trợ lý AI đang trực tuyến',
+      close: 'Đóng Chat',
+      inputPlaceholder: 'Nhập tin nhắn...',
+      inputBlocked: 'Chờ một lát nhé...',
+      openChat: 'Mở Chatbot',
+      greeting: 'Xin chào! Mình là trợ lý Vista Eye Care. Bạn có thể hỏi mình các bệnh lý về mắt 😊',
+      quickSuggestions: [
+        'Khám mắt tổng quát là gì?',
+        'Triệu chứng cận thị',
+        'Phòng ngừa đục thủy tinh thể',
+        'Giá dịch vụ khám mắt',
+        'Đặt lịch khám như thế nào?',
+        'Giờ làm việc của Vista'
+      ],
+      responses: {
+        greeting: 'Xin chào! 👋 Chào mừng bạn đến với Vista Eye Care. Mình có thể tư vấn về:\n• Khám mắt tổng quát\n• Đo khúc xạ & cắt kính\n• Phẫu thuật LASIK\n• Điều trị các bệnh về mắt\n\nBạn quan tâm dịch vụ nào nhỉ? 😊',
+        whoAreYou: 'Mình là trợ lý ảo của Vista Eye Care - Trung tâm nhãn khoa uy tín tại Cần Thơ. Mình có thể giúp bạn:\n✓ Tìm hiểu về bệnh lý mắt\n✓ Tư vấn dịch vụ khám & điều trị\n✓ Hướng dẫn đặt lịch hẹn\n✓ Giải đáp thắc mắc về giá cả',
+        whatCanYouDo: 'Mình có thể hỗ trợ bạn:\n📋 Tư vấn các dịch vụ nhãn khoa\n👁️ Giải đáp về bệnh lý mắt\n📅 Hướng dẫn đặt lịch khám\n💰 Thông tin giá dịch vụ\n⏰ Giờ làm việc & địa chỉ\n\nBạn cần giúp gì nhỉ?',
+        contact: 'Bạn có thể liên hệ Vista qua Facebook: https://www.facebook.com/profile.php?id=61581889931780 — đội ngũ sẽ phản hồi sớm nhất.',
+        address: 'Địa chỉ Vista: 600 Nguyễn Văn Cừ nối dài, An Bình, Bình Thuỷ, Cần Thơ 900000. Bạn có thể đặt lịch trước để giảm thời gian chờ.',
+        overloaded: '⚠️ Hệ thống AI đang quá tải. Vui lòng thử lại sau hoặc sử dụng các câu hỏi thường gặp bên dưới.',
+        cooldown: '⏱️ Vui lòng chờ 2 giây trước khi gửi tin nhắn tiếp theo để tránh spam hệ thống.',
+        tooManyMessages: '🚫 Bạn đã gửi quá nhiều tin nhắn! Vui lòng chờ 1 phút trước khi tiếp tục. Điều này giúp hệ thống hoạt động ổn định hơn.',
+        noInfo: 'Xin lỗi, mình chưa có thông tin về câu hỏi này. Bạn có thể thử hỏi về:\n• Khám mắt tổng quát\n• Cận thị, viễn thị\n• Đục thủy tinh thể\n• Giá dịch vụ\n• Đặt lịch hẹn\n\nHoặc gọi hotline: 038 883 3157 để được tư vấn trực tiếp nhé! 😊',
+        error: 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau! 🙏'
+      }
+    },
   },
   en: {
     nav: {
@@ -417,6 +462,35 @@ const translations = {
       loading: 'Loading...',
       error: 'An error occurred',
       close: 'Close',
+    },
+    chatbot: {
+      title: 'Vista Eye Care',
+      status: 'AI Assistant Online',
+      close: 'Close Chat',
+      inputPlaceholder: 'Type a message...',
+      inputBlocked: 'Wait a moment...',
+      openChat: 'Open Chatbot',
+      greeting: 'Hello! I\'m Vista Eye Care assistant. You can ask me about eye conditions 😊',
+      quickSuggestions: [
+        'What is comprehensive eye exam?',
+        'Myopia symptoms',
+        'Preventing cataracts',
+        'Eye exam service pricing',
+        'How to book an appointment?',
+        'Vista working hours'
+      ],
+      responses: {
+        greeting: 'Hello! 👋 Welcome to Vista Eye Care. I can advise you on:\n• Comprehensive eye exams\n• Refraction testing & glasses prescription\n• LASIK surgery\n• Eye disease treatment\n\nWhich service are you interested in? 😊',
+        whoAreYou: 'I am the virtual assistant of Vista Eye Care - a reputable ophthalmology center in Can Tho. I can help you:\n✓ Learn about eye conditions\n✓ Consulting examination & treatment services\n✓ Appointment booking guidance\n✓ Answering pricing questions',
+        whatCanYouDo: 'I can assist you with:\n📋 Ophthalmology service consulting\n👁️ Eye condition information\n📅 Appointment booking guidance\n💰 Service pricing information\n⏰ Working hours & address\n\nHow can I help you?',
+        contact: 'You can contact Vista via Facebook: https://www.facebook.com/profile.php?id=61581889931780 — our team will respond as soon as possible.',
+        address: 'Vista Address: 600 Nguyen Van Cu Extension, An Binh, Binh Thuy, Can Tho 900000. You can book in advance to reduce waiting time.',
+        overloaded: '⚠️ AI system is overloaded. Please try again later or use the frequently asked questions below.',
+        cooldown: '⏱️ Please wait 2 seconds before sending the next message to avoid spamming the system.',
+        tooManyMessages: '🚫 You have sent too many messages! Please wait 1 minute before continuing. This helps the system operate more stably.',
+        noInfo: 'Sorry, I don\'t have information about this question. You can try asking about:\n• Comprehensive eye exam\n• Myopia, hyperopia\n• Cataracts\n• Service pricing\n• Booking appointments\n\nOr call hotline: 038 883 3157 for direct consultation! 😊',
+        error: 'Sorry, an error occurred. Please try again later! 🙏'
+      }
     },
   },
 };

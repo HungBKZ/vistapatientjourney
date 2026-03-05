@@ -1,23 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion as Motion, AnimatePresence } from 'framer-motion'
 import Fuse from 'fuse.js'
+import { useLanguage } from './contexts/LanguageContext'
 
 import faqData from './fallback/faq.json'
 
 // API configuration - Azure endpoint
 const API_ENDPOINT = 'https://chatbotconversationapi.azurewebsites.net/api/Gemini/ask'
 
-// Suggested quick-reply questions
-const QUICK_SUGGESTIONS = [
-  'Khám mắt tổng quát là gì?',
-  'Triệu chứng cận thị',
-  'Phòng ngừa đục thủy tinh thể',
-  'Giá dịch vụ khám mắt',
-  'Đặt lịch khám như thế nào?',
-  'Giờ làm việc của Vista'
-]
-
 const VistaChatbot = () => {
+  const { t, tArray, language } = useLanguage()
   const faqFuse = useMemo(() => {
     return new Fuse(faqData, {
       keys: ['question'],
@@ -31,7 +23,7 @@ const VistaChatbot = () => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      text: 'Xin chào! Mình là trợ lý Vista Eye Care. Bạn có thể hỏi mình các bệnh lý về mắt 😊'
+      text: t('chatbot.greeting')
     }
   ])
   const [input, setInput] = useState('')
@@ -46,6 +38,14 @@ const VistaChatbot = () => {
   const COOLDOWN_MS = 2000
   const MAX_MESSAGES_PER_MINUTE = 10
 
+  // Update greeting message when language changes
+  useEffect(() => {
+    setMessages([{
+      role: 'assistant',
+      text: t('chatbot.greeting')
+    }])
+  }, [language, t])
+
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
@@ -58,20 +58,20 @@ const VistaChatbot = () => {
 
   // Small-talk / greeting intents (checked before FAQ search)
   const smallTalkAnswer = (text) => {
-    const t = (text || '').toLowerCase().trim()
+    const userText = (text || '').toLowerCase().trim()
     
-    const isGreeting = /^(xin chào|chào|hello|hi|hey|chao)\s*!*$/i.test(t) || 
-                       /^(xin chào|chào|hello|hi|hey|chao)\s+(bạn|mình|vista)/i.test(t)
-    const isWhoAreYou = /^(bạn là ai|ai vậy|bot là ai|vista ai|care buddy là gì)/i.test(t)
-    const isWhatCanYouDo = /^(giúp gì|làm gì được|chức năng|hỗ trợ gì|bạn làm được gì)/i.test(t)
-    const isContact = /^(liên hệ|facebook|fanpage|contact)/i.test(t)
-    const isAddress = /^(địa chỉ|ở đâu|chỗ nào|address)/i.test(t)
+    const isGreeting = /^(xin chào|chào|hello|hi|hey|chao)\s*!*$/i.test(userText) || 
+                       /^(xin chào|chào|hello|hi|hey|chao)\s+(bạn|mình|vista)/i.test(userText)
+    const isWhoAreYou = /^(bạn là ai|ai vậy|bot là ai|vista ai|care buddy là gì|who are you|what are you)/i.test(userText)
+    const isWhatCanYouDo = /^(giúp gì|làm gì được|chức năng|hỗ trợ gì|bạn làm được gì|what can you do|help me)/i.test(userText)
+    const isContact = /^(liên hệ|facebook|fanpage|contact)/i.test(userText)
+    const isAddress = /^(địa chỉ|ở đâu|chỗ nào|address|location)/i.test(userText)
 
-    if (isGreeting) return 'Xin chào! 👋 Chào mừng bạn đến với Vista Eye Care. Mình có thể tư vấn về:\n• Khám mắt tổng quát\n• Đo khúc xạ & cắt kính\n• Phẫu thuật LASIK\n• Điều trị các bệnh về mắt\n\nBạn quan tâm dịch vụ nào nhỉ? 😊'
-    if (isWhoAreYou) return 'Mình là trợ lý ảo của Vista Eye Care - Trung tâm nhãn khoa uy tín tại Cần Thơ. Mình có thể giúp bạn:\n✓ Tìm hiểu về bệnh lý mắt\n✓ Tư vấn dịch vụ khám & điều trị\n✓ Hướng dẫn đặt lịch hẹn\n✓ Giải đáp thắc mắc về giá cả'
-    if (isWhatCanYouDo) return 'Mình có thể hỗ trợ bạn:\n📋 Tư vấn các dịch vụ nhãn khoa\n👁️ Giải đáp về bệnh lý mắt\n📅 Hướng dẫn đặt lịch khám\n💰 Thông tin giá dịch vụ\n⏰ Giờ làm việc & địa chỉ\n\nBạn cần giúp gì nhỉ?'
-    if (isContact) return 'Bạn có thể liên hệ Vista qua Facebook: https://www.facebook.com/profile.php?id=61581889931780 — đội ngũ sẽ phản hồi sớm nhất.'
-    if (isAddress) return 'Địa chỉ Vista: 600 Nguyễn Văn Cừ nối dài, An Bình, Bình Thuỷ, Cần Thơ 900000. Bạn có thể đặt lịch trước để giảm thời gian chờ.'
+    if (isGreeting) return t('chatbot.responses.greeting')
+    if (isWhoAreYou) return t('chatbot.responses.whoAreYou')
+    if (isWhatCanYouDo) return t('chatbot.responses.whatCanYouDo')
+    if (isContact) return t('chatbot.responses.contact')
+    if (isAddress) return t('chatbot.responses.address')
 
     return null
   }
@@ -115,7 +115,7 @@ const VistaChatbot = () => {
 
       if (!response.ok) {
         if (response.status === 429) {
-          return '⚠️ Hệ thống AI đang quá tải. Vui lòng thử lại sau hoặc sử dụng các câu hỏi thường gặp bên dưới.'
+          return t('chatbot.responses.overloaded')
         }
         return null
       }
@@ -147,7 +147,7 @@ const VistaChatbot = () => {
     const now = Date.now()
     
     if (now - lastMessageTime < COOLDOWN_MS) {
-      setMessages((prev) => [...prev, { role: 'assistant', text: '⏱️ Vui lòng chờ 2 giây trước khi gửi tin nhắn tiếp theo để tránh spam hệ thống.' }])
+      setMessages((prev) => [...prev, { role: 'assistant', text: t('chatbot.responses.cooldown') }])
       return
     }
     
@@ -156,7 +156,7 @@ const VistaChatbot = () => {
     
     if (recentMessages.length >= MAX_MESSAGES_PER_MINUTE) {
       setIsBlocked(true)
-      setMessages((prev) => [...prev, { role: 'assistant', text: '🚫 Bạn đã gửi quá nhiều tin nhắn! Vui lòng chờ 1 phút trước khi tiếp tục. Điều này giúp hệ thống hoạt động ổn định hơn.' }])
+      setMessages((prev) => [...prev, { role: 'assistant', text: t('chatbot.responses.tooManyMessages') }])
       
       setTimeout(() => {
         setIsBlocked(false)
@@ -201,12 +201,12 @@ const VistaChatbot = () => {
           ...prev,
           {
             role: 'assistant',
-            text: 'Xin lỗi, mình chưa có thông tin về câu hỏi này. Bạn có thể thử hỏi về:\n• Khám mắt tổng quát\n• Cận thị, viễn thị\n• Đục thủy tinh thể\n• Giá dịch vụ\n• Đặt lịch hẹn\n\nHoặc gọi hotline: 038 883 3157 để được tư vấn trực tiếp nhé! 😊'
+            text: t('chatbot.responses.noInfo')
           }
         ])
       }
-    } catch (error) {
-      setMessages((prev) => [...prev, { role: 'assistant', text: 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau! 🙏' }])
+    } catch {
+      setMessages((prev) => [...prev, { role: 'assistant', text: t('chatbot.responses.error') }])
     } finally {
       setIsLoading(false)
     }
@@ -232,17 +232,17 @@ const VistaChatbot = () => {
                   👁️
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-white tracking-wide">Vista Eye Care</h3>
+                  <h3 className="text-sm font-semibold text-white tracking-wide">{t('chatbot.title')}</h3>
                   <p className="text-xs text-blue-50 mt-0.5 flex items-center gap-1 opacity-90">
                     <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-[0_0_4px_#4ade80]"></span>
-                    Trợ lý AI đang trực tuyến
+                    {t('chatbot.status')}
                   </p>
                 </div>
               </div>
               <button
                 onClick={toggleChat}
                 className="p-2 rounded-full text-white/80 hover:text-white hover:bg-white/20 transition-colors"
-                aria-label="Đóng Chat"
+                aria-label={t('chatbot.close')}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -286,7 +286,7 @@ const VistaChatbot = () => {
             {/* Quick suggestion chips - Nền trong suốt */}
             <div className="px-4 py-3 bg-transparent border-t border-white/40">
               <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar touch-pan-x">
-                {QUICK_SUGGESTIONS.map((suggestion, idx) => (
+                {tArray('chatbot.quickSuggestions').map((suggestion, idx) => (
                   <button
                     key={idx}
                     type="button"
@@ -306,7 +306,7 @@ const VistaChatbot = () => {
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 disabled={isBlocked}
-                placeholder={isBlocked ? "Chờ một lát nhé..." : "Nhập tin nhắn..."}
+                placeholder={isBlocked ? t('chatbot.inputBlocked') : t('chatbot.inputPlaceholder')}
                 className="flex-1 bg-white/70 backdrop-blur-sm border border-white/80 rounded-full px-4 py-2.5 text-[14px] text-gray-800 placeholder-gray-500 focus:outline-none focus:bg-white/95 focus:border-blue-400 focus:ring-2 focus:ring-blue-200/50 shadow-inner transition-all disabled:opacity-50"
               />
               <button
@@ -329,7 +329,7 @@ const VistaChatbot = () => {
         whileTap={{ scale: 0.95 }}
         onClick={toggleChat}
         className="w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl shadow-blue-600/30 flex items-center justify-center text-2xl relative"
-        aria-label="Mở Chatbot"
+        aria-label={t('chatbot.openChat')}
       >
         <Motion.span
           animate={isOpen ? { rotate: 90, scale: 0 } : { rotate: 0, scale: 1 }}
