@@ -5,9 +5,48 @@ import { useLanguage } from '../contexts/LanguageContext';
 const effectiveDate = '10/02/2026';
 
 const sections = {
+  km: [
+    {
+      heading: '1. ការទទួលយកលក្ខខណ្ឌ',
+      body: 'ដោយការទាញយក ចូលប្រើ ឬប្រើប្រាស់ Vista Patient Journey ("កម្មវិធី") អ្នកយល់ព្រមនឹងលក្ខខណ្ឌសេវាកម្មទាំងនេះ។ ប្រសិនបើអ្នកមិនយល់ព្រម សូមមិនប្រើប្រាស់កម្មវិធី។',
+    },
+    {
+      heading: '2. គោលបំណងកម្មវិធី (មិនជំនួសដំបូន្មានវេជ្ជសាស្ត្រ)',
+      body: 'កម្មវិធីផ្តល់ខ្លឹមសារអប់រំ និងបទពិសោធន៍ទាក់ទងនឹងសុខភាពភ្នែក។ កម្មវិធីមិនផ្តល់ដំបូន្មាន ការធ្វើរោគវិនិច្ឆ័យ ឬការព្យាបាលវេជ្ជសាស្ត្រ។ តែងតែស្វែងរកដំបូន្មានពីអ្នកជំនាញវេជ្ជសាស្ត្រ ប្រសិនបើមានការព្រួយបារម្ភ។ ក្នុងករណីបន្ទាន់ ហៅលេខជំនួយក្នុងស្រុករបស់អ្នក។',
+    },
+    {
+      heading: '3. ទំនួលខុសត្រូវរបស់អ្នកប្រើ',
+      body: 'អ្នកទទួលខុសត្រូវចំពោះព័ត៌មានដែលបញ្ចូល (ប្រវត្តិរូប ខ្លឹមសារការសន្ទនា ការណាត់ជួប...)។ សូមមិនបញ្ចូលទិន្នន័យរសើបដែលអ្នកមិនចង់រក្សាទុកនៅលើឧបករណ៍។',
+    },
+    {
+      heading: '4. ការប្រើប្រាស់ត្រឹមត្រូវ',
+      body: 'អ្នកយល់ព្រមមិន: (ក) កេងប្រវ័ញ្ចកម្មវិធី; (ខ) ព្យាយាមរំខានឬខូចខាតកម្មវិធី; (គ) ចូលប្រើប្រាស់ខុសច្បាប់ ឬបង្កើតផលិតផលដែលបានមកពីកូដ; (ឃ) ប្រើប្រើប្រាស់កម្មវិធីដើម្បីបញ្ជូនខ្លឹមសារខុសច្បាប់ ឬបំពានសិទ្ធិ។',
+    },
+    {
+      heading: '5. សេវាកម្ម/ខ្លឹមសារភាគីទីបី',
+      body: 'ខ្លឹមសារខ្លះអាចត្រូវបានផ្តល់ដោយភាគីទីបី (ឧ. ការផ្ទុក media, សេវាបង្កើត avatar, បណ្ណាល័យសម្រាប់បទពិសោធន៍)។ ការប្រើប្រាស់អាចស្ថិតក្រោមលក្ខខណ្ឌ/គោលនយោបាយរបស់ភាគីទីបីនោះ។',
+    },
+    {
+      heading: '6. ការបដិសេធការធានា',
+      body: 'កម្មវិធីត្រូវបានផ្តល់ "ដូចដែលមាន" និង "ស្ថិតលើភាពអាច"។ ក្នុងវិសាលភាពច្បាប់អនុញ្ញាត យើងបដិសេធការធានាទាំងអស់ ទាំងច្បាស់លាស់ ឬដោយប្រយោល។',
+    },
+    {
+      heading: '7. ភាពអាចរកបាន និងការផ្លាស់ប្តូរ',
+      body: 'យើងអាចធ្វើបច្ចុប្បន្នភាព កែប្រែ ផ្អាកជាបណ្តោះអាសន្ន ឬបញ្ឈប់កម្មវិធី (ទាំងស្រុង ឬតែខ្លះ) នៅពេលណាក៏បាន។ ការបន្តប្រើប្រាស់បន្ទាប់ពីការផ្លាស់ប្តូរ មានន័យថាអ្នកទទួលយកលក្ខខណ្ឌថ្មី។',
+    },
+    {
+      heading: '8. ច្បាប់គ្រប់គ្រង',
+      body: 'លក្ខខណ្ឌទាំងនេះត្រូវបានគ្រប់គ្រងដោយច្បាប់នៃប្រទេសវៀតណាម ដោយមិនចាំបាច់នឹងគោលការណ៍ជម្លោះផ្នែកច្បាប់។',
+    },
+    {
+      heading: '9. ទំនាក់ទំនង',
+      body: `ប្រសិនបើអ្នកមានសំណួរអំពីលក្ខខណ្ឌទាំងនេះ:\nEmail: vistapatientjourney@gmail.com\nទូរស័ព្ទ: +84 38 883 3157\nអាសយដ្ឋាន: 600 Nguyễn Văn Cừ nối dài, An Bình, Bình Thuỷ, Cần Thơ 900000, Vietnam`,
+    },
+  ],
   vi: [
     {
       heading: '1. Chấp nhận điều khoản',
+
       body: 'Khi bạn tải xuống, truy cập hoặc sử dụng Vista Patient Journey ("Ứng dụng"), bạn đồng ý với Điều khoản dịch vụ này. Nếu không đồng ý, vui lòng không sử dụng Ứng dụng.',
     },
     {
@@ -99,17 +138,22 @@ const sections = {
   ],
 };
 
+const titles: Record<string, { title: string; subtitle: string; back: string }> = {
+  vi: { title: 'Điều khoản dịch vụ', subtitle: `Ngày hiệu lực: ${effectiveDate}`, back: 'Quay lại trang chủ' },
+  en: { title: 'Terms of Service', subtitle: `Effective date: ${effectiveDate}`, back: 'Back to home' },
+  km: { title: 'លក្ខខណ្ឌសេវាកម្ម', subtitle: `កាលបរិច្ឆេទចូលជាធរមាន: ${effectiveDate}`, back: 'ត្រឡប់ទៅទំព័រដើម' },
+};
+
 export default function TermsOfServicePage() {
   const { language } = useLanguage();
-  const isVi = language !== 'en';
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  const content = isVi ? sections.vi : sections.en;
-  const title = isVi ? 'Điều khoản dịch vụ' : 'Terms of Service';
-  const subtitle = isVi ? `Ngày hiệu lực: ${effectiveDate}` : `Effective date: ${effectiveDate}`;
+  const lang = language === 'km' ? 'km' : language === 'en' ? 'en' : 'vi';
+  const content = sections[lang];
+  const { title, subtitle, back } = titles[lang];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -123,7 +167,7 @@ export default function TermsOfServicePage() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            {isVi ? 'Quay lại trang chủ' : 'Back to home'}
+            {back}
           </Link>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
@@ -157,11 +201,11 @@ export default function TermsOfServicePage() {
           <p>© {new Date().getFullYear()} VISTA Eye Care.</p>
           <div className="flex items-center justify-center gap-3">
             <Link to="/privacy-policy" className="hover:text-blue-600 transition-colors underline underline-offset-2">
-              {isVi ? 'Chính sách bảo mật' : 'Privacy Policy'}
+              {lang === 'km' ? 'គោលនយោបាយភាពឯកជន' : lang === 'en' ? 'Privacy Policy' : 'Chính sách bảo mật'}
             </Link>
             <span>·</span>
             <Link to="/terms-of-service" className="hover:text-blue-600 transition-colors underline underline-offset-2">
-              {isVi ? 'Điều khoản dịch vụ' : 'Terms of Service'}
+              {lang === 'km' ? 'លក្ខខណ្ឌសេវាកម្ម' : lang === 'en' ? 'Terms of Service' : 'Điều khoản dịch vụ'}
             </Link>
           </div>
         </div>

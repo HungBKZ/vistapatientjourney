@@ -5,9 +5,60 @@ import { useLanguage } from '../contexts/LanguageContext';
 const effectiveDate = '10/02/2026';
 
 const sections = {
+  km: [
+    {
+      heading: '1. ទិដ្ឋភាពទូទៅ',
+      body: 'Vista Patient Journey ("កម្មវិធី") ផ្តល់នូវខ្លឹមសារអំពីសុខភាពភ្នែក (អត្ថបទ វីដេអូ ផតខាស្ត កម្មវិធីចំណេះដឹង) មុខងារណាត់ជួប និងចាតបូតឆ្លើយសំណួរ។ គោលនយោបាយនេះពន្យល់ពីព័ត៌មានដែលត្រូវបានដំណើរការនៅពេលអ្នកប្រើប្រាស់កម្មវិធី និងរបៀបដែលព័ត៌មាននោះត្រូវបានប្រើប្រាស់។',
+    },
+    {
+      heading: '2. ព័ត៌មានដែលអ្នកផ្តល់',
+      body: 'អាស្រ័យលើការប្រើប្រាស់ អ្នកអាចបញ្ចូល: ឈ្មោះ អ៊ីមែល លេខទូរស័ព្ទ ថ្ងៃខែឆ្នាំកំណើត អាសយដ្ឋាន និងកំណត់ចំណាំប្រវត្តិវេជ្ជសាស្ត្រ។ ប្រសិនបើអ្នកប្រើចាតបូត សារដែលអ្នកវាយអាចត្រូវបានរក្សាទុកនៅលើឧបករណ៍ជាប្រវត្តិការសន្ទនា។',
+    },
+    {
+      heading: '3. សិទ្ធិចូលប្រើប្រាស់ឧបករណ៍',
+      body: 'កម្មវិធីអាចស្នើសុំការអនុញ្ញាតឧបករណ៍ដើម្បីដំណើរការ: ការជូនដំណឹង (រំលឹកការណាត់ជួប) កាមេរ៉ា/បណ្ណាល័យរូបថត (ថតឬជ្រើសរើសរូបតំណាង) និងកាមេរ៉ាសម្រាប់មុខងារ Eye Condition Experience។ អ្នកអាចបដិសេធការអនុញ្ញាត ប៉ុន្តែមុខងារខ្លះអាចខ្វះ។',
+    },
+    {
+      heading: '4. ការរក្សាទុកនៅលើឧបករណ៍',
+      body: 'ទិន្នន័យត្រូវបានរក្សាទុកជាចម្បងនៅលើឧបករណ៍ (ឧ. ប្រវត្តិរូប ដំណើរការក្វីស ការណាត់ជួប ទិន្នន័យ FAQ/ការសន្ទនា) តាមរយៈមូលដ្ឋានទិន្នន័យក្នុងស្រុក។ ការលុបកម្មវិធីជាធម្មតានឹងលុបទិន្នន័យក្នុងស្រុក។',
+    },
+    {
+      heading: '5. ខ្លឹមសារ និងសេវាកម្មភាគីទីបី',
+      body: 'ខ្លឹមសារខ្លះត្រូវបានផ្ទុកពីសេវាកម្មភាគីទីបី (ឧ. media ពី Cloudinary, avatar ពី ui-avatars.com, MediaPipe ពី CDN jsDelivr)។ នៅពេលឧបករណ៍ភ្ជាប់ទៅសេវាទាំងនេះ ពួកគេអាចទទួលបានព័ត៌មានបណ្តាញជាមូលដ្ឋានដូចជាអាសយដ្ឋាន IP។',
+    },
+    {
+      heading: '6. របៀបយើងប្រើប្រាស់ព័ត៌មាន',
+      body: 'យើងប្រើព័ត៌មានដើម្បីដំណើរការមុខងារកម្មវិធី (បង្ហាញខ្លឹមសារ រក្សាទុកដំណើរការ/ប្រវត្តិក្នុងស្រុក គាំទ្រការរំលឹកការណាត់ជួប) និងកែប្រែស្ថិរភាព។',
+    },
+    {
+      heading: '7. ការចែករំលែកព័ត៌មាន',
+      body: 'យើងមិនលក់ព័ត៌មានផ្ទាល់ខ្លួន។ ព័ត៌មានអាចត្រូវបានចែករំលែកជាមួយអ្នកផ្តល់ខ្លឹមសារភាគីទីបីតែប៉ុណ្ណោះប្រៀបធៀបទៅនឹងការចាំបាច់ ឬទៅតាមតម្រូវការច្បាប់។',
+    },
+    {
+      heading: '8. សុវត្ថិភាព',
+      body: 'យើងធ្វើវិធានការសមស្របដើម្បីការពារព័ត៌មានដែលរក្សាទុកនៅលើឧបករណ៍។ គ្មានវិធីណាមួយ 100% សុវត្ថិភាព; សូមប្រើប្រាស់កម្មវិធីដោយទទួលខុសត្រូវ និងការពារឧបករណ៍ដោយ PIN/biometrics ជានៅទីណានៅអាច។',
+    },
+    {
+      heading: '9. ភាពឯកជនរបស់កុមារ',
+      body: 'កម្មវិធីមិនសម្រាប់កុមារអាយុក្រោម 13 ឆ្នាំ។ ប្រសិនបើអ្នកគិតថាកុមារម្នាក់បានផ្តល់ព័ត៌មានផ្ទាល់ខ្លួន សូមទាក់ទងមកយើង។',
+    },
+    {
+      heading: '10. ជម្រើសរបស់អ្នក',
+      body: 'អ្នកអាចពិនិត្យ និងធ្វើបច្ចុប្បន្នភាពព័ត៌មានប្រវត្តិរូបក្នុងកម្មវិធី។ អ្នកក៏អាចគ្រប់គ្រងការអនុញ្ញាត (ការជូនដំណឹង/កាមេរ៉ា/រូបថត) ពីការកំណត់ឧបករណ៍។',
+    },
+    {
+      heading: '11. ការផ្លាស់ប្តូរគោលនយោបាយ',
+      body: 'យើងអាចធ្វើបច្ចុប្បន្នភាពគោលនយោបាយភាពឯកជននេះ។ ប្រសិនបើមានការផ្លាស់ប្តូរ យើងនឹងធ្វើបច្ចុប្បន្នភាពកាលបរិច្ឆេទ និងផ្តល់គោលនយោបាយថ្មីក្នុងកម្មវិធី។',
+    },
+    {
+      heading: '12. ទំនាក់ទំនង',
+      body: `ប្រសិនបើអ្នកមានសំណួរអំពីគោលនយោបាយនេះ សូមទំនាក់ទំនង:\nEmail: vistapatientjourney@gmail.com\nទូរស័ព្ទ: +84 38 883 3157\nអាសយដ្ឋាន: 600 Nguyễn Văn Cừ nối dài, An Bình, Bình Thuỷ, Cần Thơ 900000, Vietnam`,
+    },
+  ],
   vi: [
     {
       heading: '1. Tổng quan',
+
       body: 'Vista Patient Journey ("Ứng dụng") cung cấp nội dung về nhãn khoa (bài viết, video, podcast, quiz), tính năng đặt lịch và chatbot hỏi đáp. Chính sách này giải thích thông tin nào được xử lý khi bạn sử dụng Ứng dụng và cách sử dụng thông tin đó.',
     },
     {
@@ -107,17 +158,22 @@ const sections = {
   ],
 };
 
+const titles: Record<string, { title: string; subtitle: string; back: string }> = {
+  vi: { title: 'Chính sách bảo mật', subtitle: `Ngày hiệu lực: ${effectiveDate}`, back: 'Quay lại trang chủ' },
+  en: { title: 'Privacy Policy', subtitle: `Effective date: ${effectiveDate}`, back: 'Back to home' },
+  km: { title: 'គោលនយោបាយភាពឯកជន', subtitle: `កាលបរិច្ឆេទចូលជាធរមាន: ${effectiveDate}`, back: 'ត្រឡប់ទៅទំព័រដើម' },
+};
+
 export default function PrivacyPolicyPage() {
   const { language } = useLanguage();
-  const isVi = language !== 'en';
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  const content = isVi ? sections.vi : sections.en;
-  const title = isVi ? 'Chính sách bảo mật' : 'Privacy Policy';
-  const subtitle = isVi ? `Ngày hiệu lực: ${effectiveDate}` : `Effective date: ${effectiveDate}`;
+  const lang = language === 'km' ? 'km' : language === 'en' ? 'en' : 'vi';
+  const content = sections[lang];
+  const { title, subtitle, back } = titles[lang];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -131,7 +187,7 @@ export default function PrivacyPolicyPage() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            {isVi ? 'Quay lại trang chủ' : 'Back to home'}
+            {back}
           </Link>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
@@ -165,11 +221,11 @@ export default function PrivacyPolicyPage() {
           <p>© {new Date().getFullYear()} VISTA Eye Care.</p>
           <div className="flex items-center justify-center gap-3">
             <Link to="/privacy-policy" className="hover:text-blue-600 transition-colors underline underline-offset-2">
-              {isVi ? 'Chính sách bảo mật' : 'Privacy Policy'}
+              {lang === 'km' ? 'គោលនយោបាយភាពឯកជន' : lang === 'en' ? 'Privacy Policy' : 'Chính sách bảo mật'}
             </Link>
             <span>·</span>
             <Link to="/terms-of-service" className="hover:text-blue-600 transition-colors underline underline-offset-2">
-              {isVi ? 'Điều khoản dịch vụ' : 'Terms of Service'}
+              {lang === 'km' ? 'លក្ខខណ្ឌសេវាកម្ម' : lang === 'en' ? 'Terms of Service' : 'Điều khoản dịch vụ'}
             </Link>
           </div>
         </div>
