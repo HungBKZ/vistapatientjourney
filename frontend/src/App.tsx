@@ -12,6 +12,8 @@ import QuizPage from './pages/QuizPage';
 import PodcastPage from './pages/PodcastPage';
 import VideoPage from './VideoPage.jsx';
 import VistaChatbot from './VistaChatbot';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
             <Route path="/quiz" element={<QuizPage />} />
             <Route path="/podcast" element={<PodcastPage />} />
             <Route path="/video" element={<VideoPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms-of-service" element={<TermsOfServicePage />} />
             <Route path="*" element={<HomePage />} />
           </Routes>
         </main>
