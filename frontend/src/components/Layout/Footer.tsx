@@ -119,8 +119,17 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-10 pt-8 text-center text-sm text-gray-400">
-          © {new Date().getFullYear()} VISTA Eye Care. All rights reserved.
+        <div className="border-t border-gray-800 mt-10 pt-8 text-center text-sm text-gray-400 space-y-2">
+          <p>© {new Date().getFullYear()} VISTA Eye Care. All rights reserved.</p>
+          <div className="flex items-center justify-center gap-4">
+            <Link to="/privacy-policy" className="hover:text-white transition-colors underline underline-offset-2">
+              Chính sách bảo mật
+            </Link>
+            <span className="text-gray-600">·</span>
+            <Link to="/terms-of-service" className="hover:text-white transition-colors underline underline-offset-2">
+              Điều khoản dịch vụ
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

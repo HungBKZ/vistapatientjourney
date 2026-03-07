@@ -1,11 +1,12 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-type Language = 'vi' | 'en';
+type Language = 'vi' | 'en' | 'km';
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  tArray: (key: string) => string[];
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -25,7 +26,7 @@ interface LanguageProviderProps {
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   const [language, setLanguageState] = useState<Language>(() => {
     const saved = localStorage.getItem('vista-language');
-    return (saved === 'en' || saved === 'vi') ? saved : 'vi';
+    return (saved === 'en' || saved === 'vi' || saved === 'km') ? saved : 'vi';
   });
 
   useEffect(() => {
@@ -51,8 +52,23 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
     return typeof value === 'string' ? value : key;
   };
 
+  const tArray = (key: string): string[] => {
+    const keys = key.split('.');
+    let value: any = translations[language];
+    
+    for (const k of keys) {
+      if (value && typeof value === 'object') {
+        value = value[k];
+      } else {
+        return [];
+      }
+    }
+    
+    return Array.isArray(value) ? value : [];
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, tArray }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -238,6 +254,35 @@ const translations = {
       error: 'Đã có lỗi xảy ra',
       close: 'Đóng',
     },
+    chatbot: {
+      title: 'Vista Eye Care',
+      status: 'Trợ lý AI đang trực tuyến',
+      close: 'Đóng Chat',
+      inputPlaceholder: 'Nhập tin nhắn...',
+      inputBlocked: 'Chờ một lát nhé...',
+      openChat: 'Mở Chatbot',
+      greeting: 'Xin chào! Mình là trợ lý Vista Eye Care. Bạn có thể hỏi mình các bệnh lý về mắt 😊',
+      quickSuggestions: [
+        'Khám mắt tổng quát là gì?',
+        'Triệu chứng cận thị',
+        'Phòng ngừa đục thủy tinh thể',
+        'Giá dịch vụ khám mắt',
+        'Đặt lịch khám như thế nào?',
+        'Giờ làm việc của Vista'
+      ],
+      responses: {
+        greeting: 'Xin chào! 👋 Chào mừng bạn đến với Vista Eye Care. Mình có thể tư vấn về:\n• Khám mắt tổng quát\n• Đo khúc xạ & cắt kính\n• Phẫu thuật LASIK\n• Điều trị các bệnh về mắt\n\nBạn quan tâm dịch vụ nào nhỉ? 😊',
+        whoAreYou: 'Mình là trợ lý ảo của Vista Eye Care - Trung tâm nhãn khoa uy tín tại Cần Thơ. Mình có thể giúp bạn:\n✓ Tìm hiểu về bệnh lý mắt\n✓ Tư vấn dịch vụ khám & điều trị\n✓ Hướng dẫn đặt lịch hẹn\n✓ Giải đáp thắc mắc về giá cả',
+        whatCanYouDo: 'Mình có thể hỗ trợ bạn:\n📋 Tư vấn các dịch vụ nhãn khoa\n👁️ Giải đáp về bệnh lý mắt\n📅 Hướng dẫn đặt lịch khám\n💰 Thông tin giá dịch vụ\n⏰ Giờ làm việc & địa chỉ\n\nBạn cần giúp gì nhỉ?',
+        contact: 'Bạn có thể liên hệ Vista qua Facebook: https://www.facebook.com/profile.php?id=61581889931780 — đội ngũ sẽ phản hồi sớm nhất.',
+        address: 'Địa chỉ Vista: 600 Nguyễn Văn Cừ nối dài, An Bình, Bình Thuỷ, Cần Thơ 900000. Bạn có thể đặt lịch trước để giảm thời gian chờ.',
+        overloaded: '⚠️ Hệ thống AI đang quá tải. Vui lòng thử lại sau hoặc sử dụng các câu hỏi thường gặp bên dưới.',
+        cooldown: '⏱️ Vui lòng chờ 2 giây trước khi gửi tin nhắn tiếp theo để tránh spam hệ thống.',
+        tooManyMessages: '🚫 Bạn đã gửi quá nhiều tin nhắn! Vui lòng chờ 1 phút trước khi tiếp tục. Điều này giúp hệ thống hoạt động ổn định hơn.',
+        noInfo: 'Xin lỗi, mình chưa có thông tin về câu hỏi này. Bạn có thể thử hỏi về:\n• Khám mắt tổng quát\n• Cận thị, viễn thị\n• Đục thủy tinh thể\n• Giá dịch vụ\n• Đặt lịch hẹn\n\nHoặc gọi hotline: 038 883 3157 để được tư vấn trực tiếp nhé! 😊',
+        error: 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau! 🙏'
+      }
+    },
   },
   en: {
     nav: {
@@ -417,6 +462,244 @@ const translations = {
       loading: 'Loading...',
       error: 'An error occurred',
       close: 'Close',
+    },
+    chatbot: {
+      title: 'Vista Eye Care',
+      status: 'AI Assistant Online',
+      close: 'Close Chat',
+      inputPlaceholder: 'Type a message...',
+      inputBlocked: 'Wait a moment...',
+      openChat: 'Open Chatbot',
+      greeting: 'Hello! I\'m Vista Eye Care assistant. You can ask me about eye conditions 😊',
+      quickSuggestions: [
+        'What is comprehensive eye exam?',
+        'Myopia symptoms',
+        'Preventing cataracts',
+        'Eye exam service pricing',
+        'How to book an appointment?',
+        'Vista working hours'
+      ],
+      responses: {
+        greeting: 'Hello! 👋 Welcome to Vista Eye Care. I can advise you on:\n• Comprehensive eye exams\n• Refraction testing & glasses prescription\n• LASIK surgery\n• Eye disease treatment\n\nWhich service are you interested in? 😊',
+        whoAreYou: 'I am the virtual assistant of Vista Eye Care - a reputable ophthalmology center in Can Tho. I can help you:\n✓ Learn about eye conditions\n✓ Consulting examination & treatment services\n✓ Appointment booking guidance\n✓ Answering pricing questions',
+        whatCanYouDo: 'I can assist you with:\n📋 Ophthalmology service consulting\n👁️ Eye condition information\n📅 Appointment booking guidance\n💰 Service pricing information\n⏰ Working hours & address\n\nHow can I help you?',
+        contact: 'You can contact Vista via Facebook: https://www.facebook.com/profile.php?id=61581889931780 — our team will respond as soon as possible.',
+        address: 'Vista Address: 600 Nguyen Van Cu Extension, An Binh, Binh Thuy, Can Tho 900000. You can book in advance to reduce waiting time.',
+        overloaded: '⚠️ AI system is overloaded. Please try again later or use the frequently asked questions below.',
+        cooldown: '⏱️ Please wait 2 seconds before sending the next message to avoid spamming the system.',
+        tooManyMessages: '🚫 You have sent too many messages! Please wait 1 minute before continuing. This helps the system operate more stably.',
+        noInfo: 'Sorry, I don\'t have information about this question. You can try asking about:\n• Comprehensive eye exam\n• Myopia, hyperopia\n• Cataracts\n• Service pricing\n• Booking appointments\n\nOr call hotline: 038 883 3157 for direct consultation! 😊',
+        error: 'Sorry, an error occurred. Please try again later! 🙏'
+      }
+    },
+  },
+  km: {
+    nav: {
+      home: 'ទំព័រដើម',
+      services: 'សេវាកម្ម',
+      knowledge: 'ភ្នែកនិម្មិត',
+      explore: 'ចំណេះដឹង',
+      journey: 'ដំណើររបស់យើង',
+      quiz: 'សំណួរ',
+    },
+    home: {
+      hero: {
+        badge: 'បច្ចេកវិទ្យា AI ទំនើប',
+        title: 'បទពិសោធន៍ចក្ខុវិស័យ',
+        subtitle: 'ជាមួយ VISTA',
+        title2: 'នៅពេលភ្នែក',
+        subtitle2: 'ត្រូវបានយល់ដឹង',
+        description: 'ដំណោះស្រាយបទពិសោធន៍ចក្ខុវិស័យដែលបញ្ចូល AI ជួយអ្នកយល់ដឹងកាន់តែច្បាស់អំពីសុខភាពភ្នែករបស់អ្នក',
+        cta: 'សាកល្បងឥឡូវ',
+        learnMore: 'ស្វែងយល់បន្ថែម',
+      },
+      whyChoose: {
+        badge: 'អំពីយើង',
+        title: 'ក្រុមនិស្សិតសាកលវិទ្យាល័យ FPT ក្រុងកន្ទ',
+        title2: 'ដំណោះស្រាយបទពិសោធន៍ចក្ខុវិស័យដ៏ស្មើភាព',
+        description: 'VISTA - Patient Journey គឺជាគម្រោងដែលអភិវឌ្ឍដោយក្រុមនិស្សិត ក្នុងគោលបំណងលើកកំពស់ការយល់ដឹងរបស់សហគមន៍អំពីសុខភាពភ្នែក និងបញ្ហាភ្នែកទូទៅ។ តាមរយៈការគាំទ្រមន្ទីរពេទ្យ និងដៃគូដើម្បីបញ្ជូនព័ត៌មានបានច្បាស់លាស់ គម្រោងនេះមានគោលបំណងជួយអ្នកប្រើប្រាស់យល់ដឹងយ៉ាងត្រឹមត្រូវ ថែរក្សាត្រឹមត្រូវ និងការពារភ្នែកឱ្យមានសុខភាពល្អ ជាពិសេសក្នុងយុគសម័យឌីជីថលបច្ចុប្បន្ននេះ។',
+        list1: 'ចំណេះដឹងអំពីភ្នែក',
+        list2: 'ការថែទាំសុខភាពភ្នែក',
+        list3: 'បញ្ហាភ្នែកទូទៅ',
+        list4: 'ចំណេះដឹងដែលបានផ្ទៀងផ្ទាត់ពីអង្គការប្រកបដោយវិជ្ជាជីវៈ',
+      },
+      team: {
+        badge: 'ក្រុម Vista',
+        title: 'សមាជិកគម្រោង',
+      },
+      features: {
+        badge: 'ហេតុអ្វីបានជាជ្រើសរើស VISTA?',
+        title: 'ហេតុអ្វីបានជាជ្រើសរើសដំណោះស្រាយនេះ?',
+        description: 'VISTA គឺជាគម្រោងដែលមានបេសកកម្មលើកកំពស់ការយល់ដឹងរបស់សហគមន៍អំពីសុខភាពភ្នែក។ យើងជឿជាក់ថាពេលមនុស្សយល់ដឹងត្រឹមត្រូវអំពីភ្នែករបស់ពួកគេ ពួកគេនឹងមើលឃើញមិនត្រឹមតែពិភពលោក ប៉ុន្តែក៏អនាគតផងដែរ។',
+        feature1: 'ព័ត៌មានដែលបានផ្ទៀងផ្ទាត់',
+        feature2: 'ដើម្បីសុខភាពសហគមន៍',
+        feature3: 'ដៃគូប្រកបដោយវិជ្ជាជីវៈ',
+      },
+    },
+    knowledge: {
+      title: 'បទពិសោធន៍ចក្ខុវិស័យ',
+      hoverHint: 'ដាក់កណ្ដុរលើផ្នែកនីមួយៗដើម្បីមើលព័ត៌មានលម្អិត',
+      virtualTryOn: {
+        title: 'បទពិសោធន៍វ៉ែនតា',
+        subtitle: 'Virtual Try-On',
+        description: 'ជ្រើសរើសវ៉ែនតាដែលស្រប ទៅនឹងមុខរបស់អ្នកតាមរយៈបច្ចេកវិទ្យាកាមេរ៉ាចក្ខុ',
+      },
+      visualSimulation: {
+        title: 'បទពិសោធន៍ចក្ខុវិស័យ',
+        subtitle: 'Visual Simulation',
+        description: 'មើលពិភពលោកតាមរយៈភ្នែករបស់អ្នកដែលមានជំងឺភ្នែក',
+      },
+      visionTest: {
+        title: 'ការតេស្តចក្ខុវិស័យ',
+        subtitle: 'Vision Test',
+        description: 'ពិនិត្យភ្នែកព័ណ៌ស្ទើររបស់អ្នកនៅផ្ទះយ៉ាងរហ័សតាមរយៈកាមេរ៉ា',
+      },
+      cta: 'សាកល្បងឥឡូវ',
+      bottomTitle: 'រួចរាល់ហើយឬ?',
+      bottomDescription: 'រុករកពិភពលោកចក្ខុវិស័យជាមួយបច្ចេកវិទ្យា AI ទំនើបរបស់ VISTA',
+      bottomCta: 'ចាប់ផ្ដើម',
+      backHome: 'ត្រឡប់ទំព័រដើម',
+    },
+    journey: {
+      badge: 'ដំណើរនៅតែបន្ត',
+      title: 'ដំណើររបស់ VISTA',
+      subtitle: 'ពីថ្នាក់រៀនដល់សហគមន៍',
+      milestones: 'វិស័យសំខាន់ៗ',
+      exploreCta: 'រុករកដំណើរ',
+      scrollHint: 'រំកិលចុះដើម្បីមើល',
+      fbLink: 'មើលប្រកាសនៅ Facebook',
+      highlights: 'ចំណុចសំខាន់:',
+      milestone1: {
+        chapter: 'វិស័យ ០១',
+        title: 'ពិព័រណ៍ SEE BEYOND',
+        subtitle: 'ពិព័រណ៍បទពិសោធន៍ចក្ខុវិស័យដំបូងបង្អស់នៅវៀតណាម',
+        quote: 'ជាលើកដំបូងនៅវៀតណាម ពិព័រណ៍មួយប្រើប្រាស់ AI ដើម្បីឱ្យសាធារណជនរំឭកបទពិសោធន៍ចក្ខុវិស័យរបស់អ្នកដែលមានជំងឺភ្នែក។',
+        description: 'ពិព័រណ៍ SEE BEYOND គឺជាព្រឹត្តិការណ៍សហគមន៍ដំបូងដែល VISTA រៀបចំដើម្បីលើកកំពស់ការយល់ដឹងអំពីសុខភាពភ្នែក។',
+        highlight1: 'ភ្ញៀវជាង ៣០០ នាក់',
+        highlight2: 'ការសាកល្បង AR ផ្ទាល់',
+        highlight3: 'បទពិសោធន៍ AI',
+      },
+      milestone2: {
+        chapter: 'វិស័យ ០២',
+        title: 'ទទួលបានអាហារូបករណ៍ ៥០ លានដុង',
+        subtitle: 'អាហារូបករណ៍ចាប់ផ្ដើមអាជីវកម្មច្នៃប្រឌិត ២០២៥',
+        quote: 'ការវិនិយោគលើទេពកោសល្យវ័យក្មេងគឺការវិនិយោគលើអនាគតសង្គម។',
+        description: 'VISTA មានកិត្តិយសសម្រេចទទួលបានអាហារូបករណ៍ចាប់ផ្ដើមអាជីវកម្មច្នៃប្រឌិតរបស់សាកលវិទ្យាល័យ FPT ដែលមានតម្លៃ ៥០ លានដុង។',
+        highlight1: 'អាហារូបករណ៍ ៥០ លាន',
+        highlight2: 'ការគាំទ្រការអភិវឌ្ឍ',
+        highlight3: 'ទិសដៅសហគ្រាស',
+      },
+      milestone3: {
+        chapter: 'វិស័យ ០៣',
+        title: 'សិក្ខាសាលាព្យាបាលភ្នែកខ្លី',
+        subtitle: 'សិក្ខាសាលាជាមួយ BS CKII Trần Bá Kiền',
+        quote: 'ចំណេះដឹងវេជ្ជសាស្ត្រដែលបញ្ជូនដោយផ្ទាល់ពីអ្នកជំនាញជាមូលដ្ឋានរឹងមាំ។',
+        description: 'ក្រុម VISTA បានធ្វើការនិងរៀនពី BS CKII Trần Bá Kiền អ្នកជំនាញឈានមុខគេខាងភ្នែក។',
+        highlight1: 'BS CKII Trần Bá Kiền',
+        highlight2: 'ចំណេះដឹងវេជ្ជសាស្ត្រ',
+        highlight3: 'ការរៀនសូត្រ & ការតភ្ជាប់',
+      },
+      milestone4: {
+        chapter: 'វិស័យ ០៤',
+        title: 'ចុះហត្ថលេខា & ប្រគល់ឱ្យមន្ទីរពេទ្យភ្នែក VISI Sóc Trăng',
+        subtitle: 'ដំណោះស្រាយបទពិសោធន៍ចក្ខុវិស័យដែលបញ្ចូល AI',
+        quote: 'ជាលើកដំបូងគម្រោងនិស្សិតត្រូវបានប្រគល់ដើម្បីដាក់ពង្រាយសាកល្បងក្នុងបរិយាកាសមន្ទីរពេទ្យពិតប្រាកដ។',
+        description: 'នៅថ្ងៃទី ០២/០២ គម្រោង VISTA បានចុះហត្ថលេខាជាផ្លូវការ និងប្រគល់ដំណោះស្រាយបទពិសោធន៍ចក្ខុវិស័យ AI ឱ្យមន្ទីរពេទ្យភ្នែក VISI Sóc Trăng។',
+        highlight1: 'មន្ទីរពេទ្យ VISI',
+        highlight2: 'AI ដែលបញ្ចូល',
+        highlight3: 'ការអនុវត្តជាក់ស្ដែង',
+      },
+      solution: {
+        badge: 'ដំណោះស្រាយស្នូល',
+        title: 'បទពិសោធន៍ចក្ខុវិស័យដែលបញ្ចូល AI',
+        description1: 'ប្រព័ន្ធប្រើ AI ដើម្បីក្លែងធ្វើបទពិសោធន៍ចក្ខុវិស័យនៃការបាក់ចក្ខុ ដូចជាភ្នែកខ្លី ភ្នែកវែង គ្រីស្យ══ ភ្នែកពន្លឺ...',
+        description2: 'នៅក្នុងបរិយាកាសមន្ទីរពេទ្យ VISTA ដើរតួជាឧបករណ៍ជំនួយប្រឹក្សា ជួយវេជ្ជបណ្ឌិតប្រាស្រ័យទាក់ទងប្រកបដោយប្រសិទ្ធភាពជាងមុនជាមួយអ្នកជំងឺ។',
+        cta: 'សាកល្បងឥឡូវ',
+        knowledge: 'ចំណេះដឹងភ្នែក',
+        home: 'ទំព័រដើម',
+      },
+    },
+    explore: {
+      title: 'រុករកចំណេះដឹងអំពីភ្នែក',
+      description: 'ស្វែងយល់អំពីជំងឺភ្នែកទូទៅ និងវិធីថែទាំភ្នែករបស់អ្នក',
+      header: 'ចំណេះដឹង',
+      choose: 'ជ្រើសរើសរបៀបដើម្បីចាប់ផ្ដើម',
+      quiz: {
+        title: 'Quiz',
+        subtitle: 'ពិនិត្យចំណេះដឹង',
+        description: 'ការប្រឡងរហ័សជាមួយសំណួរសុខភាពភ្នែក',
+      },
+      podcast: {
+        title: 'Podcast',
+        subtitle: 'ស្ដាប់អ្នកជំនាញ',
+        description: 'ចំណេះដឹងងាយស្រួលស្ដាប់ ថ្ងៃណា ពេលណាក៏បាន',
+      },
+      video: {
+        title: 'Video',
+        subtitle: 'រៀនតាមរូបភាព',
+        description: 'មើលការណែនាំដែលជាក់ស្ដែងនិងអាចអនុវត្ត',
+      },
+      cta: 'រុករកឥឡូវ',
+    },
+    quizPage: {
+      title: 'ការប្រឡងចំណេះដឹងអំពីភ្នែក',
+      description: 'ឆ្លើយ ១០ សំណួរដើម្បីពិនិត្យការយល់ដឹងរបស់អ្នកអំពីសុខភាពភ្នែក',
+      meta: {
+        questions: '១០ សំណួរ',
+        time: 'គ្មានកំណត់ពេលវេលា',
+      },
+      actions: {
+        start: 'ចាប់ផ្ដើម',
+        retry: 'សាកល្បងម្ដងទៀត',
+        home: 'ទំព័រដើម',
+      },
+      questionLabel: 'សំណួរ',
+      detailsTitle: 'លម្អិតលទ្ធផល',
+      result: {
+        excellent: 'ល្អឥតខ្ចោះ!',
+        good: 'ល្អណាស់!',
+        improve: 'ត្រូវការកែលម្អ!',
+        summaryPrefix: 'អ្នកឆ្លើយត្រឹមត្រូវ',
+        summarySuffix: 'សំណួរ',
+      },
+      answers: {
+        yours: 'ចម្លើយរបស់អ្នក:',
+        correct: 'ចម្លើយត្រឹមត្រូវ:',
+      },
+    },
+    common: {
+      loading: 'កំពុងផ្ទុក...',
+      error: 'មានកំហុសបច្ចេកទេស',
+      close: 'បិទ',
+    },
+    chatbot: {
+      title: 'Vista Eye Care',
+      status: 'ជំនួយការ AI អនឡាញ',
+      close: 'បិទការជជែក',
+      inputPlaceholder: 'វាយសារ...',
+      inputBlocked: 'សូមរង់ចាំ...',
+      openChat: 'បើកការជជែក',
+      greeting: 'សួស្ដី! ខ្ញុំជាជំនួយការ Vista Eye Care។ អ្នកអាចសួរខ្ញុំអំពីជំងឺភ្នែក 😊',
+      quickSuggestions: [
+        'ការពិនិត្យភ្នែកទូទៅគឺជាអ្វី?',
+        'រោគសញ្ញាភ្នែកខ្លី',
+        'ការការពារភ្នែកពន្លឺ',
+        'តម្លៃសេវាពិនិត្យភ្នែក',
+        'របៀបកក់ការណាត់ជួប?',
+        'ម៉ោងធ្វើការ Vista'
+      ],
+      responses: {
+        greeting: 'សួស្ដី! 👋 ស្វាគមន៍មកកាន់ Vista Eye Care។ ខ្ញុំអាចផ្ដល់ដំបូន្មានអំពី:\n• ការពិនិត្យភ្នែកទូទៅ\n• ការវាស់វែង & វ៉ែនតា\n• ការវះកាត់ LASIK\n• ការព្យាបាលជំងឺភ្នែក\n\nអ្នកចាប់អារម្មណ៍សេវាណា? 😊',
+        whoAreYou: 'ខ្ញុំជាជំនួយការនិម្មិតរបស់ Vista Eye Care - មជ្ឈមណ្ឌលភ្នែកល្បីល្បាញក្នុងក្រុង Cần Thơ។ ខ្ញុំអាចជួយអ្នក:\n✓ ស្វែងយល់អំពីជំងឺភ្នែក\n✓ ប្រឹក្សាសេវាពិនិត្យ & ព្យាបាល\n✓ ណែនាំការកក់ណាត់ជួប\n✓ ឆ្លើយសំណួរអំពីតម្លៃ',
+        whatCanYouDo: 'ខ្ញុំអាចជួយអ្នក:\n📋 ប្រឹក្សាសេវាភ្នែក\n👁️ ព័ត៌មានជំងឺភ្នែក\n📅 ណែនាំការកក់ណាត់ជួប\n💰 ព័ត៌មានតម្លៃសេវា\n⏰ ម៉ោងធ្វើការ & អាសយដ្ឋាន\n\nខ្ញុំអាចជួយអ្វី?',
+        contact: 'អ្នកអាចទំនាក់ទំនង Vista តាម Facebook: https://www.facebook.com/profile.php?id=61581889931780 — ក្រុមមានឫក្ខណ៍ឆ្លើយតបឆាប់រហ័ស។',
+        address: 'អាសយដ្ឋាន Vista: 600 Nguyễn Văn Cừ, An Bình, Bình Thuỷ, Cần Thơ 900000។ អ្នកអាចកក់ទុកជាមុនដើម្បីកាត់បន្ថយពេលរង់ចាំ។',
+        overloaded: '⚠️ ប្រព័ន្ធ AI ជួបភាពមមាញឹក។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។',
+        cooldown: '⏱️ សូមរង់ចាំ ២ វិនាទីមុនពេលផ្ញើសារបន្ទាប់។',
+        tooManyMessages: '🚫 អ្នកផ្ញើសារច្រើនពេក! សូមរង់ចាំ ១ នាទីមុនពេលបន្ត។',
+        noInfo: 'សូមទោស ខ្ញុំមិនមានព័ត៌មានអំពីសំណួរនេះ។ អ្នកអាចសាកសួរអំពី:\n• ការពិនិត្យភ្នែកទូទៅ\n• ភ្នែកខ្លី ភ្នែកវែង\n• ភ្នែកពន្លឺ\n• តម្លៃសេវា\n• ការកក់ណាត់ជួប\n\nឬទូរស័ព្ទ hotline: 038 883 3157 ។ 😊',
+        error: 'សូមទោស មានបញ្ហា។ សូមព្យាយាមម្ដងទៀត! 🙏'
+      }
     },
   },
 };
