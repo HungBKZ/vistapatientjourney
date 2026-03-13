@@ -4,7 +4,7 @@ const LOGO_URL = 'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white hidden md:block">
+    <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex flex-wrap justify-between gap-16">
           {/* Brand */}
