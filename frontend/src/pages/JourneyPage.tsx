@@ -28,6 +28,10 @@ type Milestone = {
   accent: 'amber' | 'rose' | 'teal' | 'violet';
   highlights: string[];
   fbLink?: string;
+  links?: Array<{
+    label: string;
+    url: string;
+  }>;
 };
 
 /* ─── warm accent palette ─── */
@@ -363,6 +367,41 @@ export default function JourneyPage() {
       highlights: [t('journey.milestone4.highlight1'), t('journey.milestone4.highlight2'), t('journey.milestone4.highlight3')],
       fbLink: 'https://www.facebook.com/share/p/1DkUNs66NB/',
     },
+    {
+      id: 'media-recognition',
+      chapter: t('journey.milestone5.chapter'),
+      date: '03/2026',
+      title: t('journey.milestone5.title'),
+      subtitle: t('journey.milestone5.subtitle'),
+      quote: t('journey.milestone5.quote'),
+      description: t('journey.milestone5.description'),
+      images: [
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1773419482/647280036_122123208369062997_6928364276467755357_n_be5jlp.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1773419482/646829784_122123208327062997_3707418219203006998_n_b3rw3k.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1773419482/648646541_122123208333062997_6447584519480269090_n_nhpvsh.jpg',
+        'https://res.cloudinary.com/dvucotc8z/image/upload/v1773419482/z7616492665205_1afa552afb72c9c4b950b853cee28ae9_cwaemk.jpg',
+      ],
+      accent: 'amber' as const,
+      highlights: [t('journey.milestone5.highlight1'), t('journey.milestone5.highlight2'), t('journey.milestone5.highlight3')],
+      links: [
+        {
+          label: t('journey.facebookPostLink'),
+          url: 'https://www.facebook.com/share/p/1JnS4zQVPk/',
+        },
+        {
+          label: t('journey.vtvArticleLink'),
+          url: 'https://vtv.vn/ung-dung-ai-mo-phong-benh-ly-nhan-khoa-cua-sinh-vien-duoc-chuyen-giao-cho-benh-vien-100260304192222996.htm?fbclid=IwY2xjawQhG6VleHRuA2FlbQIxMABicmlkETE2a3R5dU1QYUxEeHRkSmk5c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoDGvSeD097AaekAW3iY2pe20TxnzxTkk91GQYjdngLg5rcHyNlNt-VwqgT0_aem_oaNUTQhrCblTX3AfCzLCyw',
+        },
+        {
+          label: t('journey.danvietArticleLink'),
+          url: 'https://danviet.vn/ung-dung-ai-mo-phong-benh-ly-nhan-khoa-cua-sinh-vien-duoc-dua-vao-benh-vien-d1406922.html?fbclid=IwY2xjawQhG8RleHRuA2FlbQIxMABicmlkETE2a3R5dU1QYUxEeHRkSmk5c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHqY28rYIqRohX98fxG7oFmoWamkruotnTqCMdmttjOncoLp4VbNLf8_1PMmi_aem_X7fzuXGEQkb4rB5qVTbZWA',
+        },
+        {
+          label: t('journey.thanhnienArticleLink'),
+          url: 'https://thanhnien.vn/tu-du-an-sinh-vien-den-giai-phap-giup-benh-nhan-nhin-thay-benh-ly-thi-giac-185260306155726806.htm',
+        },
+      ],
+    },
   ], [t]);
 
   const totalImages = useMemo(() => MILESTONES.reduce((s, m) => s + m.images.length, 0), [MILESTONES]);
@@ -546,18 +585,36 @@ export default function JourneyPage() {
                 )}
 
                 {/* CTA */}
-                {ms.fbLink && (
-                  <a
-                    href={ms.fbLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-all duration-200 hover:scale-105 shadow-lg"
-                  >
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                    {t('journey.fbLink')}
-                  </a>
+                {(ms.fbLink || ms.links?.length) && (
+                  <div className="flex flex-wrap gap-3">
+                    {ms.fbLink && (
+                      <a
+                        href={ms.fbLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-all duration-200 hover:scale-105 shadow-lg"
+                      >
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        {t('journey.fbLink')}
+                      </a>
+                    )}
+                    {ms.links?.map((link) => (
+                      <a
+                        key={link.url}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-gray-900 hover:bg-gray-800 text-white font-semibold text-xs sm:text-sm transition-all duration-200 hover:scale-105 shadow-lg"
+                      >
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5M10.172 13.828a4 4 0 010-5.656l3-3a4 4 0 115.656 5.656l-1.5 1.5" />
+                        </svg>
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
                 )}
               </motion.div>
 
