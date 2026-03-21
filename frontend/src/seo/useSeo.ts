@@ -10,6 +10,8 @@ type SeoConfig = {
 };
 
 const SITE_URL = 'https://vistapatientjourney.vn';
+const DEFAULT_SOCIAL_IMAGE =
+  'https://res.cloudinary.com/dvucotc8z/image/upload/v1761407529/567696130_122104196085062997_7245508250228661975_n_nu6jbt.jpg';
 
 const upsertMeta = (selector: string, attrs: Record<string, string>) => {
   let element = document.head.querySelector(selector) as HTMLMetaElement | null;
@@ -66,7 +68,7 @@ const upsertGoogleVerification = () => {
 export const useSeo = ({ title, description, path, image, robots, schema }: SeoConfig) => {
   useEffect(() => {
     const canonicalUrl = `${SITE_URL}${path}`;
-    const socialImage = image || `${SITE_URL}/vite.svg`;
+    const socialImage = image || DEFAULT_SOCIAL_IMAGE;
 
     document.title = title;
     document.documentElement.setAttribute('lang', 'vi');
@@ -88,6 +90,10 @@ export const useSeo = ({ title, description, path, image, robots, schema }: SeoC
     upsertMeta('meta[property="og:description"]', {
       property: 'og:description',
       content: description,
+    });
+    upsertMeta('meta[property="og:site_name"]', {
+      property: 'og:site_name',
+      content: 'VISTA Patient Journey',
     });
     upsertMeta('meta[property="og:type"]', {
       property: 'og:type',
