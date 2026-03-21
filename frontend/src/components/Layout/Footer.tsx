@@ -47,6 +47,32 @@ export default function Footer() {
             </div>
           </div>
 
+          <div>
+            <h4 className="font-semibold mb-4">Trung tam kien thuc</h4>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li>
+                <Link to="/kien-thuc" className="hover:text-white transition-colors">
+                  Hub kien thuc suc khoe mat
+                </Link>
+              </li>
+              <li>
+                <Link to="/kien-thuc/tat-khuc-xa" className="hover:text-white transition-colors">
+                  Cluster: Tat khuc xa
+                </Link>
+              </li>
+              <li>
+                <Link to="/kien-thuc/benh-ly-pho-bien" className="hover:text-white transition-colors">
+                  Cluster: Benh ly pho bien
+                </Link>
+              </li>
+              <li>
+                <Link to="/kien-thuc/cham-soc-mat-man-hinh" className="hover:text-white transition-colors">
+                  Cluster: Cham soc mat man hinh
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Quick Links */}
           {/* <div>
             <h4 className="font-semibold mb-4">Truy cập nhanh</h4>

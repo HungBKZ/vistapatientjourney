@@ -14,10 +14,17 @@ import VideoPage from './VideoPage.jsx';
 import VistaChatbot from './VistaChatbot';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
+import KnowledgeHubPage from './pages/KnowledgeHubPage';
+import ClusterPage from './pages/ClusterPage';
+import ArticlePage from './pages/ArticlePage';
+import RouteSeo from './seo/RouteSeo';
+import AnalyticsTracker from './analytics/AnalyticsTracker';
 
 function App() {
   return (
     <BrowserRouter>
+      <RouteSeo />
+      <AnalyticsTracker />
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow md:pb-0">
@@ -31,6 +38,9 @@ function App() {
             <Route path="/quiz" element={<QuizPage />} />
             <Route path="/podcast" element={<PodcastPage />} />
             <Route path="/video" element={<VideoPage />} />
+            <Route path="/kien-thuc" element={<KnowledgeHubPage />} />
+            <Route path="/kien-thuc/:clusterSlug" element={<ClusterPage />} />
+            <Route path="/kien-thuc/:clusterSlug/:articleSlug" element={<ArticlePage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms-of-service" element={<TermsOfServicePage />} />
             <Route path="*" element={<HomePage />} />
