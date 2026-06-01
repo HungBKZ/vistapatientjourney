@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -6,429 +6,266 @@ import { useLanguage } from '../contexts/LanguageContext';
 type Experience = {
   title: string;
   subtitle: string;
+  tag: string;
   description: string;
   image: string;
   href: string;
   accent: 'violet' | 'sky' | 'emerald';
 };
 
+const accentMap = {
+  violet: {
+    line: '#a78bfa',
+    sub: '#c084fc',
+    glow: 'rgba(167, 139, 250, 0.25)',
+    bgGradient: 'from-violet-950/40 via-violet-900/10 to-transparent',
+  },
+  sky: {
+    line: '#22d3ee',
+    sub: '#67e8f9',
+    glow: 'rgba(34, 211, 238, 0.25)',
+    bgGradient: 'from-cyan-950/40 via-cyan-900/10 to-transparent',
+  },
+  emerald: {
+    line: '#34d399',
+    sub: '#6ee7b7',
+    glow: 'rgba(52, 211, 153, 0.25)',
+    bgGradient: 'from-emerald-950/40 via-emerald-900/10 to-transparent',
+  },
+};
+
 export default function KnowledgePage() {
   const { t } = useLanguage();
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [isDesktop, setIsDesktop] = useState(false);
   const prefersReducedMotion = useReducedMotion();
-  const containerRef = useRef<HTMLElement | null>(null);
-  
-  const experiences: Experience[] = useMemo(() => [
-    {
-      title: t('knowledge.virtualTryOn.title'),
-      subtitle: t('knowledge.virtualTryOn.subtitle'),
-      description: t('knowledge.virtualTryOn.description'),
-      image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310445/VDZ08622_maluun.jpg',
-      href: 'https://vista-camera-eyes.vercel.app/',
-      accent: 'violet',
-    },
-    {
-      title: t('knowledge.visualSimulation.title'),
-      subtitle: t('knowledge.visualSimulation.subtitle'),
-      description: t('knowledge.visualSimulation.description'),
-      image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310518/625361590_122119516413062997_1303514405670367212_n_wzuecd.jpg',
-      href: 'https://vista-camera-eyes.vercel.app/eye-simulation.html',
-      accent: 'sky',
-    },
-    {
-      title: t('knowledge.visionTest.title'),
-      subtitle: t('knowledge.visionTest.subtitle'),
-      description: t('knowledge.visionTest.description'),
-      image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310767/623446721_122119025241062997_8088043366359299100_n_cr5mod.jpg',
-      href: 'https://vista-camera-eyes.vercel.app/',
-      accent: 'emerald',
-    },
-  ], [t]);
-  const pointerRef = useRef({
-    rafId: 0,
-    hasPointer: false,
-    tx: 0,
-    ty: 0,
-    cx: 0,
-    cy: 0,
-    trx: 0,
-    try: 0,
-    crx: 0,
-    cry: 0,
-  });
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const clipPaths = useMemo(
-    () =>
-      [
-        'polygon(0 0, 92% 0, 80% 100%, 0 100%)',
-        'polygon(12% 0, 92% 0, 80% 100%, 0 100%)',
-        'polygon(12% 0, 100% 0, 100% 100%, 0 100%)',
-      ] as const,
-    []
+  const experiences: Experience[] = useMemo(
+    () => [
+      {
+        title: t('knowledge.virtualTryOn.title'),
+        subtitle: t('knowledge.virtualTryOn.subtitle'),
+        tag: 'AR Technology',
+        description: t('knowledge.virtualTryOn.description'),
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310445/VDZ08622_maluun.jpg',
+        href: 'https://vista-camera-eyes.vercel.app/',
+        accent: 'violet',
+      },
+      {
+        title: t('knowledge.visualSimulation.title'),
+        subtitle: t('knowledge.visualSimulation.subtitle'),
+        tag: 'Eye Science',
+        description: t('knowledge.visualSimulation.description'),
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310518/625361590_122119516413062997_1303514405670367212_n_wzuecd.jpg',
+        href: 'https://vista-camera-eyes.vercel.app/eye-simulation.html',
+        accent: 'sky',
+      },
+      {
+        title: t('knowledge.visionTest.title'),
+        subtitle: t('knowledge.visionTest.subtitle'),
+        tag: 'Health Check',
+        description: t('knowledge.visionTest.description'),
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310767/623446721_122119025241062997_8088043366359299100_n_cr5mod.jpg',
+        href: 'https://vista-camera-eyes.vercel.app/',
+        accent: 'emerald',
+      },
+    ],
+    [t]
   );
-
-  const accent = (key: Experience['accent']) => {
-    switch (key) {
-      case 'violet':
-        return 'bg-violet-400/80';
-      case 'sky':
-        return 'bg-sky-400/80';
-      case 'emerald':
-        return 'bg-emerald-400/80';
-      default:
-        return 'bg-white/60';
-    }
-  };
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el || prefersReducedMotion) return;
-
-    const setTargetsFromClient = (clientX: number, clientY: number) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = Math.min(Math.max(clientX - rect.left, 0), rect.width);
-      const y = Math.min(Math.max(clientY - rect.top, 0), rect.height);
-
-      const px = rect.width ? x / rect.width : 0.5;
-      const py = rect.height ? y / rect.height : 0.5;
-      const ry = (px - 0.5) * 8;
-      const rx = (0.5 - py) * 6;
-
-      pointerRef.current.tx = x;
-      pointerRef.current.ty = y;
-      pointerRef.current.trx = rx;
-      pointerRef.current.try = ry;
-    };
-
-    const tick = () => {
-      const c = containerRef.current;
-      if (!c) return;
-
-      const p = pointerRef.current;
-      const ease = 0.15; // Faster easing = fewer frames needed
-      p.cx += (p.tx - p.cx) * ease;
-      p.cy += (p.ty - p.cy) * ease;
-      p.crx += (p.trx - p.crx) * ease;
-      p.cry += (p.try - p.cry) * ease;
-
-      c.style.setProperty('--mx', `${Math.round(p.cx)}px`);
-      c.style.setProperty('--my', `${Math.round(p.cy)}px`);
-      c.style.setProperty('--rx', `${p.crx.toFixed(1)}deg`);
-      c.style.setProperty('--ry', `${p.cry.toFixed(1)}deg`);
-
-      const settled =
-        Math.abs(p.tx - p.cx) < 0.5 &&
-        Math.abs(p.ty - p.cy) < 0.5 &&
-        Math.abs(p.trx - p.crx) < 0.05 &&
-        Math.abs(p.try - p.cry) < 0.05;
-
-      if (p.hasPointer || !settled) {
-        p.rafId = window.requestAnimationFrame(tick);
-      } else {
-        p.rafId = 0;
-      }
-    };
-
-    const ensureTicking = () => {
-      if (!pointerRef.current.rafId) {
-        pointerRef.current.rafId = window.requestAnimationFrame(tick);
-      }
-    };
-
-    const onMove = (evt: MouseEvent) => {
-      pointerRef.current.hasPointer = true;
-      setTargetsFromClient(evt.clientX, evt.clientY);
-      ensureTicking();
-    };
-
-    const onLeave = () => {
-      pointerRef.current.hasPointer = false;
-      const rect = el.getBoundingClientRect();
-      pointerRef.current.tx = rect.width * 0.5;
-      pointerRef.current.ty = rect.height * 0.4;
-      pointerRef.current.trx = 0;
-      pointerRef.current.try = 0;
-      ensureTicking();
-    };
-
-    el.addEventListener('mousemove', onMove);
-    el.addEventListener('mouseleave', onLeave);
-    onLeave();
-
-    return () => {
-      el.removeEventListener('mousemove', onMove);
-      el.removeEventListener('mouseleave', onLeave);
-      if (pointerRef.current.rafId) cancelAnimationFrame(pointerRef.current.rafId);
-      pointerRef.current.rafId = 0;
-    };
-  }, [prefersReducedMotion]);
-
-  // Detect desktop for clip-path
-  useEffect(() => {
-    const checkDesktop = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-    checkDesktop();
-    window.addEventListener('resize', checkDesktop);
-    return () => window.removeEventListener('resize', checkDesktop);
-  }, []);
 
   return (
     <MotionConfig
       reducedMotion={prefersReducedMotion ? 'always' : 'never'}
-      transition={{ type: 'tween', duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ type: 'spring', stiffness: 220, damping: 26 }}
     >
-      <div className="min-h-screen bg-black text-white">
-        {/* Main Interactive Section - 3 Diagonal Sections */}
-        <section ref={containerRef} className="relative min-h-screen lg:h-[100svh] overflow-hidden">
-        {/* Subtle background treatment (less neon, more cinematic) */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 vj-grid" />
-          <div className="absolute inset-0 vj-vignette" />
-          <div className="absolute inset-0 vj-spotlight" />
-        </div>
+      <div className="min-h-screen bg-[#09090b] text-white antialiased selection:bg-white selection:text-black">
+        
+        {/* ── Horizontal Accordion Section (Các dòng ngang giãn nở linh hoạt) ── */}
+        <section className="relative w-full max-w-7xl mx-auto flex flex-col gap-5 p-4 md:p-8 py-16 md:py-24 overflow-hidden">
+          {experiences.map((exp, index) => {
+            const ac = accentMap[exp.accent];
+            const isActive = activeIndex === index;
 
-        <div className="relative h-full">
-          <motion.div
-            className="absolute right-4 sm:right-6 md:right-10 top-20 sm:top-24 z-30 text-[10px] sm:text-xs text-white/60 select-none"
-            animate={{ opacity: activeIndex === null ? 1 : 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            {t('knowledge.hoverHint')}
-          </motion.div>
-
-          <div className="absolute inset-0 flex flex-col lg:flex-row">
-          {experiences.map((exp, index) => (
-            <div
-              key={exp.title}
-              className={
-                'vj-panel relative cursor-pointer focus:outline-none overflow-hidden transition-[flex] duration-300 ease-out ' +
-                (index === 0 ? '' : 'lg:-ml-16 xl:-ml-24')
-              }
-              style={{
-                clipPath: isDesktop ? (clipPaths[index] ?? clipPaths[0]) : 'none',
-                flex: activeIndex === index ? 1.7 : 1,
-              }}
-              tabIndex={0}
-              onMouseEnter={() => setActiveIndex(index)}
-              onMouseLeave={() => setActiveIndex(null)}
-              onFocus={() => setActiveIndex(index)}
-              onBlur={() => setActiveIndex(null)}
-              onTouchStart={() => setActiveIndex(index)}
-              data-active={activeIndex === index ? 'true' : 'false'}
-            >
-              {/* Background Image */}
-              <div className="absolute inset-0 overflow-hidden">
+            return (
+              <motion.a
+                layout
+                key={exp.title}
+                href={exp.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative block w-full overflow-hidden rounded-2xl cursor-pointer select-none border transition-all duration-500 group focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b] focus:outline-none"
+                style={{
+                  // Thay đổi chiều cao linh hoạt trên Desktop thay vì thay đổi chiều rộng như trước
+                  height: isActive ? '320px' : '230px',
+                  borderColor: isActive ? ac.line : 'rgba(255,255,255,0.06)',
+                  boxShadow: isActive ? `0 10px 40px -10px ${ac.glow}` : 'none',
+                }}
+                onClick={(e) => {
+                  if (!isActive && typeof window !== 'undefined' && window.innerWidth >= 768) {
+                    e.preventDefault();
+                    setActiveIndex(index);
+                  }
+                }}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+                onFocus={() => setActiveIndex(index)}
+                onBlur={() => setActiveIndex(null)}
+                tabIndex={0}
+              >
+                {/* Ảnh nền */}
                 <img
                   src={exp.image}
                   alt={exp.title}
-                  className={
-                    'w-full h-full object-cover transition-transform duration-300 ease-out will-change-transform ' +
-                    (activeIndex === index ? 'scale-[1.08]' : 'scale-[1.02]') +
-                    (activeIndex !== null && activeIndex !== index ? ' brightness-75 saturate-50' : '')
-                  }
+                  className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.02]"
+                  style={{
+                    filter: isActive
+                      ? 'brightness(0.55) saturate(1.1) contrast(1.05)' 
+                      : 'brightness(0.25) saturate(0.7)',
+                    objectPosition: 'center 35%',
+                  }}
+                  loading="lazy"
                 />
 
-                {/* Cinematic overlay - simplified */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black/85" />
-              </div>
+                {/* Lớp phủ phim màu chuyển sắc */}
+                <div 
+                  className={`absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent transition-all duration-500 pointer-events-none ${
+                    isActive ? `bg-gradient-to-r ${ac.bgGradient}` : ''
+                  }`} 
+                />
 
-              {/* Border + accent */}
-              <div
-                className={
-                  'absolute inset-0 ring-1 transition-all duration-500 ' +
-                  (activeIndex === index ? 'ring-white/25' : 'ring-white/10')
-                }
-              />
+                {/* Neon Border phía bên trái (Chỉ báo ngang) */}
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      layoutId="neonLineHorizontal"
+                      className="absolute top-0 bottom-0 left-0 w-[4px] pointer-events-none"
+                      style={{
+                        background: ac.line,
+                        boxShadow: `0 0 16px ${ac.line}`,
+                      }}
+                      initial={{ scaleY: 0 }}
+                      animate={{ scaleY: 1 }}
+                      exit={{ scaleY: 0 }}
+                    />
+                  )}
+                </AnimatePresence>
 
-              {/* Lift/tilt only for active panel */}
-              <div
-                className={
-                  'absolute inset-0 transition-transform duration-500 vj-tilt ' +
-                  (activeIndex === index ? 'vj-tilt-active' : '')
-                }
-              />
-              <div
-                className={
-                  'absolute left-4 sm:left-6 md:left-10 top-20 sm:top-24 md:top-32 h-[2px] w-8 sm:w-10 rounded-full transition-all duration-500 ' +
-                  accent(exp.accent)
-                }
-                style={{
-                  opacity: activeIndex === null || activeIndex === index ? 1 : 0.25,
-                }}
-              />
+                {/* Nội dung bên trong chia Grid ngang thông minh */}
+                <div className="absolute inset-0 z-10 flex flex-col md:grid md:grid-cols-12 items-start md:items-center p-6 md:px-12 pointer-events-none h-full transition-all duration-300">
+                  
+                  {/* Cột trái: Số thứ tự, Subtitle & Tiêu đề chính */}
+                  <div className="md:col-span-5 flex items-center gap-6 w-full">
+                    <div
+                      className="text-lg font-mono transition-colors duration-300 tracking-wider flex-shrink-0"
+                      style={{ color: isActive ? ac.line : 'rgba(255,255,255,0.2)' }}
+                    >
+                      0{index + 1}
+                    </div>
 
-              {/* Content */}
-              <div className="relative z-10 h-full p-4 sm:p-6 md:p-8 lg:p-10">
-                <div className="h-full flex flex-col">
-                  <div className="pt-16 sm:pt-20 md:pt-24 lg:pt-28">
-                    {/* Removed subtitle label */}
+                    <div className="space-y-0.5 min-w-0">
+                      <p
+                        className="text-[9px] font-bold tracking-widest uppercase transition-opacity duration-300"
+                        style={{
+                          color: ac.sub,
+                          opacity: isActive ? 1 : 0.6,
+                        }}
+                      >
+                        {exp.subtitle}
+                      </p>
+                      <h2 className="font-extrabold text-white leading-tight tracking-wide uppercase text-lg sm:text-xl md:text-2xl truncate drop-shadow-md">
+                        {exp.title}
+                      </h2>
+                    </div>
                   </div>
 
-                  <div className="mt-auto pb-6 sm:pb-8 md:pb-10 lg:pb-12">
-                    <h2
-                      className={
-                        'font-semibold tracking-tight leading-[1.05] transition-all duration-300 ease-out ' +
-                        (activeIndex === index ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl -translate-y-0.5' : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl') +
-                        (activeIndex !== null && activeIndex !== index ? ' opacity-60' : ' opacity-100')
-                      }
-                      style={{ textShadow: '0 10px 30px rgba(0,0,0,0.55)' }}
+                  {/* Cột giữa: Nhãn Tag công nghệ (Ẩn khi đóng để trông gọn gàng) */}
+                  <div className="md:col-span-2 hidden md:flex justify-start pl-4">
+                    <div
+                      className="text-[9px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded border border-white/10 backdrop-blur-md bg-black/40 text-white/80 transition-all duration-300"
+                      style={{ opacity: isActive ? 1 : 0 }}
                     >
-                      {exp.title}
-                    </h2>
+                      {exp.tag}
+                    </div>
+                  </div>
 
-                    <AnimatePresence initial={false} mode="wait">
-                      {activeIndex === index && (
-                        <motion.p
-                          key="desc"
-                          className="mt-3 sm:mt-4 max-w-md text-sm sm:text-base text-white/80 leading-relaxed"
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 8 }}
-                          transition={{ duration: 0.2, ease: 'easeOut' }}
-                        >
-                          {exp.description}
-                        </motion.p>
-                      )}
-                    </AnimatePresence>
-
-                    <AnimatePresence initial={false} mode="wait">
-                      {activeIndex === index && (
+                  {/* Cột phải: Khối mô tả chi tiết và CTA khi active */}
+                  <div className="md:col-span-5 w-full mt-3 md:mt-0 flex flex-col justify-center items-start md:pl-6">
+                    <AnimatePresence initial={false}>
+                      {isActive && (
                         <motion.div
-                          key="cta"
-                          className="mt-4 sm:mt-6"
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 8 }}
-                          transition={{ duration: 0.2, ease: 'easeOut', delay: 0.05 }}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          className="space-y-4 w-full"
                         >
-                          <a
-                            href={exp.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="vj-btn inline-flex items-center gap-2 rounded-full bg-white/95 text-black px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold
-                              transition-all duration-200 hover:bg-white hover:shadow-xl hover:shadow-black/30"
+                          <p className="text-xs sm:text-sm text-white/70 leading-relaxed max-w-xl font-normal">
+                            {exp.description}
+                          </p>
+
+                          <div
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold tracking-widest text-black bg-white uppercase shadow-lg transition-transform active:scale-95"
+                            style={{
+                              boxShadow: `0 4px 20px ${ac.glow}`,
+                            }}
                           >
-                            {t('knowledge.cta')}
-                            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M17 8l4 4m0 0l-4 4m4-4H3"
-                              />
+                            <span>{t('knowledge.cta')}</span>
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>
-                          </a>
+                          </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
+
                 </div>
-              </div>
+              </motion.a>
+            );
+          })}
+        </section>
 
-              {/* Bottom number */}
-              <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-8 z-20 text-sm sm:text-base text-white/15 font-semibold tracking-[0.2em]">
-                0{index + 1}
-              </div>
-
-              {/* Subtle light sweep */}
-              <div
-                className={
-                  'absolute inset-0 pointer-events-none transition-opacity duration-300 ' +
-                  (activeIndex === index ? 'opacity-100' : 'opacity-0')
-                }
-              >
-                <div className="absolute -inset-x-24 -top-20 h-40 rotate-12 bg-white/10 blur-2xl" />
-              </div>
-            </div>
-          ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Bottom CTA */}
-        <section className="relative py-12 sm:py-16 md:py-20 bg-black">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+        {/* ── Bottom CTA Section ── */}
+        <section className="relative py-20 px-4 md:px-6">
+          <div
+            className="max-w-5xl mx-auto rounded-2xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 px-8 py-10 md:p-12 relative overflow-hidden group border border-white/[0.05]"
+            style={{
+              background: 'radial-gradient(circle at top right, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 70%), #0e0e11',
+              boxShadow: '0 30px 60px -20px rgba(0,0,0,0.8)',
+            }}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
-              {t('knowledge.bottomTitle')}
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-6 sm:mb-8 md:mb-10">
-              {t('knowledge.bottomDescription')}
-            </p>
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+            <div className="space-y-2">
+              <p className="text-[10px] tracking-[0.3em] uppercase text-white/30 font-bold">
+                Vista Camera
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                {t('knowledge.bottomTitle')}
+              </h2>
+              <p className="text-sm text-white/40 max-w-lg leading-relaxed font-normal">
+                {t('knowledge.bottomDescription')}
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto flex-shrink-0">
               <a
                 href="https://vista-camera-eyes.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 sm:px-7 py-2.5 sm:py-3.5 text-sm sm:text-base bg-white text-black font-semibold rounded-full transition-all
-                  hover:bg-white/95 hover:shadow-xl hover:shadow-black/30"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white text-[#09090b] text-sm font-bold transition-all duration-300 hover:bg-neutral-200 active:scale-[0.98] w-full sm:w-auto shadow-xl"
               >
                 {t('knowledge.bottomCta')}
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </a>
               <Link
                 to="/"
-                className="px-5 sm:px-7 py-2.5 sm:py-3.5 text-sm sm:text-base bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full
-                  border border-white/15 transition-all"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium text-white/70 hover:text-white border border-white/10 hover:bg-white/[0.04] transition-all duration-200 w-full sm:w-auto text-center"
               >
                 {t('knowledge.backHome')}
               </Link>
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <style>{`
-        .vj-vignette {
-          background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.85));
-        }
-
-        .vj-grid {
-          opacity: 0.1;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-          background-size: 60px 60px;
-        }
-
-        .vj-spotlight {
-          opacity: 0.8;
-          background: radial-gradient(600px 400px at var(--mx, 50%) var(--my, 40%), rgba(255,255,255,0.08), transparent 60%);
-          pointer-events: none;
-          will-change: background;
-        }
-
-        .vj-tilt { pointer-events: none; }
-        .vj-panel[data-active='true'] .vj-tilt {
-          transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-4px);
-        }
-
-        .vj-btn {
-          transform: translateY(0);
-        }
-
-        .vj-panel[data-active='true'] .vj-btn {
-          box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-        }
-
-        .vj-panel {
-          will-change: flex;
-          min-height: 33.333vh;
-        }
-        
-        @media (min-width: 1024px) {
-          .vj-panel {
-            min-height: 100%;
-          }
-        }
-      `}</style>
       </div>
     </MotionConfig>
   );

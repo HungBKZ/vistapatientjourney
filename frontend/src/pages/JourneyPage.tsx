@@ -1,21 +1,16 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import {
   motion,
-  useScroll,
-  useTransform,
-  useSpring,
-  useInView,
   AnimatePresence,
+  useInView,
 } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
 
 /* ═══════════════════════════════════════════════════════
-   JOURNEY PAGE — "Hồi ức" / Nostalgic Scrapbook Style
-   Warm bright palette · Polaroid photos · Film texture
+   UPGRADED JOURNEY PAGE — PREMIUM SCRAPBOOK STYLE
+   Warm bright palette · Polaroid layers · Dynamic bokeh lights
    ═══════════════════════════════════════════════════════ */
 
-/* ─── types ─── */
 type Milestone = {
   id: string;
   chapter: string;
@@ -34,158 +29,86 @@ type Milestone = {
   }>;
 };
 
-/* ─── warm accent palette ─── */
 const warmPalette = {
   amber: {
     bg: 'bg-amber-50',
     border: 'border-amber-200',
     dot: 'bg-amber-500',
     ring: 'ring-amber-300/50',
-    pill: 'bg-amber-100 text-amber-700 border-amber-200',
-    text: 'text-amber-600',
-    quote: 'border-amber-400 bg-amber-50/80',
-    tag: 'bg-amber-100/80 text-amber-700 border-amber-200/60',
-    photoShadow: 'shadow-amber-200/40',
-    gradient: 'from-amber-200 via-amber-100 to-orange-100',
+    pill: 'bg-amber-100/80 text-amber-800 border-amber-200',
+    text: 'text-amber-700',
+    quote: 'border-amber-400 bg-amber-100/40',
+    tag: 'bg-white/80 text-amber-800 border-amber-200',
+    photoShadow: 'shadow-amber-950/10',
     from: '#fef3c7',      // amber-100
-    via: '#fef9e7',       // warm cream
-    to: '#fef3c7',        // amber-100
-    watermark: 'text-amber-200',
+    via: '#fffbeb',       // amber-50
+    to: '#fde68a',        // amber-200
+    watermark: 'text-amber-300/20',
+    bokeh: 'bg-amber-400/20',
   },
   rose: {
     bg: 'bg-rose-50',
     border: 'border-rose-200',
     dot: 'bg-rose-500',
     ring: 'ring-rose-300/50',
-    pill: 'bg-rose-100 text-rose-700 border-rose-200',
-    text: 'text-rose-600',
-    quote: 'border-rose-400 bg-rose-50/80',
-    tag: 'bg-rose-100/80 text-rose-700 border-rose-200/60',
-    photoShadow: 'shadow-rose-200/40',
-    gradient: 'from-rose-200 via-pink-100 to-rose-100',
+    pill: 'bg-rose-100/80 text-rose-800 border-rose-200',
+    text: 'text-rose-700',
+    quote: 'border-rose-400 bg-rose-100/40',
+    tag: 'bg-white/80 text-rose-800 border-rose-200',
+    photoShadow: 'shadow-rose-950/10',
     from: '#ffe4e6',      // rose-100
-    via: '#fef2f2',       // warm pink
-    to: '#ffe4e6',        // rose-100
-    watermark: 'text-rose-200',
+    via: '#fff5f5',       // rose-50
+    to: '#fecdd3',        // rose-200
+    watermark: 'text-rose-300/20',
+    bokeh: 'bg-rose-400/20',
   },
   teal: {
     bg: 'bg-teal-50',
     border: 'border-teal-200',
     dot: 'bg-teal-500',
     ring: 'ring-teal-300/50',
-    pill: 'bg-teal-100 text-teal-700 border-teal-200',
-    text: 'text-teal-600',
-    quote: 'border-teal-400 bg-teal-50/80',
-    tag: 'bg-teal-100/80 text-teal-700 border-teal-200/60',
-    photoShadow: 'shadow-teal-200/40',
-    gradient: 'from-teal-200 via-cyan-100 to-teal-100',
+    pill: 'bg-teal-100/80 text-teal-800 border-teal-200',
+    text: 'text-teal-700',
+    quote: 'border-teal-400 bg-teal-100/40',
+    tag: 'bg-white/80 text-teal-800 border-teal-200',
+    photoShadow: 'shadow-teal-950/10',
     from: '#ccfbf1',      // teal-100
     via: '#f0fdfa',       // teal-50
-    to: '#ccfbf1',        // teal-100
-    watermark: 'text-teal-200',
+    to: '#99f6e4',        // teal-200
+    watermark: 'text-teal-300/20',
+    bokeh: 'bg-teal-400/20',
   },
   violet: {
     bg: 'bg-violet-50',
     border: 'border-violet-200',
     dot: 'bg-violet-500',
     ring: 'ring-violet-300/50',
-    pill: 'bg-violet-100 text-violet-700 border-violet-200',
-    text: 'text-violet-600',
-    quote: 'border-violet-400 bg-violet-50/80',
-    tag: 'bg-violet-100/80 text-violet-700 border-violet-200/60',
-    photoShadow: 'shadow-violet-200/40',
-    gradient: 'from-violet-200 via-purple-100 to-violet-100',
+    pill: 'bg-violet-100/80 text-violet-800 border-violet-200',
+    text: 'text-violet-700',
+    quote: 'border-violet-400 bg-violet-100/40',
+    tag: 'bg-white/80 text-violet-800 border-violet-200',
+    photoShadow: 'shadow-violet-950/10',
     from: '#ede9fe',      // violet-100
-    via: '#faf5ff',       // violet-50
-    to: '#ede9fe',        // violet-100
-    watermark: 'text-violet-200',
+    via: '#f5f3ff',       // violet-50
+    to: '#ddd6fe',        // violet-200
+    watermark: 'text-violet-300/20',
+    bokeh: 'bg-violet-400/20',
   },
 };
 
-/* polaroid random rotations */
-const polaroidRotations = [
-  '-rotate-2', 'rotate-1', 'rotate-3', '-rotate-1',
-  'rotate-2', '-rotate-3', 'rotate-1', '-rotate-2',
-];
+// Khởi tạo các góc nghiêng ngẫu nhiên để mô phỏng dán ảnh Scrapbook thủ công
+const polaroidRotations = [-3, 2, -1, 3, -2, 1];
 
-/* ─── Scroll-triggered Reveal ─── */
-function Reveal({
-  children,
-  className = '',
-  delay = 0,
-  y = 50,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-  y?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/* ─── Stagger wrapper ─── */
-function StaggerContainer({
-  children,
-  className = '',
-  stagger = 0.1,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  stagger?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
-      variants={{
-        hidden: {},
-        visible: { transition: { staggerChildren: stagger } },
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-const polaroidReveal = {
-  hidden: { opacity: 0, y: 40, rotate: -6, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotate: 0,
-    scale: 1,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
-  },
-};
-
-/* ─── Floating bokeh lights ─── */
+/* ─── Hiệu ứng hạt sáng Bokeh trôi nổi ─── */
 function BokehLight({ className, size, duration }: { className: string; size: string; duration: number }) {
   return (
     <motion.div
-      className={`pointer-events-none absolute rounded-full blur-xl ${size} ${className}`}
+      className={`pointer-events-none absolute rounded-full blur-3xl ${size} ${className}`}
       animate={{
-        y: [0, -30, 0],
-        x: [0, 15, 0],
-        opacity: [0.3, 0.6, 0.3],
-        scale: [1, 1.15, 1],
+        y: [0, -40, 0],
+        x: [0, 20, 0],
+        opacity: [0.2, 0.5, 0.2],
+        scale: [1, 1.2, 1],
       }}
       transition={{
         duration,
@@ -196,10 +119,10 @@ function BokehLight({ className, size, duration }: { className: string; size: st
   );
 }
 
-/* ─── Typewriter text ─── */
+/* ─── Hiệu ứng máy đánh chữ (Typewriter Effect) ─── */
 function TypewriterText({ text, className = '' }: { text: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
+  const inView = useInView(ref, { once: true, margin: '-20px' });
   const [displayed, setDisplayed] = useState('');
 
   useEffect(() => {
@@ -213,7 +136,7 @@ function TypewriterText({ text, className = '' }: { text: string; className?: st
       } else {
         clearInterval(timer);
       }
-    }, 35);
+    }, 40);
     return () => clearInterval(timer);
   }, [inView, text]);
 
@@ -223,24 +146,20 @@ function TypewriterText({ text, className = '' }: { text: string; className?: st
       {inView && displayed.length < text.length && (
         <motion.span
           animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.5, repeat: Infinity }}
-          className="inline-block w-[2px] h-[1em] bg-current ml-0.5 align-middle"
+          transition={{ duration: 0.4, repeat: Infinity }}
+          className="inline-block w-[3px] h-[1em] bg-current ml-1 align-middle"
         />
       )}
     </span>
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   MAIN COMPONENT
-   ═══════════════════════════════════════════════════════ */
 export default function JourneyPage() {
   const { t } = useLanguage();
   const [lightboxIdx, setLightboxIdx] = useState<{ ms: number; img: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [currentMilestone, setCurrentMilestone] = useState(0);
 
-  /* lightbox keyboard nav */
+  /* Lightbox Navigation Utilities */
   const closeLightbox = useCallback(() => setLightboxIdx(null), []);
   const navigateLightbox = useCallback(
     (dir: 1 | -1) => {
@@ -266,34 +185,6 @@ export default function JourneyPage() {
       document.body.style.overflow = '';
     };
   }, [lightboxIdx, closeLightbox, navigateLightbox]);
-
-  /* Track scroll position for navigation dots */
-  useEffect(() => {
-
-    const handleScroll = () => {
-      const sections = [
-        document.getElementById('hero'),
-        ...MILESTONES.map((_, i) => document.getElementById(`milestone-${i}`))
-      ];
-
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        if (section && section.offsetTop <= scrollPosition) {
-          setCurrentMilestone(i);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const openLightbox = useCallback((msIdx: number, imgIdx: number) => {
-    setLightboxIdx({ ms: msIdx, img: imgIdx });
-  }, []);
 
   const MILESTONES = useMemo(() => [
     {
@@ -384,96 +275,85 @@ export default function JourneyPage() {
       accent: 'amber' as const,
       highlights: [t('journey.milestone5.highlight1'), t('journey.milestone5.highlight2'), t('journey.milestone5.highlight3')],
       links: [
-        {
-          label: t('journey.facebookPostLink'),
-          url: 'https://www.facebook.com/share/p/1JnS4zQVPk/',
-        },
-        {
-          label: t('journey.vtvArticleLink'),
-          url: 'https://vtv.vn/ung-dung-ai-mo-phong-benh-ly-nhan-khoa-cua-sinh-vien-duoc-chuyen-giao-cho-benh-vien-100260304192222996.htm?fbclid=IwY2xjawQhG6VleHRuA2FlbQIxMABicmlkETE2a3R5dU1QYUxEeHRkSmk5c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoDGvSeD097AaekAW3iY2pe20TxnzxTkk91GQYjdngLg5rcHyNlNt-VwqgT0_aem_oaNUTQhrCblTX3AfCzLCyw',
-        },
-        {
-          label: t('journey.danvietArticleLink'),
-          url: 'https://danviet.vn/ung-dung-ai-mo-phong-benh-ly-nhan-khoa-cua-sinh-vien-duoc-dua-vao-benh-vien-d1406922.html?fbclid=IwY2xjawQhG8RleHRuA2FlbQIxMABicmlkETE2a3R5dU1QYUxEeHRkSmk5c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHqY28rYIqRohX98fxG7oFmoWamkruotnTqCMdmttjOncoLp4VbNLf8_1PMmi_aem_X7fzuXGEQkb4rB5qVTbZWA',
-        },
-        {
-          label: t('journey.thanhnienArticleLink'),
-          url: 'https://thanhnien.vn/tu-du-an-sinh-vien-den-giai-phap-giup-benh-nhan-nhin-thay-benh-ly-thi-giac-185260306155726806.htm',
-        },
+        { label: t('journey.facebookPostLink'), url: 'https://www.facebook.com/share/p/1JnS4zQVPk/' },
+        { label: t('journey.vtvArticleLink'), url: 'https://vtv.vn/ung-dung-ai-mo-phong-benh-ly-nhan-khoa-cua-sinh-vien-duoc-chuyen-giao-cho-benh-vien-100260304192222996.htm' },
+        { label: t('journey.danvietArticleLink'), url: 'https://danviet.vn/ung-dung-ai-mo-phong-benh-ly-nhan-khoa-cua-sinh-vien-duoc-dua-vao-benh-vien-d1406922.html' },
+        { label: t('journey.thanhnienArticleLink'), url: 'https://thanhnien.vn/tu-du-an-sinh-vien-den-giai-phap-giup-benh-nhan-nhin-thay-benh-ly-thi-giac-185260306155726806.htm' },
       ],
     },
   ], [t]);
 
-  const totalImages = useMemo(() => MILESTONES.reduce((s, m) => s + m.images.length, 0), [MILESTONES]);
-
   return (
-    <div
-      ref={containerRef}
-      className="relative"
-      style={{ scrollBehavior: 'smooth' }}
-    >
-      {/* Navigation dots */}
-      {/* <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
-        {[0, ...MILESTONES.map((_, i) => i + 1)].map((idx) => (
-          <button
-            key={idx}
-            onClick={() => {
-              const section = document.getElementById(idx === 0 ? 'hero' : `milestone-${idx - 1}`);
-              section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              currentMilestone === idx
-                ? 'bg-blue-600 scale-125'
-                : 'bg-gray-300 hover:bg-gray-400'
-            }`}
-          />
-        ))}
-      </div> */}
-
-      {/* ═══════ HERO BANNER ═══════ */}
-      <section
-        id="hero"
-        className="relative min-h-screen lg:snap-start lg:snap-always flex items-center justify-center pt-16"
-      >
-        {/* Background Image */}
-        <div className="absolute inset-0 top-16">
+    <div ref={containerRef} className="relative bg-stone-900 overflow-x-hidden">
+      
+      {/* ═══════ HERO BANNER (ĐÃ FIX LỖI GRADIENT ĐÁY MÀU TRẮNG) ═══════ */}
+      <section id="hero" className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0">
           <img
             src="https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/a_xnxud3.jpg"
             alt="VISTA Journey"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent" />
         </div>
 
-        {/* Content */}
-        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl">
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl space-y-6">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="mb-4 sm:mb-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs sm:text-sm font-semibold">
+            <span className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs sm:text-sm font-bold tracking-wider uppercase">
               ✨ {t('journey.badge')}
             </span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight mb-4 sm:mb-6"
-          >
-            {t('journey.title')}
-            <br />
-            <span className="text-blue-400">{t('journey.subtitle')}</span>
-          </motion.h1>
-
-          <motion.p
+        <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="flex flex-col items-center justify-center text-center select-none"
+            style={{ fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}
+          >
+            {/* Dòng 1: Badge phụ */}
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] text-white/90 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
+              {t('journey.title')}
+            </span>
+
+            {/* Dòng 2: Tiêu đề chính xử lý thuật toán tách chữ */}
+            <span className="font-black text-white leading-tight text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight max-w-4xl block drop-shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
+              {(() => {
+                // 1. Lấy toàn bộ câu từ hàm dịch ra (Nếu chưa có thì lấy câu mặc định)
+                const fullText = t('journey.subtitle') || 'Hành trình từ lớp học ra cộng đồng';
+                
+                // 2. Tách câu thành mảng các từ riêng lẻ dựa vào khoảng trắng
+                const words = fullText.split(' ');
+                
+                // 3. Tìm điểm cắt (ví dụ câu có 7 từ thì cắt ở từ thứ 2: "Hành trình" | "từ lớp học...")
+                // Bạn có thể chỉnh số 2 này tùy theo độ dài mong muốn của dòng 1
+                const breakIndex = words.length > 4 ? 2 : Math.floor(words.length / 2);
+                
+                const firstLine = words.slice(0, breakIndex).join(' ');
+                const secondLine = words.slice(breakIndex).join(' ');
+
+                return (
+                  <>
+                    {firstLine}
+                    <br />
+                    <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
+                      {secondLine}
+                    </span>
+                  </>
+                );
+              })()}
+            </span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.6 }}
-            className="text-lg sm:text-xl text-gray-200 mb-6 sm:mb-8"
+            className="text-lg sm:text-2xl text-stone-200/90 font-medium"
           >
             {MILESTONES.length} {t('journey.milestones')}
           </motion.p>
@@ -481,102 +361,86 @@ export default function JourneyPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
           >
             <button
-              onClick={() => {
-                document.getElementById('milestone-0')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 hover:scale-105"
+              onClick={() => document.getElementById('milestone-0')?.scrollIntoView({ behavior: 'smooth' })}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-base font-bold transition-all shadow-xl hover:shadow-blue-600/30 hover:scale-105"
             >
               {t('journey.exploreCta')}
-              <motion.span
-                animate={{ y: [0, 4, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
+              <motion.span animate={{ y: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
                 ↓
               </motion.span>
             </button>
           </motion.div>
         </div>
 
-        {/* Scroll hint */}
-        <motion.div
-          animate={{ opacity: [1, 0.3, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 text-white/60 text-xs sm:text-sm"
-        >
-          {t('journey.scrollHint')}
-        </motion.div>
+        {/* Đã sửa từ màu trắng thành màu cam nhạt ấm (#fef3c7) khớp hoàn toàn với chương đầu tiên */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#fef3c7] to-transparent pointer-events-none" />
       </section>
 
-      {/* ═══════ MILESTONES - SNAP SCROLL ═══════ */}
+      {/* ═══════ MILESTONES — SCRAPBOOK STYLE ═══════ */}
       {MILESTONES.map((ms, idx) => {
         const c = warmPalette[ms.accent];
-        const imgCols = ms.images.length === 6 ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2';
         
         return (
           <section
             key={ms.id}
             id={`milestone-${idx}`}
-            className="relative min-h-screen flex items-center justify-center overflow-hidden py-12 sm:py-16 lg:py-0"
-            style={{
-              background: `linear-gradient(135deg, ${c.from} 0%, ${c.via} 50%, ${c.to} 100%)`
-            }}
+            className="relative min-h-screen flex items-center justify-center overflow-hidden py-24 sm:py-32"
+            style={{ background: `linear-gradient(135deg, ${c.from} 0%, ${c.via} 60%, ${c.to} 100%)` }}
           >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 w-full grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-center">
-              {/* Left: Content */}
+            {/* Hạt hiệu ứng Bokeh nghệ thuật */}
+            <BokehLight className={c.bokeh} size="w-72 h-72" duration={7} />
+            <BokehLight className={c.bokeh} size="w-96 h-96 top-1/3 right-10" duration={10} />
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
+              
+              {/* Bên trái: Nội dung câu chuyện */}
               <motion.div
-                initial={{ opacity: 0, x: -60 }}
+                initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="space-y-4 sm:space-y-6"
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+                className="space-y-6 lg:col-span-5"
               >
-                {/* Badge */}
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                  <span className={`inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-bold ${c.pill}`}>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className={`inline-block px-4 py-1.5 rounded-full text-xs font-black tracking-wider border shadow-sm ${c.pill}`}>
                     {ms.date}
                   </span>
-                  <span className="text-gray-700 font-semibold text-xs sm:text-sm">
-                    {ms.chapter}
+                  <span className="text-stone-500 font-bold text-xs uppercase tracking-widest">
+                    <TypewriterText text={ms.chapter} />
                   </span>
                 </div>
 
-                {/* Title */}
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-stone-900 leading-tight tracking-tight">
                   {ms.title}
                 </h2>
 
-                <p className={`text-lg sm:text-xl font-semibold ${c.text}`}>
+                <p className={`text-lg sm:text-xl font-bold ${c.text}`}>
                   {ms.subtitle}
                 </p>
 
-                {/* Quote */}
-                <div className={`pl-4 sm:pl-5 border-l-4 ${c.quote} py-2`}>
-                  <p className="text-gray-700 text-sm sm:text-base leading-relaxed font-medium italic">
+                <div className={`pl-5 border-l-4 ${c.quote} py-3 rounded-r-2xl pr-4 shadow-sm relative overflow-hidden bg-white/40 backdrop-blur-xs`}>
+                  <p className="text-stone-800 text-sm sm:text-base leading-relaxed font-medium italic relative z-10">
                     "{ms.quote}"
                   </p>
-                  <p className="mt-2 text-xs sm:text-sm text-gray-500 font-medium">— Nhóm VISTA</p>
+                  <p className="mt-2 text-xs text-stone-500 font-bold tracking-wide">— VISTA TEAM</p>
                 </div>
 
-                {/* Description */}
-                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+                <p className="text-stone-700 text-sm sm:text-base leading-relaxed font-medium">
                   {ms.description}
                 </p>
 
-                {/* Highlights */}
+                {/* Điểm nhấn nổi bật */}
                 {ms.highlights.length > 0 && (
-                  <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-gray-900 mb-2 sm:mb-3 uppercase tracking-wide">
-                      {t('journey.highlights')}
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-black text-stone-900 uppercase tracking-widest">
+                      📌 {t('journey.highlights')}
                     </h4>
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {ms.highlights.map((item, i) => (
-                        <span
-                          key={i}
-                          className={`rounded-md border px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-medium ${c.tag}`}
-                        >
+                        <span key={i} className={`rounded-lg border px-3 py-1.5 text-xs font-bold shadow-2xs ${c.tag}`}>
                           {item}
                         </span>
                       ))}
@@ -584,17 +448,17 @@ export default function JourneyPage() {
                   </div>
                 )}
 
-                {/* CTA */}
+                {/* Các liên kết hành động */}
                 {(ms.fbLink || ms.links?.length) && (
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-3 pt-2">
                     {ms.fbLink && (
                       <a
                         href={ms.fbLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-all duration-200 hover:scale-105 shadow-lg"
+                        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md hover:scale-105"
                       >
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                         </svg>
                         {t('journey.fbLink')}
@@ -606,9 +470,9 @@ export default function JourneyPage() {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-gray-900 hover:bg-gray-800 text-white font-semibold text-xs sm:text-sm transition-all duration-200 hover:scale-105 shadow-lg"
+                        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm transition-all shadow-md hover:scale-105"
                       >
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5M10.172 13.828a4 4 0 010-5.656l3-3a4 4 0 115.656 5.656l-1.5 1.5" />
                         </svg>
                         {link.label}
@@ -618,71 +482,64 @@ export default function JourneyPage() {
                 )}
               </motion.div>
 
-              {/* Right: Image Gallery */}
+              {/* Bên phải: Album ảnh Polaroid nghệ thuật sắp xếp lớp */}
               <motion.div
-                initial={{ opacity: 0, x: 60 }}
+                initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="relative mt-8 lg:mt-0"
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.9, ease: 'easeOut' }}
+                className="lg:col-span-7 flex justify-center items-center relative mt-10 lg:mt-0"
               >
-                <div className="relative rounded-2xl bg-white/80 backdrop-blur-sm border border-white/40 p-3 sm:p-4 md:p-5 shadow-2xl">
-                  <div className={`grid gap-2 sm:gap-3 ${imgCols}`}>
-                    {ms.images.map((img, imgIdx) => (
+                <div className="grid grid-cols-2 gap-6 sm:gap-8 max-w-xl w-full relative">
+                  {ms.images.map((img, imgIdx) => {
+                    // Trích xuất góc quay ngẫu nhiên cố định theo chỉ mục ảnh
+                    const rotation = polaroidRotations[imgIdx % polaroidRotations.length];
+                    
+                    return (
                       <motion.button
                         key={imgIdx}
                         onClick={() => setLightboxIdx({ ms: idx, img: imgIdx })}
-                        className="group relative rounded-lg overflow-hidden bg-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                        whileHover={{ y: -6, scale: 1.03 }}
-                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        className={`bg-white p-3 pb-8 rounded-xs ${c.photoShadow} border border-stone-200/60 focus:outline-none w-full`}
+                        style={{ rotate: `${rotation}deg` }}
+                        whileHover={{ 
+                          scale: 1.06, 
+                          rotate: 0, 
+                          zIndex: 50,
+                          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                        }}
+                        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                       >
-                        <div className="relative aspect-square">
+                        {/* Khung ảnh chính */}
+                        <div className="relative aspect-square overflow-hidden rounded-xs bg-stone-50 border border-stone-100">
                           <img
                             src={img}
                             alt={`${ms.title} - ${imgIdx + 1}`}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                            className="absolute inset-0 w-full h-full object-cover"
                             loading="lazy"
-                            decoding="async"
                           />
-                          {/* Hover overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <div className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 rounded-full bg-white flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-300">
-                              <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                              </svg>
-                            </div>
-                          </div>
+                          <div className="absolute inset-0 bg-stone-950/5 pointer-events-none" />
+                        </div>
+                        
+                        {/* Mô phỏng chữ viết tay nhỏ dưới chân ảnh Polaroid */}
+                        <div className="mt-3 text-center text-[10px] tracking-widest uppercase font-black text-stone-400 select-none">
+                          VISTA • {ms.date.split('/')[2] || '2026'}
                         </div>
                       </motion.button>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
               </motion.div>
             </div>
 
-            {/* Milestone number watermark */}
-            <div 
-              className={`absolute bottom-8 right-8 text-9xl md:text-[12rem] font-black ${c.watermark} select-none pointer-events-none opacity-30`}
-            >
+            {/* Số thứ tự chương chìm cực lớn phía sau nền */}
+            <div className={`absolute bottom-4 right-6 text-[12rem] md:text-[20rem] font-black ${c.watermark} select-none pointer-events-none leading-none`}>
               {String(idx + 1).padStart(2, '0')}
             </div>
-
-            {/* Progress indicator for this section */}
-            {/* <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
-              {MILESTONES.map((_, i) => (
-                <div
-                  key={i}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === idx ? 'w-8 bg-gray-900' : 'w-1.5 bg-gray-400'
-                  }`}
-                />
-              ))}
-            </div> */}
           </section>
         );
       })}
 
-      {/* ═══════ LIGHTBOX ═══════ */}
+      {/* ═══════ LIGHTBOX CHẾ ĐỘ XEM ẢNH PHÓNG TO ═══════ */}
       <AnimatePresence>
         {lightboxIdx && (
           <motion.div
@@ -690,67 +547,59 @@ export default function JourneyPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            style={{ backgroundColor: 'rgba(30, 20, 10, 0.92)' }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md"
+            style={{ backgroundColor: 'rgba(15, 12, 10, 0.94)' }}
             onClick={closeLightbox}
             role="dialog"
             aria-modal="true"
           >
-            {/* Close */}
-            <motion.button
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.15 }}
+            {/* Nút đóng */}
+            <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 h-10 w-10 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors z-10"
-              aria-label="Đóng"
+              className="absolute top-6 right-6 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-white"
             >
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
-            </motion.button>
+            </button>
 
-            {/* Prev */}
+            {/* Nút lướt ảnh trái */}
             <button
               onClick={(e) => { e.stopPropagation(); navigateLightbox(-1); }}
-              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors z-10"
-              aria-label="Trước"
+              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-white"
             >
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
 
-            {/* Next */}
+            {/* Nút lướt ảnh phải */}
             <button
               onClick={(e) => { e.stopPropagation(); navigateLightbox(1); }}
-              className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors z-10"
-              aria-label="Sau"
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-white"
             >
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </button>
 
-            {/* Clean lightbox */}
+            {/* Khung chứa ảnh phóng lớn */}
             <motion.div
               key={`lb-${lightboxIdx.ms}-${lightboxIdx.img}`}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="relative max-w-[90vw] max-h-[90vh]"
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ type: 'spring', damping: 25 }}
+              className="relative max-w-[85vw] max-h-[80vh]"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={MILESTONES[lightboxIdx.ms].images[lightboxIdx.img]}
                 alt="Phóng to"
-                className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                className="max-w-full max-h-[80vh] object-contain rounded-xl shadow-2xl border border-white/10"
               />
-              {/* Caption */}
-              <div className="absolute -bottom-12 left-0 right-0 text-center">
-                <p className="text-sm text-white/80 font-medium">
+              <div className="absolute -bottom-10 left-0 right-0 text-center">
+                <p className="text-sm text-stone-300 font-semibold tracking-wide">
                   {MILESTONES[lightboxIdx.ms].title} — {lightboxIdx.img + 1}/{MILESTONES[lightboxIdx.ms].images.length}
                 </p>
               </div>
