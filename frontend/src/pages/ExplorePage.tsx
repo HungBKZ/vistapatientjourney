@@ -21,7 +21,7 @@ const accentMap = {
     bgGradient: 'from-slate-900/80 via-slate-900/40 to-transparent',
   },
   sky: {
-    line: '#0EA5E9', 
+    line: '#0EA5E9',
     sub: '#0284c7',
     glow: 'rgba(14, 165, 233, 0.2)',
     bgGradient: 'from-slate-900/80 via-slate-900/40 to-transparent',
@@ -76,11 +76,11 @@ export default function ExplorePage() {
     >
       {/* Nền tổng thể xanh xám nhạt dịu mát */}
       <div className="min-h-screen bg-[#d2ebfc] text-slate-800 antialiased selection:bg-sky-600 selection:text-white">
-        
+
         <header className="relative max-w-7xl px-4 pt-3 md:pt-6 sm:px-6 lg:px-8">
           {/* Header giữ nguyên */}
         </header>
-       
+
         <main className="relative w-full max-w-7xl mx-auto flex flex-col gap-5 p-4 md:p-8 py-12 md:py-16 overflow-hidden">
           {services.map((svc, index) => {
             const ac = accentMap[svc.accent];
@@ -128,9 +128,8 @@ export default function ExplorePage() {
 
                 {/* Lớp phủ động khi Hover/Active */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-r ${ac.bgGradient} opacity-0 transition-opacity duration-500 pointer-events-none ${
-                    isActive ? 'opacity-100' : ''
-                  }`}
+                  className={`absolute inset-0 bg-gradient-to-r ${ac.bgGradient} opacity-0 transition-opacity duration-500 pointer-events-none ${isActive ? 'opacity-100' : ''
+                    }`}
                 />
 
                 {/* Neon Border góc trái */}
@@ -152,7 +151,7 @@ export default function ExplorePage() {
 
                 {/* Khối chữ: Đổi toàn bộ chữ sang Tone Trắng (White) và Slate sáng để tương phản hoàn hảo trên nền ảnh mới */}
                 <div className="absolute inset-0 z-10 flex flex-col md:grid md:grid-cols-12 items-start md:items-center p-6 md:px-14 h-full transition-all duration-300">
-                  
+
                   {/* Cột trái: Index & Tiêu đề */}
                   <div className="md:col-span-5 flex items-center gap-6 w-full">
                     <div
