@@ -145,7 +145,7 @@ const translations = {
     journey: {
       badge: 'Hành trình vẫn đang tiếp tục',
       title: 'Hành trình của VISTA',
-      subtitle: 'Từ lớp học ra cộng đồng',
+      subtitle: 'Từ lớp học ra cộng\u00A0đồng',
       milestones: 'cột mốc quan trọng',
       exploreCta: 'Khám phá hành trình',
       scrollHint: 'Cuộn xuống để xem',
