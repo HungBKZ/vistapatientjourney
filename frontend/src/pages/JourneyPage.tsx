@@ -5,37 +5,36 @@ import { useLanguage } from '../contexts/LanguageContext';
 /*
   ═══════════════════════════════════════════════════════════
   JOURNEY PAGE — "VISTA Clinical" Enhanced Theme v2
-  Cải tiến:
-  1. Sticky progress nav với IntersectionObserver
-  2. Mobile layout fix (order reset)
-  3. Vertical timeline connector
-  4. Font optimization (chỉ load weights cần thiết)
-  5. Lightbox swipe gesture + thumbnail strip
-  6. Body text 15–16px cho dễ đọc
+  Cải tiến styling theo Legibility & UI Cleanse Audit:
+  1. Typography: Revert sang font chữ 'Inter' tối giản, dễ đọc (như trang HomePage).
+  2. Background Overlay: Tinh chỉnh lớp phủ gradient mịn và đằm thắm hơn, tạo độ sâu điện ảnh và nâng cao độ tương phản chữ.
+  3. UI Cleanse: Loại bỏ hoàn toàn thanh Timeline Rail bên trái để màn hình thoáng đãng.
+  4. Central Area Sharpness: Làm sắc nét phần đếm số cột mốc, timeline markers 01-05, và nút bấm CTA.
+  5. Viewport Stability: Sử dụng 100dvh chống giật trên thiết bị di động.
   ═══════════════════════════════════════════════════════════
 */
 
-/* ─── Chỉ load weights thực sự dùng: Lexend 600,800,900 + DM Sans 400,500 ─── */
+/* ─── Chỉ load weights thực sự dùng: Inter từ 300 đến 900 ─── */
 const FONT_LINK = `
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@600;800;900&family=DM+Sans:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 `;
 
 /* ─── Color tokens ─── */
 const C = {
-  navy:       '#04213F',
-  blue:       '#1A6FD8',
-  blueMid:    '#2563EB',
+  navy:       '#090D1A', // Off-black/charcoal để tránh màu đen tuyệt đối
+  blue:       '#2563EB', // Xanh thương hiệu chính
+  blueMid:    '#3B82F6', // Xanh thương hiệu phụ
   blueLight:  '#60A5FA',
-  blue50:     '#EFF6FF',
-  blue100:    '#DBEAFE',
-  blue200:    '#BFDBFE',
-  slate700:   '#334155',
+  blue50:     '#F8FAFC',
+  blue100:    '#F1F5F9',
+  blue200:    '#E2E8F0',
+  slate700:   '#334155', // Màu text chính
   slate500:   '#64748B',
   slate400:   '#94A3B8',
   slate200:   '#E2E8F0',
   white:      '#FFFFFF',
-  pageBg:     '#F0F6FF',
-  sectionAlt: '#F4F9FF',
+  pageBg:     '#FFFFFF', // Nền trang trắng sạch
+  sectionAlt: '#FAFBFD', // Nền section xen kẽ rất nhẹ
 };
 
 type AccentKey = 'blue' | 'indigo' | 'sky' | 'cobalt';
@@ -55,36 +54,36 @@ interface Accent {
 
 const accents: Record<AccentKey, Accent> = {
   blue: {
-    hex: '#2563EB', text: '#1D4ED8',
-    bg: '#EFF6FF', border: '#BFDBFE',
+    hex: '#2563EB', text: '#1E40AF',
+    bg: '#F8FAFC', border: '#E2E8F0',
     tagBg: '#EFF6FF', tagText: '#1D4ED8', tagBorder: '#BFDBFE',
-    quoteBg: '#EBF4FF',
-    shadow: '0 4px 28px rgba(37,99,235,0.10)',
-    galleryBorder: '#BFDBFE',
+    quoteBg: '#F8FAFC',
+    shadow: '0 20px 40px -15px rgba(37,99,235,0.06)',
+    galleryBorder: '#E2E8F0',
   },
   indigo: {
-    hex: '#4338CA', text: '#3730A3',
-    bg: '#EEF2FF', border: '#C7D2FE',
+    hex: '#4F46E5', text: '#3730A3',
+    bg: '#FAFBFD', border: '#E2E8F0',
     tagBg: '#EEF2FF', tagText: '#3730A3', tagBorder: '#C7D2FE',
-    quoteBg: '#EEF2FF',
-    shadow: '0 4px 28px rgba(67,56,202,0.10)',
-    galleryBorder: '#C7D2FE',
+    quoteBg: '#FAFBFD',
+    shadow: '0 20px 40px -15px rgba(79,70,229,0.06)',
+    galleryBorder: '#E2E8F0',
   },
   sky: {
     hex: '#0284C7', text: '#0369A1',
-    bg: '#F0F9FF', border: '#BAE6FD',
+    bg: '#F8FAFC', border: '#E2E8F0',
     tagBg: '#F0F9FF', tagText: '#0369A1', tagBorder: '#BAE6FD',
-    quoteBg: '#F0F9FF',
-    shadow: '0 4px 28px rgba(2,132,199,0.10)',
-    galleryBorder: '#BAE6FD',
+    quoteBg: '#F8FAFC',
+    shadow: '0 20px 40px -15px rgba(2,132,199,0.06)',
+    galleryBorder: '#E2E8F0',
   },
   cobalt: {
     hex: '#1D4ED8', text: '#1E40AF',
-    bg: '#EFF6FF', border: '#93C5FD',
+    bg: '#F8FAFC', border: '#E2E8F0',
     tagBg: '#EFF6FF', tagText: '#1E40AF', tagBorder: '#93C5FD',
-    quoteBg: '#EBF4FF',
-    shadow: '0 4px 28px rgba(29,78,216,0.10)',
-    galleryBorder: '#93C5FD',
+    quoteBg: '#F8FAFC',
+    shadow: '0 20px 40px -15px rgba(29,78,216,0.06)',
+    galleryBorder: '#E2E8F0',
   },
 };
 
@@ -165,7 +164,7 @@ function ChapterBadge({ num, label, ac }: { num: number; label: string; ac: Acce
   return (
     <div style={{
       display: 'inline-flex', alignItems: 'center', gap: 8,
-      fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+      fontFamily: "'Inter', sans-serif", fontWeight: 500,
       fontSize: 11, letterSpacing: '0.14em',
       color: ac.text, textTransform: 'uppercase',
     }}>
@@ -193,12 +192,12 @@ function PhotoCard({
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        position: 'relative', borderRadius: 9, overflow: 'hidden',
+        position: 'relative', borderRadius: 16, overflow: 'hidden',
         border: `1.5px solid ${hov ? ac.hex : '#E2EDFC'}`,
-        background: '#F1F8FF',
+        background: '#F8FAFC',
         cursor: 'pointer', outline: 'none', padding: 0,
         transition: 'border-color 0.2s, box-shadow 0.2s',
-        boxShadow: hov ? `0 8px 24px ${ac.hex}30` : '0 1px 6px rgba(37,99,235,0.06)',
+        boxShadow: hov ? `0 12px 32px rgba(37,99,235,0.12)` : '0 4px 16px rgba(0,0,0,0.02)',
         aspectRatio: '1 / 1',
       }}
       whileHover={{ scale: 1.04, y: -2 }}
@@ -211,8 +210,9 @@ function PhotoCard({
         src={src} alt={alt}
         style={{
           width: '100%', height: '100%', objectFit: 'cover', display: 'block',
-          filter: hov ? 'brightness(0.82)' : 'brightness(1)',
+          filter: hov ? 'brightness(0.85)' : 'brightness(1)',
           transition: 'filter 0.2s',
+          borderRadius: 14,
         }}
         loading="lazy"
       />
@@ -222,8 +222,8 @@ function PhotoCard({
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           {[
-            { top: 5, left: 5 }, { top: 5, right: 5 },
-            { bottom: 5, left: 5 }, { bottom: 5, right: 5 },
+            { top: 6, left: 6 }, { top: 6, right: 6 },
+            { bottom: 6, left: 6 }, { bottom: 6, right: 6 },
           ].map((pos, i) => (
             <div key={i} style={{
               position: 'absolute', width: 11, height: 11,
@@ -242,7 +242,7 @@ function PhotoCard({
               width: 36, height: 36, borderRadius: '50%',
               border: `1.5px solid ${ac.hex}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'rgba(255,255,255,0.88)',
+              background: 'rgba(255,255,255,0.92)',
             }}
           >
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke={ac.hex} strokeWidth={2}>
@@ -254,7 +254,7 @@ function PhotoCard({
       )}
       <div style={{
         position: 'absolute', bottom: 5, right: 7,
-        fontFamily: "'Lexend', monospace", fontSize: 9,
+        fontFamily: "'Inter', monospace", fontSize: 9,
         color: hov ? ac.hex : '#BFDBFE', transition: 'color 0.2s',
         letterSpacing: '0.05em',
       }}>
@@ -265,7 +265,7 @@ function PhotoCard({
 }
 
 /* ════════════════════════════════════════════
-   STICKY PROGRESS NAV — CẢI TIẾN 1
+   STICKY PROGRESS NAV
 ════════════════════════════════════════════ */
 function StickyProgressNav({
   milestones,
@@ -308,7 +308,7 @@ function StickyProgressNav({
         >
           {/* VISTA label */}
           <span style={{
-            fontFamily: "'Lexend', sans-serif", fontWeight: 800,
+            fontFamily: "'Inter', sans-serif", fontWeight: 800,
             fontSize: 9, letterSpacing: '0.16em',
             color: C.blueMid, textTransform: 'uppercase',
             marginRight: 8, opacity: 0.7,
@@ -349,7 +349,7 @@ function StickyProgressNav({
                       exit={{ opacity: 0, width: 0 }}
                       transition={{ duration: 0.22 }}
                       style={{
-                        fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+                        fontFamily: "'Inter', sans-serif", fontWeight: 500,
                         fontSize: 10, color: ac.text,
                         letterSpacing: '0.06em', whiteSpace: 'nowrap',
                         overflow: 'hidden',
@@ -365,86 +365,6 @@ function StickyProgressNav({
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-/* ════════════════════════════════════════════
-   TIMELINE CONNECTOR — CẢI TIẾN 3
-════════════════════════════════════════════ */
-function TimelineConnector({
-  totalCount,
-  activeIdx,
-  milestones,
-}: {
-  totalCount: number;
-  activeIdx: number;
-  milestones: Milestone[];
-}) {
-  return (
-    <div style={{
-      position: 'fixed', left: 20, top: '50%',
-      transform: 'translateY(-50%)',
-      zIndex: 100,
-      display: 'flex', flexDirection: 'column',
-      alignItems: 'center', gap: 0,
-    }}
-      className="vj-timeline-connector"
-    >
-      {milestones.map((ms, i) => {
-        const ac = accents[ms.accent];
-        const isActive = i === activeIdx;
-        const isPast = i < activeIdx;
-        return (
-          <div key={ms.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {/* Node circle */}
-            <motion.button
-              onClick={() => document.getElementById(`ms-${i}`)?.scrollIntoView({ behavior: 'smooth' })}
-              title={ms.title}
-              animate={{
-                scale: isActive ? 1.2 : 1,
-                borderColor: isActive ? ac.hex : isPast ? ac.hex : C.slate200,
-                background: isActive ? ac.hex : isPast ? `${ac.hex}30` : C.white,
-              }}
-              transition={{ duration: 0.3 }}
-              style={{
-                width: 20, height: 20, borderRadius: '50%',
-                border: `2px solid`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', outline: 'none',
-                boxShadow: isActive ? `0 0 0 4px ${ac.hex}25` : 'none',
-                transition: 'box-shadow 0.3s',
-              }}
-            >
-              <span style={{
-                fontFamily: "'Lexend', sans-serif", fontWeight: 800,
-                fontSize: 7, color: isActive ? C.white : isPast ? ac.text : C.slate400,
-              }}>
-                {i + 1}
-              </span>
-            </motion.button>
-
-            {/* Connector line between nodes */}
-            {i < totalCount - 1 && (
-              <div style={{ width: 2, height: 36, position: 'relative', overflow: 'hidden' }}>
-                <div style={{
-                  position: 'absolute', inset: 0,
-                  background: C.slate200, borderRadius: 1,
-                }} />
-                <motion.div
-                  animate={{ scaleY: isPast ? 1 : 0 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  style={{
-                    position: 'absolute', inset: 0,
-                    background: accents[milestones[i].accent].hex,
-                    borderRadius: 1, transformOrigin: 'top',
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
   );
 }
 
@@ -551,7 +471,7 @@ export default function JourneyPage() {
     },
   ], [t]);
 
-  /* ─── Active milestone tracking (IntersectionObserver) — CẢI TIẾN 1+3 ─── */
+  /* ─── Active milestone tracking (IntersectionObserver) ─── */
   const [activeIdx, setActiveIdx] = useState(0);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -594,7 +514,7 @@ export default function JourneyPage() {
     return () => { window.removeEventListener('keydown', h); document.body.style.overflow = ''; };
   }, [lb, closeLb, navLb]);
 
-  /* ─── Swipe gesture for lightbox — CẢI TIẾN 5 ─── */
+  /* ─── Swipe gesture for lightbox ─── */
   const swipeStartX = useRef<number | null>(null);
   const handlePointerDown = (e: React.PointerEvent) => {
     swipeStartX.current = e.clientX;
@@ -614,10 +534,12 @@ export default function JourneyPage() {
         .vj {
           background: ${C.pageBg};
           color: ${C.slate700};
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Inter', sans-serif;
+          font-weight: 300;
         }
         .vj h1, .vj h2, .vj h3 {
-          font-family: 'Lexend', sans-serif;
+          font-family: 'Inter', sans-serif;
+          font-weight: 800;
         }
         .vj ::-webkit-scrollbar { width: 4px; }
         .vj ::-webkit-scrollbar-track { background: ${C.blue50}; }
@@ -625,17 +547,23 @@ export default function JourneyPage() {
 
         .vj-btn {
           display: inline-flex; align-items: center; gap: 7px;
-          font-family: 'DM Sans', sans-serif; font-weight: 500;
-          font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase;
-          padding: 10px 18px; border-radius: 9px;
+          font-family: 'Inter', sans-serif; font-weight: 500;
+          font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+          padding: 12px 22px; border-radius: 12px;
           border-width: 1.5px; border-style: solid;
           cursor: pointer; text-decoration: none;
-          transition: transform 0.18s, box-shadow 0.18s;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .vj-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(37,99,235,0.16); }
+        .vj-btn:hover {
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 12px 28px rgba(37,99,235,0.12);
+        }
+        .vj-btn:active {
+          transform: translateY(-1px) scale(0.98);
+        }
 
         .vj-tag {
-          font-family: 'DM Sans', sans-serif; font-weight: 500;
+          font-family: 'Inter', sans-serif; font-weight: 500;
           font-size: 12px; padding: 5px 14px;
           border-radius: 20px; border-width: 1px; border-style: solid;
           display: inline-block; white-space: nowrap;
@@ -666,18 +594,13 @@ export default function JourneyPage() {
         }
         .vj-scroll-hint { animation: vj-scroll-hint 3s ease infinite; }
 
-        /* ── CẢI TIẾN 2: Mobile layout fix ── */
+        /* Mobile layout fix */
         @media (max-width: 768px) {
           .vj-text-col { order: 1 !important; }
           .vj-gallery-col { order: 2 !important; }
         }
 
-        /* ── Ẩn timeline connector trên mobile nhỏ ── */
-        @media (max-width: 640px) {
-          .vj-timeline-connector { display: none !important; }
-        }
-
-        /* ── Lightbox thumbnail active ring ── */
+        /* Lightbox thumbnail active ring */
         .vj-lb-thumb-active {
           outline: 2px solid white !important;
           outline-offset: 2px;
@@ -685,26 +608,20 @@ export default function JourneyPage() {
         }
       `}</style>
 
-      <div className="vj" style={{ minHeight: '100vh' }}>
+      <div className="vj" style={{ minHeight: '100dvh' }}>
 
-        {/* ══════════════ STICKY PROGRESS NAV — CẢI TIẾN 1 ══════════════ */}
+        {/* ══════════════ STICKY PROGRESS NAV ══════════════ */}
         <StickyProgressNav milestones={MILESTONES} activeIdx={activeIdx} />
-
-        {/* ══════════════ TIMELINE CONNECTOR — CẢI TIẾN 3 ══════════════ */}
-        <TimelineConnector
-          totalCount={MILESTONES.length}
-          activeIdx={activeIdx}
-          milestones={MILESTONES}
-        />
 
         {/* ══════════════ HERO ══════════════ */}
         <section style={{
           position: 'relative',
-          minHeight: '100vh',
+          minHeight: '100dvh',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           overflow: 'hidden',
           background: `linear-gradient(160deg, #E8F2FF 0%, #F5FAFF 50%, #EAF1FF 100%)`,
-          paddingTop: 80,
+          paddingTop: 140,
+          paddingBottom: 140,
         }}>
           <MedGrid opacity={0.07} />
 
@@ -733,11 +650,20 @@ export default function JourneyPage() {
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
               objectFit: 'cover',
-              filter: 'saturate(0.1) brightness(1.6) contrast(0.7)',
-              mixBlendMode: 'multiply',
-              opacity: 0.18,
+              filter: 'saturate(0.15) brightness(1.4) contrast(0.8)',
+              opacity: 0.12,
+              zIndex: 0,
             }}
           />
+
+          {/* Deepened and smoothed gradient overlay for cinematic backdrop and high text contrast */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(245, 250, 255, 0.88) 50%, rgba(232, 242, 255, 0.95) 100%)`,
+            zIndex: 1,
+            pointerEvents: 'none',
+          }} />
 
           {[
             { top: '22%', left: '13%', delay: 0 },
@@ -750,6 +676,7 @@ export default function JourneyPage() {
               border: `2px solid ${C.white}`,
               top: pos.top, left: pos.left, right: (pos as any).right, bottom: (pos as any).bottom,
               animationDelay: `${pos.delay}s`,
+              zIndex: 2,
             }} />
           ))}
 
@@ -757,10 +684,11 @@ export default function JourneyPage() {
           <div style={{
             position: 'absolute', left: 20, top: '50%',
             transform: 'translateY(-50%)',
-            fontFamily: "'Lexend', monospace", fontSize: 9,
+            fontFamily: "'Inter', monospace", fontSize: 9,
             color: C.blueMid, letterSpacing: '0.1em',
             lineHeight: 2.5, overflow: 'hidden', height: 220,
             opacity: 0.22, userSelect: 'none',
+            zIndex: 2,
           }}>
             <div className="vj-ticker">
               {['VISTA.SYS', 'AI_MODEL', 'VER:2.1', 'LIVE', 'CNN:ON', 'ACC:96%', 'OCULAR', 'SCAN:OK',
@@ -782,17 +710,17 @@ export default function JourneyPage() {
             >
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
-                fontSize: 11, letterSpacing: '0.16em', color: C.blueMid,
+                fontFamily: "'Inter', sans-serif", fontWeight: 600,
+                fontSize: 11, letterSpacing: '0.16em', color: C.blue,
                 textTransform: 'uppercase',
-                background: 'rgba(255,255,255,0.92)',
+                background: 'rgba(255,255,255,0.95)',
                 border: `1.5px solid ${C.blue200}`,
-                padding: '7px 20px', borderRadius: 100,
-                boxShadow: '0 2px 16px rgba(37,99,235,0.1)',
+                padding: '8px 22px', borderRadius: 100,
+                boxShadow: '0 4px 20px rgba(37,99,235,0.06)',
               }}>
                 <span className="vj-blink" style={{
                   width: 6, height: 6, borderRadius: '50%',
-                  background: C.blueMid, display: 'inline-block',
+                  background: C.blue, display: 'inline-block',
                 }} />
                 {t('journey.badge')}
               </span>
@@ -802,7 +730,7 @@ export default function JourneyPage() {
               initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.25 }}
               style={{
-                fontFamily: "'Lexend', sans-serif", fontWeight: 900,
+                fontFamily: "'Inter', sans-serif", fontWeight: 900,
                 fontSize: 'clamp(44px, 7vw, 88px)',
                 lineHeight: 1.02, letterSpacing: '-0.04em',
                 color: C.navy, marginBottom: 12,
@@ -832,9 +760,13 @@ export default function JourneyPage() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.6 }}
               style={{
-                fontSize: 15, color: C.blueMid, fontWeight: 400,
-                marginBottom: 36, opacity: 0.8,
-                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14,
+                color: C.blue,
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                marginBottom: 36,
+                fontFamily: "'Inter', sans-serif",
               }}
             >
               {MILESTONES.length} {t('journey.milestones')}
@@ -847,18 +779,23 @@ export default function JourneyPage() {
               style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 36 }}
             >
               {MILESTONES.map((ms, i) => (
-                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, cursor: 'pointer' }}
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, cursor: 'pointer' }}
                   onClick={() => document.getElementById(`ms-${i}`)?.scrollIntoView({ behavior: 'smooth' })}>
                   <motion.div
-                    whileHover={{ scaleY: 2.2, scaleX: 1.15 }}
+                    whileHover={{ scaleY: 2.5, backgroundColor: C.blue }}
                     style={{
-                      width: 44, height: 3, borderRadius: 2,
-                      background: accents[ms.accent].hex, opacity: 0.5,
+                      width: 48,
+                      height: 4,
+                      borderRadius: 2,
+                      background: accents[ms.accent].hex,
+                      opacity: 0.8,
+                      transition: 'background-color 0.2s',
                     }}
                   />
                   <span style={{
-                    fontFamily: "'Lexend', monospace", fontSize: 9,
-                    color: accents[ms.accent].hex, opacity: 0.55, letterSpacing: '0.1em',
+                    fontFamily: "'Inter', sans-serif", fontSize: 12,
+                    fontWeight: 600,
+                    color: C.navy, opacity: 0.9, letterSpacing: '0.05em',
                   }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
@@ -871,19 +808,36 @@ export default function JourneyPage() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ duration: 0.65, delay: 0.9 }}
               onClick={() => document.getElementById('ms-0')?.scrollIntoView({ behavior: 'smooth' })}
-              whileHover={{ y: -3, boxShadow: '0 8px 28px rgba(37,99,235,0.2)' }}
+              whileHover={{
+                scale: 1.03,
+                y: -3,
+                backgroundColor: '#1E40AF',
+                borderColor: '#1E40AF',
+                boxShadow: '0 12px 30px rgba(37,99,235,0.25)',
+                transition: { type: 'spring', stiffness: 400, damping: 15 }
+              }}
+              whileTap={{ scale: 0.96 }}
               style={{
-                background: C.white, border: `1.5px solid ${C.blue200}`,
-                color: C.blueMid, padding: '13px 32px', borderRadius: 12,
-                fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
-                fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase',
+                background: C.blue,
+                border: `1.5px solid ${C.blue}`,
+                color: C.white,
+                padding: '16px 36px',
+                borderRadius: 12,
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 600,
+                fontSize: 14,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
                 cursor: 'pointer',
-                display: 'inline-flex', alignItems: 'center', gap: 10,
-                boxShadow: '0 2px 16px rgba(37,99,235,0.12)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
+                boxShadow: '0 4px 20px rgba(37,99,235,0.15)',
+                transition: 'color 0.3s, background-color 0.3s, border-color 0.3s',
               }}
             >
               {t('journey.exploreCta')}
-              <motion.span animate={{ y: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>↓</motion.span>
+              <motion.span animate={{ y: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}>↓</motion.span>
             </motion.button>
           </div>
 
@@ -891,8 +845,8 @@ export default function JourneyPage() {
           <div className="vj-scroll-hint" style={{
             position: 'absolute', bottom: 26, left: '50%',
             transform: 'translateX(-50%)',
-            fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
-            fontSize: 10, color: C.blueMid,
+            fontFamily: "'Inter', sans-serif", fontWeight: 600,
+            fontSize: 11, color: C.blue,
             letterSpacing: '0.18em', textTransform: 'uppercase',
           }}>
             {t('journey.scrollHint')}
@@ -925,10 +879,10 @@ export default function JourneyPage() {
               ref={el => { sectionRefs.current[idx] = el; }}
               style={{
                 position: 'relative',
-                minHeight: '100vh',
+                minHeight: '100dvh',
                 display: 'flex', alignItems: 'center',
                 overflow: 'hidden',
-                padding: 'clamp(70px, 9vw, 110px) 0',
+                padding: 'clamp(140px, 15vw, 220px) 0',
                 background: isEven ? C.white : C.sectionAlt,
                 borderBottom: `1px solid ${C.slate200}`,
               }}
@@ -940,7 +894,7 @@ export default function JourneyPage() {
                 position: 'absolute',
                 right: isEven ? -10 : 'auto', left: !isEven ? -10 : 'auto',
                 bottom: 4,
-                fontFamily: "'Lexend', sans-serif", fontWeight: 900,
+                fontFamily: "'Inter', sans-serif", fontWeight: 900,
                 fontSize: 'clamp(110px, 18vw, 220px)',
                 color: ac.hex, opacity: 0.04,
                 lineHeight: 1, letterSpacing: '-0.05em',
@@ -961,11 +915,11 @@ export default function JourneyPage() {
                 width: '100%',
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: 'clamp(48px, 6vw, 88px)',
+                gap: 'clamp(64px, 8vw, 100px)',
                 alignItems: 'center',
               }}>
 
-                {/* ── Text column — CẢI TIẾN 2: thêm className để reset order trên mobile ── */}
+                {/* ── Text column ── */}
                 <motion.div
                   className="vj-text-col"
                   initial={{ opacity: 0, x: isEven ? -36 : 36 }}
@@ -981,7 +935,7 @@ export default function JourneyPage() {
                   }}>
                     <ChapterBadge num={idx + 1} label={ms.chapter} ac={ac} />
                     <span style={{
-                      fontFamily: "'Lexend', monospace", fontSize: 11,
+                      fontFamily: "'Inter', monospace", fontSize: 11,
                       color: C.slate400, letterSpacing: '0.06em',
                       borderLeft: `1px solid ${C.slate200}`, paddingLeft: 14,
                     }}>
@@ -991,9 +945,9 @@ export default function JourneyPage() {
 
                   {/* Title */}
                   <h2 style={{
-                    fontFamily: "'Lexend', sans-serif", fontWeight: 900,
+                    fontFamily: "'Inter', sans-serif", fontWeight: 800,
                     fontSize: 'clamp(30px, 3.5vw, 54px)',
-                    color: C.navy, lineHeight: 1.06,
+                    color: C.navy, lineHeight: 1.15,
                     letterSpacing: '-0.028em', marginBottom: 8,
                   }}>
                     {ms.title}
@@ -1003,7 +957,8 @@ export default function JourneyPage() {
                   <p style={{
                     fontSize: 15, fontWeight: 500,
                     color: ac.text, marginBottom: 22,
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: "'Inter', sans-serif",
+                    lineHeight: 1.5,
                   }}>
                     {ms.subtitle}
                   </p>
@@ -1016,11 +971,11 @@ export default function JourneyPage() {
                     marginBottom: 20, position: 'relative',
                   }}>
                     <p style={{
-                      /* CẢI TIẾN 4: body text 15–16px dễ đọc hơn 14px */
                       fontSize: 15, fontStyle: 'italic',
                       color: C.navy, lineHeight: 1.82,
                       margin: 0, opacity: 0.88,
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: "'Inter', sans-serif",
+                      fontWeight: 300,
                     }}>
                       {ms.quote}
                     </p>
@@ -1028,17 +983,17 @@ export default function JourneyPage() {
                       fontSize: 10, fontWeight: 500,
                       color: ac.text, marginTop: 10,
                       letterSpacing: '0.12em', textTransform: 'uppercase',
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: "'Inter', sans-serif",
                     }}>
                       — Nhóm VISTA
                     </p>
                   </div>
 
-                  {/* Description — CẢI TIẾN 4: 16px */}
+                  {/* Description */}
                   <p style={{
                     fontSize: 16, color: C.slate700,
-                    lineHeight: 1.85, marginBottom: 24, fontWeight: 400,
-                    fontFamily: "'DM Sans', sans-serif",
+                    lineHeight: 1.75, marginBottom: 24, fontWeight: 300,
+                    fontFamily: "'Inter', sans-serif",
                   }}>
                     {ms.description}
                   </p>
@@ -1049,7 +1004,7 @@ export default function JourneyPage() {
                       <p style={{
                         fontSize: 10, fontWeight: 500, color: C.slate400,
                         letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 10,
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: "'Inter', sans-serif",
                       }}>
                         {t('journey.highlights')}
                       </p>
@@ -1093,7 +1048,7 @@ export default function JourneyPage() {
                   )}
                 </motion.div>
 
-                {/* ── Gallery column — CẢI TIẾN 2: thêm className ── */}
+                {/* ── Gallery column — Double-Bezel nested architecture ── */}
                 <motion.div
                   className="vj-gallery-col"
                   initial={{ opacity: 0, x: isEven ? 36 : -36 }}
@@ -1102,62 +1057,75 @@ export default function JourneyPage() {
                   transition={{ duration: 0.75, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
                   style={{ order: isEven ? 2 : 1 }}
                 >
+                  {/* Outer Bezel Shell */}
                   <div style={{
-                    background: C.white,
-                    border: `1.5px solid ${ac.galleryBorder}`,
-                    borderRadius: 16, padding: 16,
-                    boxShadow: ac.shadow,
+                    background: 'rgba(37, 99, 235, 0.015)',
+                    border: '1px solid rgba(37, 99, 235, 0.06)',
+                    borderRadius: 32,
+                    padding: 12,
+                    boxShadow: '0 30px 60px -15px rgba(37, 99, 235, 0.05)',
                     position: 'relative',
                   }}>
-                    {/* Gallery header */}
+                    {/* Inner Core Enclosure */}
                     <div style={{
-                      display: 'flex', alignItems: 'center', gap: 9,
-                      paddingBottom: 11, marginBottom: 12,
-                      borderBottom: `1px solid ${C.blue100}`,
+                      background: C.white,
+                      border: '1px solid rgba(0, 0, 0, 0.05)',
+                      borderRadius: 22,
+                      padding: 20,
+                      position: 'relative',
                     }}>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        {[ac.hex, C.blue200, C.blue100].map((c, i) => (
-                          <div key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: c }} />
+                      {/* Gallery header */}
+                      <div style={{
+                        display: 'flex', alignItems: 'center', gap: 9,
+                        paddingBottom: 11, marginBottom: 12,
+                        borderBottom: `1px solid ${C.blue100}`,
+                      }}>
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          {[ac.hex, C.blue200, C.blue100].map((c, i) => (
+                            <div key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: c }} />
+                          ))}
+                        </div>
+                        <span style={{
+                          fontFamily: "'Inter', monospace", fontSize: 10,
+                          color: C.slate400, letterSpacing: '0.05em', marginLeft: 4,
+                        }}>
+                          VISTA_CAM · {ms.images.length} FRAMES
+                        </span>
+                        <span style={{
+                          marginLeft: 'auto',
+                          fontFamily: "'Inter', monospace", fontSize: 9, fontWeight: 600,
+                          color: ac.text, background: ac.bg,
+                          border: `1px solid ${ac.border}`,
+                          padding: '3px 9px', borderRadius: 5, letterSpacing: '0.07em',
+                        }}>
+                          ● REC
+                        </span>
+                      </div>
+
+                      {/* Photo grid */}
+                      <div style={{ display: 'grid', gridTemplateColumns: imgCols, gap: 16 }}>
+                        {ms.images.map((img, i) => (
+                          <PhotoCard key={i} src={img} alt={`${ms.title} ${i + 1}`}
+                            onClick={() => setLb({ ms: idx, img: i })}
+                            ac={ac} index={i}
+                          />
                         ))}
                       </div>
-                      <span style={{
-                        fontFamily: "'Lexend', monospace", fontSize: 10,
-                        color: C.slate400, letterSpacing: '0.05em', marginLeft: 4,
-                      }}>
-                        VISTA_CAM · {ms.images.length} FRAMES
-                      </span>
-                      <span style={{
-                        marginLeft: 'auto',
-                        fontFamily: "'Lexend', monospace", fontSize: 9, fontWeight: 600,
-                        color: ac.text, background: ac.bg,
-                        border: `1px solid ${ac.border}`,
-                        padding: '3px 9px', borderRadius: 5, letterSpacing: '0.07em',
-                      }}>
-                        ● REC
-                      </span>
+
+                      {/* ECG footer */}
+                      <div style={{ marginTop: 11 }}>
+                        <ECGLine color={ac.hex} />
+                      </div>
                     </div>
 
-                    {/* Photo grid */}
-                    <div style={{ display: 'grid', gridTemplateColumns: imgCols, gap: 9 }}>
-                      {ms.images.map((img, i) => (
-                        <PhotoCard key={i} src={img} alt={`${ms.title} ${i + 1}`}
-                          onClick={() => setLb({ ms: idx, img: i })}
-                          ac={ac} index={i}
-                        />
-                      ))}
-                    </div>
-
-                    {/* ECG footer */}
-                    <div style={{ marginTop: 11 }}>
-                      <ECGLine color={ac.hex} />
-                    </div>
-
+                    {/* Concentric Bottom-Right Border Bracket */}
                     <div style={{
-                      position: 'absolute', bottom: -1, right: -1,
-                      width: 38, height: 38,
+                      position: 'absolute', bottom: -1.5, right: -1.5,
+                      width: 44, height: 44,
                       borderRight: `2px solid ${ac.hex}40`,
                       borderBottom: `2px solid ${ac.hex}40`,
-                      borderRadius: '0 0 16px 0',
+                      borderRadius: '0 0 32px 0',
+                      pointerEvents: 'none',
                     }} />
                   </div>
                 </motion.div>
@@ -1166,7 +1134,7 @@ export default function JourneyPage() {
           );
         })}
 
-        {/* ══════════════ LIGHTBOX — CẢI TIẾN 5: swipe + thumbnail strip ══════════════ */}
+        {/* ══════════════ LIGHTBOX ══════════════ */}
         <AnimatePresence>
           {lb && (
             <motion.div
@@ -1200,7 +1168,7 @@ export default function JourneyPage() {
               <div style={{
                 position: 'absolute', top: 18, left: '50%',
                 transform: 'translateX(-50%)',
-                fontFamily: "'Lexend', sans-serif", fontWeight: 800,
+                fontFamily: "'Inter', sans-serif", fontWeight: 800,
                 fontSize: 11, color: 'rgba(219,234,254,0.7)',
                 letterSpacing: '0.14em', textTransform: 'uppercase',
                 whiteSpace: 'nowrap',
@@ -1258,13 +1226,13 @@ export default function JourneyPage() {
                   alt="Phóng to"
                   style={{
                     maxWidth: '100%', maxHeight: '72vh',
-                    objectFit: 'contain', borderRadius: 10, display: 'block',
-                    boxShadow: '0 28px 70px rgba(0,0,0,0.5)',
+                    objectFit: 'contain', borderRadius: 20, display: 'block',
+                    boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
                   }}
                 />
               </motion.div>
 
-              {/* ── Thumbnail strip — CẢI TIẾN 5 ── */}
+              {/* Thumbnail strip */}
               <div
                 onClick={e => e.stopPropagation()}
                 style={{
@@ -1299,7 +1267,7 @@ export default function JourneyPage() {
               {/* Counter */}
               <div style={{ marginTop: 10, textAlign: 'center' }}>
                 <span style={{
-                  fontFamily: "'Lexend', monospace", fontSize: 11,
+                  fontFamily: "'Inter', monospace", fontSize: 11,
                   color: 'rgba(219,234,254,0.55)', letterSpacing: '0.06em',
                 }}>
                   {lb.img + 1} / {MILESTONES[lb.ms].images.length}
