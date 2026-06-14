@@ -25,7 +25,9 @@ app.use(cors({
     'http://localhost:5173',
     'http://localhost:5174',
     'https://vistapatientjourney.vercel.app',
-    'https://eye-care-landing-git-main-hungbkzs-projects.vercel.app'
+    'https://eye-care-landing-git-main-hungbkzs-projects.vercel.app',
+    'https://vistapatientjourney.vn',
+    'https://www.vistapatientjourney.vn'
   ],
   credentials: true
 }));

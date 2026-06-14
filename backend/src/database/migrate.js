@@ -28,13 +28,13 @@ const migrate = async () => {
   try {
     // Connect without database first to create it
     connection = await mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
-      port: process.env.DB_PORT || 3306,
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || ''
+      host: process.env.DB_HOST || process.env.MYSQLHOST || 'localhost',
+      port: process.env.DB_PORT || process.env.MYSQLPORT || 3306,
+      user: process.env.DB_USER || process.env.MYSQLUSER || 'root',
+      password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || ''
     });
 
-    const dbName = process.env.DB_NAME || 'vista_eye_care';
+    const dbName = process.env.DB_NAME || process.env.MYSQLDATABASE || 'vista_eye_care';
 
     // Create database if not exists
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
