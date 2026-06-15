@@ -66,7 +66,7 @@ export default function KnowledgePage() {
         tag: 'Health Check',
         description: t('knowledge.visionTest.description'),
         image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310767/623446721_122119025241062997_8088043366359299100_n_cr5mod.jpg',
-        href: 'https://vista-camera-eyes.vercel.app/',
+        href: '/color-blind-test',
         accent: 'emerald',
       },
     ],

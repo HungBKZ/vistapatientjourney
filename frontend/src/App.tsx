@@ -20,6 +20,7 @@ import ArticlePage from './pages/ArticlePage';
 import RouteSeo from './seo/RouteSeo';
 import AnalyticsTracker from './analytics/AnalyticsTracker';
 import VirtualTryOnPage from './pages/VirtualTryOnPage';
+import ColorBlindTestPage from './pages/ColorBlindTestPage';
 
 function AppShell() {
   const location = useLocation();
@@ -43,6 +44,7 @@ function AppShell() {
           <Route path="/kien-thuc/:clusterSlug" element={<ClusterPage />} />
           <Route path="/kien-thuc/:clusterSlug/:articleSlug" element={<ArticlePage />} />
           <Route path="/virtual-try-on" element={<VirtualTryOnPage />} />
+          <Route path="/color-blind-test" element={<ColorBlindTestPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="*" element={<HomePage />} />

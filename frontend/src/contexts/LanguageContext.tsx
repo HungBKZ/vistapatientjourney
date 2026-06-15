@@ -297,6 +297,30 @@ const translations = {
         error: 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau! 🙏'
       }
     },
+    ishihara: {
+      title: 'Kiểm tra mù màu Ishihara',
+      desc: 'Bài kiểm tra mù màu chuẩn y khoa giúp đánh giá khả năng nhận diện màu sắc của bạn ngay tại nhà.',
+      start: 'Bắt đầu kiểm tra',
+      back: 'Quay lại',
+      plate: 'Đĩa kiểm tra',
+      next: 'Tiếp theo',
+      skip: 'Bỏ qua',
+      submit: 'Nộp bài',
+      restart: 'Làm lại bài kiểm tra',
+      notSee: 'Không thấy số nào',
+      result: 'Kết quả kiểm tra',
+      correctAnswers: 'Đáp án đúng',
+      normal: 'Bình thường',
+      mild: 'Rối loạn nhẹ',
+      moderate: 'Rối loạn trung bình',
+      severe: 'Rối loạn nặng',
+      diagnoses: {
+        normal: 'Thị lực màu bình thường. Bạn có khả năng phân biệt màu sắc rất tốt.',
+        mild: 'Có dấu hiệu sắc giác yếu nhẹ. Bạn nên tham khảo ý kiến chuyên gia nhãn khoa.',
+        moderate: 'Có dấu hiệu rối loạn sắc giác trung bình (mù màu một phần). Khuyến nghị bạn đi khám chuyên khoa mắt.',
+        severe: 'Có dấu hiệu mù màu nặng. Bạn nên sớm gặp bác sĩ nhãn khoa để có chẩn đoán chính xác nhất.'
+      }
+    },
   },
   en: {
     nav: {
@@ -520,6 +544,30 @@ const translations = {
         error: 'Sorry, an error occurred. Please try again later! 🙏'
       }
     },
+    ishihara: {
+      title: 'Ishihara Color Blindness Test',
+      desc: 'Medical-standard color blindness test to assess your color perception at home.',
+      start: 'Start Test',
+      back: 'Go Back',
+      plate: 'Test Plate',
+      next: 'Next',
+      skip: 'Skip',
+      submit: 'Submit',
+      restart: 'Restart Test',
+      notSee: "I don't see any number",
+      result: 'Test Results',
+      correctAnswers: 'Correct Answers',
+      normal: 'Normal',
+      mild: 'Mild Deficiency',
+      moderate: 'Moderate Deficiency',
+      severe: 'Severe Deficiency',
+      diagnoses: {
+        normal: 'Normal color vision. You have excellent color perception.',
+        mild: 'Signs of mild color vision deficiency. You should consult an eye care professional.',
+        moderate: 'Signs of moderate color vision deficiency (partial color blindness). Eye specialist exam is recommended.',
+        severe: 'Signs of severe color vision deficiency. You should consult an ophthalmologist for a formal diagnosis.'
+      }
+    },
   },
   km: {
     nav: {
@@ -741,6 +789,30 @@ const translations = {
         tooManyMessages: '🚫 អ្នកផ្ញើសារច្រើនពេក! សូមរង់ចាំ ១ នាទីមុនពេលបន្ត។',
         noInfo: 'សូមទោស ខ្ញុំមិនមានព័ត៌មានអំពីសំណួរនេះ។ អ្នកអាចសាកសួរអំពី:\n• ការពិនិត្យភ្នែកទូទៅ\n• ភ្នែកខ្លី ភ្នែកវែង\n• ភ្នែកពន្លឺ\n• តម្លៃសេវា\n• ការកក់ណាត់ជួប\n\nឬទូរស័ព្ទ hotline: 038 883 3157 ។ 😊',
         error: 'សូមទោស មានបញ្ហា។ សូមព្យាយាមម្ដងទៀត! 🙏'
+      }
+    },
+    ishihara: {
+      title: 'ការតេស្តពិការភ្នែកពណ៌ Ishihara',
+      desc: 'ការតេស្តពិនិត្យភ្នែកពណ៌កម្រិតវេជ្ជសាស្ត្រដើម្បីវាយតម្លៃការយល់ដឹងពណ៌របស់អ្នកនៅផ្ទះ។',
+      start: 'ចាប់ផ្តើមការតេស្ត',
+      back: 'ត្រឡប់ក្រោយ',
+      plate: 'ផ្ទាំងពណ៌',
+      next: 'បន្ទាប់',
+      skip: 'រំលង',
+      submit: 'បញ្ជូន',
+      restart: 'ធ្វើតេស្តឡើងវិញ',
+      notSee: 'មិនឃើញលេខទេ',
+      result: 'លទ្ធផលតេស្ត',
+      correctAnswers: 'ចម្លើយត្រឹមត្រូវ',
+      normal: 'ធម្មតា',
+      mild: 'ខ្សោយពណ៌កម្រិតស្រាល',
+      moderate: 'ខ្សោយពណ៌កម្រិតមធ្យម',
+      severe: 'ខ្សោយពណ៌កម្រិតធ្ងន់',
+      diagnoses: {
+        normal: 'ចក្ខុវិស័យពណ៌ធម្មតា។ អ្នកមានការយល់ដឹងពណ៌ល្អណាស់។',
+        mild: 'សញ្ញានៃការខ្សោយពណ៌កម្រិតស្រាល។ អ្នកគួរតែពិគ្រោះជាមួយអ្នកជំនាញភ្នែក។',
+        moderate: 'សញ្ញានៃការខ្សោយពណ៌កម្រិតមធ្យម (ពិការភ្នែកពណ៌មួយផ្នែក)។ ណែនាំឱ្យពិនិត្យភ្នែក។',
+        severe: 'សញ្ញានៃការខ្សោយពណ៌កម្រិតធ្ងន់។ អ្នកគួរតែជួបគ្រូពេទ្យភ្នែកដើម្បីធ្វើរោគវិនិច្ឆ័យច្បាស់លាស់។'
       }
     },
   },
