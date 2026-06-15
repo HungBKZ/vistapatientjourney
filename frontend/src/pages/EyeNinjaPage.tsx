@@ -67,8 +67,10 @@ export default function EyeNinjaPage() {
 
   // Reticle Tracking Coordinates
   const [reticlePos, setReticlePos] = useState({ x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 });
-  const [sensitivity, setSensitivity] = useState(6.0); // Higher sensitivity for iris movements
+  const [sensitivity, setSensitivity] = useState(2.5); // Suitable default for nose tip movements
   const calibratedCenterRef = useRef<{ x: number; y: number } | null>(null);
+  const gazeBufferXRef = useRef<number[]>([]);
+  const gazeBufferYRef = useRef<number[]>([]);
 
   // Game references
   const targetIdCounter = useRef(0);
@@ -130,6 +132,8 @@ export default function EyeNinjaPage() {
   // Calibration Function
   const calibrateCenter = () => {
     calibratedCenterRef.current = null;
+    gazeBufferXRef.current = [];
+    gazeBufferYRef.current = [];
   };
 
   // Webcam Tracking Loop with Iris / Pupil Detection
@@ -153,49 +157,40 @@ export default function EyeNinjaPage() {
               setFaceDetected(true);
               const landmarks = results.faceLandmarks[0];
 
-              // Pure Eye Gaze (Iris tracking):
-              // Left Eye: corners (33, 133), pupil (468)
-              // Right Eye: corners (362, 263), pupil (473)
-              if (landmarks[468] && landmarks[473]) {
-                const leftCenter = (landmarks[33].x + landmarks[133].x) / 2;
-                const leftWidth = Math.abs(landmarks[33].x - landmarks[133].x);
-                const leftGazeX = (landmarks[468].x - leftCenter) / leftWidth;
+              // Stable Head/Face Tracking using Nose Tip landmark (1)
+              if (landmarks[1]) {
+                const nose = landmarks[1];
 
-                const rightCenter = (landmarks[362].x + landmarks[263].x) / 2;
-                const rightWidth = Math.abs(landmarks[362].x - landmarks[263].x);
-                const rightGazeX = (landmarks[473].x - rightCenter) / rightWidth;
-
-                // Vertical relative offsets
-                const leftCenterY = (landmarks[159].y + landmarks[145].y) / 2;
-                const leftHeight = Math.abs(landmarks[159].y - landmarks[145].y);
-                const leftGazeY = (landmarks[468].y - leftCenterY) / leftHeight;
-
-                const rightCenterY = (landmarks[386].y + landmarks[374].y) / 2;
-                const rightHeight = Math.abs(landmarks[386].y - landmarks[374].y);
-                const rightGazeY = (landmarks[473].y - rightCenterY) / rightHeight;
-
-                const avgGazeX = (leftGazeX + rightGazeX) / 2;
-                const avgGazeY = (leftGazeY + rightGazeY) / 2;
-
-                if (!calibratedCenterRef.current) {
-                  calibratedCenterRef.current = { x: avgGazeX, y: avgGazeY };
+                // Push to smoothing buffers
+                gazeBufferXRef.current.push(nose.x);
+                gazeBufferYRef.current.push(nose.y);
+                if (gazeBufferXRef.current.length > 4) {
+                  gazeBufferXRef.current.shift();
+                  gazeBufferYRef.current.shift();
                 }
 
-                const dx = avgGazeX - calibratedCenterRef.current.x;
-                const dy = avgGazeY - calibratedCenterRef.current.y;
+                // Get smoothed coordinates
+                const smoothedX = gazeBufferXRef.current.reduce((a, b) => a + b, 0) / gazeBufferXRef.current.length;
+                const smoothedY = gazeBufferYRef.current.reduce((a, b) => a + b, 0) / gazeBufferYRef.current.length;
 
-                // Translate small pupil offset into full screen coordinate
-                // dx is positive when looking left (camera mirror), so X moves left. We adjust signs:
+                if (!calibratedCenterRef.current) {
+                  calibratedCenterRef.current = { x: smoothedX, y: smoothedY };
+                }
+
+                const dx = smoothedX - calibratedCenterRef.current.x;
+                const dy = smoothedY - calibratedCenterRef.current.y;
+
+                // dx is positive when head tilts left (camera's right), so subtract to move cursor left
                 let targetX = CANVAS_WIDTH / 2 - dx * CANVAS_WIDTH * sensitivity;
-                let targetY = CANVAS_HEIGHT / 2 + dy * CANVAS_HEIGHT * (sensitivity * 1.5);
+                let targetY = CANVAS_HEIGHT / 2 + dy * CANVAS_HEIGHT * (sensitivity * 1.25);
 
                 // Clamp to canvas borders
                 targetX = Math.max(30, Math.min(CANVAS_WIDTH - 30, targetX));
                 targetY = Math.max(30, Math.min(CANVAS_HEIGHT - 30, targetY));
 
-                // Smooth reticle movement
-                gameRef.current.reticleX += (targetX - gameRef.current.reticleX) * 0.18;
-                gameRef.current.reticleY += (targetY - gameRef.current.reticleY) * 0.18;
+                // Smooth reticle movement (increased speed from 0.11 to 0.22)
+                gameRef.current.reticleX += (targetX - gameRef.current.reticleX) * 0.22;
+                gameRef.current.reticleY += (targetY - gameRef.current.reticleY) * 0.22;
 
                 setReticlePos({
                   x: gameRef.current.reticleX,
@@ -292,23 +287,23 @@ export default function EyeNinjaPage() {
       const x = side === 'left' ? 60 : CANVAS_WIDTH - 60;
       const y = CANVAS_HEIGHT;
 
-      // Slower, floaty trajectories for comfortable gaze tracking
-      const vx = side === 'left' ? (0.8 + Math.random() * 1.5) : (-0.8 - Math.random() * 1.5);
-      const vy = -3.5 - Math.random() * 1.5;
+      // Flying trajectories: rise higher for easier targeting
+      const vx = side === 'left' ? (0.6 + Math.random() * 1.2) : (-0.6 - Math.random() * 1.2);
+      const vy = -5.4 - Math.random() * 1.8;
 
       const rand = Math.random();
       let type: 'bacteria' | 'dust' | 'eye-drop' | 'bomb' = 'bacteria';
-      let radius = 28;
+      let radius = 42; // Larger default size
 
       if (rand < 0.12) {
         type = 'bomb';
-        radius = 32;
+        radius = 48; // Large bomb
       } else if (rand < 0.32) {
         type = 'eye-drop';
-        radius = 24;
+        radius = 38; // Large water drop
       } else if (rand < 0.60) {
         type = 'dust';
-        radius = 28;
+        radius = 42;
       }
 
       state.targets.push({
@@ -352,8 +347,8 @@ export default function EyeNinjaPage() {
           const dy = state.reticleY - t.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          // Forgiving slash boundaries
-          if (dist < t.radius + 18) {
+          // Highly generous slash boundaries
+          if (dist < t.radius + 40) {
             t.hoverProgress++;
 
             // Instant Slash on Gaze Hover!
@@ -768,11 +763,11 @@ export default function EyeNinjaPage() {
               />
               {faceDetected ? (
                 <div className="absolute bottom-1 right-1 bg-emerald-500/80 text-[8px] px-1 py-0.2 rounded font-bold uppercase tracking-wider text-white">
-                  Eye ON
+                  Face ON
                 </div>
               ) : (
                 <div className="absolute bottom-1 right-1 bg-red-500/80 text-[8px] px-1 py-0.2 rounded font-bold uppercase tracking-wider text-white animate-pulse">
-                  No Pupil
+                  No Face
                 </div>
               )}
             </div>
@@ -786,14 +781,14 @@ export default function EyeNinjaPage() {
       {playMode === 'camera' && gameState === 'playing' && (
         <div className="absolute top-16 right-4 w-52 bg-[#0b101f]/80 border border-white/10 rounded-xl p-3 shadow-xl backdrop-blur-md z-25 flex flex-col gap-2">
           <div className="flex justify-between text-[10px] text-white/50 font-bold uppercase tracking-wider">
-            <span>Iris sensitivity:</span>
+            <span>Face sensitivity:</span>
             <span>{sensitivity.toFixed(1)}x</span>
           </div>
           <input
             type="range"
-            min="3.0"
-            max="9.0"
-            step="0.5"
+            min="1.0"
+            max="5.0"
+            step="0.1"
             value={sensitivity}
             onChange={(e) => setSensitivity(parseFloat(e.target.value))}
             className="w-full accent-sky-400 bg-white/10 rounded-lg cursor-pointer h-1"
@@ -802,7 +797,7 @@ export default function EyeNinjaPage() {
             onClick={calibrateCenter}
             className="w-full py-1 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition text-[9px] font-bold text-white/80"
           >
-            🎯 Calibrate Eyes
+            🎯 Calibrate Face
           </button>
         </div>
       )}
