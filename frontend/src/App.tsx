@@ -23,13 +23,15 @@ import VirtualTryOnPage from './pages/VirtualTryOnPage';
 import ColorBlindTestPage from './pages/ColorBlindTestPage';
 import EyeSimulationPage from './pages/EyeSimulationPage';
 import BlinkGamePage from './pages/BlinkGamePage';
+import EyeNinjaPage from './pages/EyeNinjaPage';
 
 function AppShell() {
   const location = useLocation();
   const isImmersivePage = 
     location.pathname === '/virtual-try-on' || 
     location.pathname === '/eye-simulation' ||
-    location.pathname === '/explore/blink-flight';
+    location.pathname === '/explore/blink-flight' ||
+    location.pathname === '/explore/eye-ninja';
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -52,6 +54,7 @@ function AppShell() {
           <Route path="/color-blind-test" element={<ColorBlindTestPage />} />
           <Route path="/eye-simulation" element={<EyeSimulationPage />} />
           <Route path="/explore/blink-flight" element={<BlinkGamePage />} />
+          <Route path="/explore/eye-ninja" element={<EyeNinjaPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="*" element={<HomePage />} />

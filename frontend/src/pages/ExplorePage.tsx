@@ -108,6 +108,17 @@ function GameIcon({ color }: { color: string }) {
   );
 }
 
+function TargetIcon({ color }: { color: string }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" />
+      <circle cx="12" cy="12" r="6" stroke={color} strokeWidth="1.5" />
+      <circle cx="12" cy="12" r="2" fill={color} />
+      <path d="M12 2V6M12 18V22M2 12H6M18 12H22" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function ArrowIcon({ color }: { color: string }) {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -151,7 +162,9 @@ function BentoCard({
         ? PodcastIcon
         : svc.id === 'blink-flight'
           ? GameIcon
-          : VideoIcon;
+          : svc.id === 'eye-ninja'
+            ? TargetIcon
+            : VideoIcon;
 
   const cardContent = (
     /* ── Outer Bezel Shell ── */
@@ -484,6 +497,16 @@ export default function ExplorePage() {
         accent: 'violet',
         label: 'Interactive Game',
       },
+      {
+        id: 'eye-ninja',
+        title: t('explore.eyeNinja.title'),
+        subtitle: t('explore.eyeNinja.subtitle'),
+        description: t('explore.eyeNinja.description'),
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313972/VDZ08640_rtfyh2.jpg',
+        href: '/explore/eye-ninja',
+        accent: 'sky',
+        label: 'Ocular Motility',
+      },
     ],
     [t]
   );
@@ -603,9 +626,14 @@ export default function ExplorePage() {
               <BentoCard svc={services[3]} index={2} size="default" />
             </div>
 
-            {/* ── Video card: spans 2 columns, Row 2 ── */}
-            <div className="md:col-span-2">
-              <BentoCard svc={services[2]} index={3} size="default" />
+            {/* ── Eye Ninja card: 1 column, Row 2 ── */}
+            <div className="md:col-span-1">
+              <BentoCard svc={services[4]} index={3} size="default" />
+            </div>
+
+            {/* ── Video card: 1 column, Row 2 ── */}
+            <div className="md:col-span-1">
+              <BentoCard svc={services[2]} index={4} size="default" />
             </div>
           </div>
 

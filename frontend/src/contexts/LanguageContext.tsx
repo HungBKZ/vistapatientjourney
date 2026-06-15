@@ -240,6 +240,11 @@ const translations = {
         subtitle: 'Vệ binh Giọt nước',
         description: 'Trò chơi nháy mắt tương tác AI giúp luyện tập và bảo vệ mắt khỏi khô mắt',
       },
+      eyeNinja: {
+        title: 'VISTA Eye Ninja',
+        subtitle: 'Chiến binh vận nhãn',
+        description: 'Sử dụng hướng nhìn/chuyển động đầu để chém mục tiêu giúp rèn luyện 6 nhóm cơ vận động nhãn cầu',
+      },
       cta: 'Khám phá ngay',
     },
     blinkGame: {
@@ -268,6 +273,33 @@ const translations = {
         'Quy tắc 20-20-20: Mỗi 20 phút, hãy nhìn xa 20 feet (6m) trong 20 giây để giảm mỏi mắt.',
         'Nháy mắt chậm và sâu giúp phục hồi màng nước mắt bị bay hơi trên bề mặt giác mạc.',
         'Không nháy mắt đủ lâu dẫn đến tình trạng khô mắt, đỏ mắt và giảm thị lực tạm thời.'
+      ]
+    },
+    eyeNinjaGame: {
+      title: 'VISTA Eye Ninja: Chiến binh vận nhãn',
+      subtitle: 'Di chuyển đầu/mắt để chém mục tiêu - Bài tập cơ mắt cùng VISTA',
+      instructions: 'Di chuyển đầu hoặc hướng mắt của bạn để điều khiển tâm ngắm. Giữ tâm ngắm đè lên các vi khuẩn, bụi bẩn hoặc túi nước mắt nhân tạo để chém chúng. Tránh chém trúng Bom tia bức xạ!',
+      instructionsMouse: 'Hoặc di chuyển chuột trên màn hình game để nhắm chém nếu không sử dụng camera.',
+      startCam: 'Chế độ Camera AI',
+      startMouse: 'Chế độ Di chuột',
+      btnStart: 'Bắt đầu chơi',
+      btnPlayAgain: 'Chơi lại',
+      btnBack: 'Quay lại',
+      score: 'Điểm',
+      highScore: 'Điểm cao',
+      gameOver: 'Trò chơi kết thúc',
+      calibrating: 'Đang kết nối camera...',
+      calibrated: 'Đưa tâm ngắm vào giữa để bắt đầu!',
+      noFace: 'Không phát hiện khuôn mặt',
+      tipsTitle: 'Kiến thức vận nhãn từ VISTA',
+      cameraRequired: 'Camera cần thiết cho chế độ vận nhãn AI. Vui lòng cho phép truy cập camera.',
+      useInstead: 'Hoặc chuyển sang chế độ chơi bằng chuột.',
+      tips: [
+        'Bài tập vận nhãn giúp kéo giãn và tăng cường sức mạnh cho 6 nhóm cơ vận động quanh nhãn cầu.',
+        'Luyện cơ mắt thường xuyên giúp giảm triệu chứng khô mắt, nhức mỏi và mờ mắt do hội chứng CVS.',
+        'Liếc mắt hết biên độ ở các góc màn hình giúp kích hoạt lưu thông máu và nuôi dưỡng mắt tốt hơn.',
+        'Quy tắc 20-20-20 phối hợp bài tập liếc mắt 4 góc giúp cơ vận nhãn được thư giãn tối đa sau giờ làm việc.',
+        'Bài tập vận nhãn hỗ trợ phục hồi khả năng tập trung của thủy tinh thể và cải thiện phản xạ thị giác.'
       ]
     },
     quizPage: {
@@ -520,6 +552,11 @@ const translations = {
         subtitle: 'Tear Guardian',
         description: 'AI interactive blinking game to train and protect your eyes from dryness',
       },
+      eyeNinja: {
+        title: 'VISTA Eye Ninja',
+        subtitle: 'Gaze Warrior',
+        description: 'Use eye direction/head pose to slash targets to train and stretch the 6 ocular motor muscles',
+      },
       cta: 'Explore Now',
     },
     blinkGame: {
@@ -548,6 +585,33 @@ const translations = {
         'Rule 20-20-20: Every 20 minutes, look 20 feet (6m) away for 20 seconds to reduce strain.',
         'Blinking slowly and deeply helps restore evaporated tear film on the cornea surface.',
         'Not blinking enough leads to dry eyes, redness, and temporary blurry vision.'
+      ]
+    },
+    eyeNinjaGame: {
+      title: 'VISTA Eye Ninja: Gaze Warrior',
+      subtitle: 'Move head/gaze to slash targets - Eye muscle workout with VISTA',
+      instructions: 'Move your head or eyes to control the reticle. Hold the reticle over bacteria, dust, or hydration drops to slash them. Avoid hitting Radiation Bombs!',
+      instructionsMouse: 'Or move your mouse cursor over the game screen to slash if camera is not used.',
+      startCam: 'AI Camera Mode',
+      startMouse: 'Mouse Cursor Mode',
+      btnStart: 'Start Game',
+      btnPlayAgain: 'Play Again',
+      btnBack: 'Go Back',
+      score: 'Score',
+      highScore: 'High Score',
+      gameOver: 'Game Over',
+      calibrating: 'Connecting camera...',
+      calibrated: 'Move reticle to center to start!',
+      noFace: 'No face detected',
+      tipsTitle: 'Ocular Motility Knowledge from VISTA',
+      cameraRequired: 'Camera is required for AI Gaze Mode. Please allow camera access.',
+      useInstead: 'Or switch to Mouse Mode.',
+      tips: [
+        'Ocular motility exercises help stretch and strengthen the 6 extraocular muscles around the eye.',
+        'Training eye muscles regularly reduces dry eyes, strain, and blurriness caused by CVS.',
+        'Rolling eyes to maximum borders stimulates blood circulation and nourishes the eyeball.',
+        'Combining the 20-20-20 rule with 4-corner gaze stretches relaxes ocular muscles after screen time.',
+        'Eye movement training supports lens focus recovery and improves visual reaction times.'
       ]
     },
     quizPage: {
@@ -800,6 +864,11 @@ const translations = {
         subtitle: 'វែប៊ីនតំណក់ទឹក',
         description: 'ហ្គេមបិទបើកភ្នែកអន្តរកម្ម AI ដើម្បីហ្វឹកហាត់និងការពារភ្នែកពីភាពស្ងួត',
       },
+      eyeNinja: {
+        title: 'VISTA Eye Ninja',
+        subtitle: 'អ្នកចម្បាំងចក្ខុ',
+        description: 'ប្រើទិសដៅក្រសែភ្នែក/ក្បាលដើម្បីកាត់ដាច់គោលដៅ ជួយហ្វឹកហាត់ក្រុមសាច់ដុំភ្នែកទាំង ៦',
+      },
       cta: 'រុករកឥឡូវ',
     },
     blinkGame: {
@@ -828,6 +897,33 @@ const translations = {
         'វិធាន ២០-២០-២០៖ រៀងរាល់ ២០ នាទី សម្លឹងមើលទៅចម្ងាយ ២០ ហ្វីត (៦ ម៉ែត្រ) រយៈពេល ២០ វិនាទី។',
         'ការបិទបើកភ្នែកយឺតៗនិងវែងៗជួយស្តារឡើងវិញនូវស្រទាប់ទឹកភ្នែកដែលហួតនៅលើកែវភ្នែក។',
         'ការមិនបិទបើកភ្នែកឱ្យបានគ្រប់គ្រាន់នាំឱ្យស្ងួតភ្នែក ក្រហមភ្នែក និងស្រវាំងភ្នែកជាបណ្តោះអាសន្ន។'
+      ]
+    },
+    eyeNinjaGame: {
+      title: 'VISTA Eye Ninja: អ្នកចម្បាំងចក្ខុ',
+      subtitle: 'ផ្លាស់ទីក្បាល/ភ្នែកដើម្បីកាត់គោលដៅ - ហាត់ប្រាណសាច់ដុំភ្នែកជាមួយ VISTA',
+      instructions: 'ផ្លាស់ទីក្បាល ឬភ្នែករបស់អ្នកដើម្បីបញ្ជាចិត្តគោលដៅ។ រក្សាទុកចិត្តគោលដៅលើបាក់តេរី ធូលី ឬតំណក់ទឹកភ្នែកដើម្បីកាត់វា។ ជៀសវាងគ្រាប់បែកវិទ្យុសកម្ម!',
+      instructionsMouse: 'ឬផ្លាស់ទីកណ្ដុរលើអេក្រង់ហ្គេមដើម្បីកាត់ ប្រសិនបើមិនប្រើកាមេរ៉ា។',
+      startCam: 'របៀបកាមេរ៉ា AI',
+      startMouse: 'របៀបប្រើកណ្ដុរ',
+      btnStart: 'ចាប់ផ្ដើមលេង',
+      btnPlayAgain: 'លេងម្ដងទៀត',
+      btnBack: 'ត្រឡប់ក្រោយ',
+      score: 'ពិន្ទុ',
+      highScore: 'ពិន្ទុខ្ពស់បំផុត',
+      gameOver: 'ហ្គេមត្រូវបានបញ្ចប់',
+      calibrating: 'កំពុងភ្ជាប់កាមេរ៉า...',
+      calibrated: 'ផ្លាស់ទីគោលដៅទៅកណ្តាលដើម្បីចាប់ផ្តើម!',
+      noFace: 'រកមិនឃើញផ្ទៃមុខឡើយ',
+      tipsTitle: 'ចំណេះដឹងចលនាភ្នែកពី VISTA',
+      cameraRequired: 'កាមេរ៉ាគឺចាំបាច់សម្រាប់របៀប AI ក្រសែភ្នែក។ សូមអនុញ្ញាតឱ្យចូលប្រើកាមេរ៉ា។',
+      useInstead: 'ឬប្តូរទៅរបៀបប្រើប្រាស់កណ្ដុរ។',
+      tips: [
+        'លំហាត់ប្រាណចលនាភ្នែកជួយទាញនិងពង្រឹងសាច់ដុំភ្នែកទាំង ៦ នៅជុំវិញគ្រាប់ភ្នែក។',
+        'ការហ្វឹកហាត់សាច់ដុំភ្នែកទៀងទាត់ជួយកាត់បន្ថយភាពស្ងួតភ្នែក ហត់ភ្នែក និងស្រវាំងភ្នែកបង្កដោយ CVS។',
+        'ការសម្លឹងមើលទៅជ្រុងនៃអេក្រង់ជួយជំរុញចរន្តឈាមនិងចិញ្ចឹមគ្រាប់ភ្នែកឱ្យបានល្អ។',
+        'ការរួមបញ្ចូលវិធាន ២០-២០-២០ ជាមួយការសម្លឹងជ្រុងទាំង ៤ ជួយសម្រាកសាច់ដុំភ្នែកក្រោយពេលប្រើប្រាស់អេក្រង់។',
+        'ការហ្វឹកហាត់ចលនាភ្នែកជួយដល់ការស្តារការផ្តោតអារម្មណ៍របស់កែវភ្នែកនិងបង្កើនប្រតិកម្មចក្ខុ។'
       ]
     },
     quizPage: {
