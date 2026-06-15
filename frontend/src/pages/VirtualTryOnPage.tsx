@@ -237,110 +237,114 @@ export default function VirtualTryOnPage() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       let results: any = null;
+      let detectionRun = false;
       if (video.currentTime !== lastVideoTime) {
         lastVideoTime = video.currentTime;
         results = faceLandmarker.detectForVideo(video, performance.now());
+        detectionRun = true;
       }
 
-      const hasFace = results?.faceLandmarks?.length > 0;
+      if (detectionRun) {
+        const hasFace = results?.faceLandmarks?.length > 0;
 
-      if (hasFace) {
-        if (missCounterRef.current !== 0) missCounterRef.current = 0;
-        setFaceVisible((prev) => (prev ? prev : true));
-        setSearching((prev) => (prev ? false : prev));
+        if (hasFace) {
+          if (missCounterRef.current !== 0) missCounterRef.current = 0;
+          setFaceVisible((prev) => (prev ? prev : true));
+          setSearching((prev) => (prev ? false : prev));
 
-        const analysis = analyzeFaceAndRecommend(results.faceLandmarks);
-        if (analysis) {
-          setFaceAnalysis((prev: any) =>
-            prev?.faceShape === analysis.faceShape ? prev : analysis
-          );
-          if (autoModeRef.current && analysis.recommendedGlass) {
-            const recommendedIndex = glassesList.findIndex(
-              (g) => g.id === analysis.recommendedGlass.id
+          const analysis = analyzeFaceAndRecommend(results.faceLandmarks);
+          if (analysis) {
+            setFaceAnalysis((prev: any) =>
+              prev?.faceShape === analysis.faceShape ? prev : analysis
             );
-            if (recommendedIndex !== -1 && recommendedIndex !== glassIndexRef.current) {
-              setGlassIndex(recommendedIndex);
+            if (autoModeRef.current && analysis.recommendedGlass) {
+              const recommendedIndex = glassesList.findIndex(
+                (g) => g.id === analysis.recommendedGlass.id
+              );
+              if (recommendedIndex !== -1 && recommendedIndex !== glassIndexRef.current) {
+                setGlassIndex(recommendedIndex);
+              }
             }
           }
-        }
 
-        if (imagesLoaded) {
-          const face = results.faceLandmarks[0];
-          // Use landmarks:
-          // 33: Left eye outer corner, 263: Right eye outer corner
-          // 168: Nose bridge between eyes
-          // 234: Left cheek, 454: Right cheek
-          // 10: Forehead, 152: Chin
-          const leftOuter = face[33];
-          const rightOuter = face[263];
-          const noseBridge = face[168];
-          const leftCheek = face[234];
-          const rightCheek = face[454];
-          const forehead = face[10];
-          const chin = face[152];
+          if (imagesLoaded) {
+            const face = results.faceLandmarks[0];
+            // Use landmarks:
+            // 33: Left eye outer corner, 263: Right eye outer corner
+            // 168: Nose bridge between eyes
+            // 234: Left cheek, 454: Right cheek
+            // 10: Forehead, 152: Chin
+            const leftOuter = face[33];
+            const rightOuter = face[263];
+            const noseBridge = face[168];
+            const leftCheek = face[234];
+            const rightCheek = face[454];
+            const forehead = face[10];
+            const chin = face[152];
 
-          // Anchor X at nose bridge (horizontal center of face), Y at midpoint of both eye outer corners (eye level)
-          // noseBridge.x gives accurate horizontal center; eye midpoint Y gives the correct vertical eye level
-          const eyeCenterX = noseBridge.x * canvas.width;
-          const eyeCenterY = ((leftOuter.y + rightOuter.y) / 2) * canvas.height;
+            // Anchor X at nose bridge (horizontal center of face), Y at midpoint of both eye outer corners (eye level)
+            // noseBridge.x gives accurate horizontal center; eye midpoint Y gives the correct vertical eye level
+            const eyeCenterX = noseBridge.x * canvas.width;
+            const eyeCenterY = ((leftOuter.y + rightOuter.y) / 2) * canvas.height;
 
-          // 3D Outer Eye Distance (combines x, y, and z depth to remain constant under head rotation)
-          const dxOuter = (rightOuter.x - leftOuter.x) * canvas.width;
-          const dyOuter = (rightOuter.y - leftOuter.y) * canvas.height;
-          const dzOuter = (rightOuter.z - leftOuter.z) * canvas.width;
-          const rawEyeDistance = Math.sqrt(dxOuter * dxOuter + dyOuter * dyOuter + dzOuter * dzOuter);
+            // 3D Outer Eye Distance (combines x, y, and z depth to remain constant under head rotation)
+            const dxOuter = (rightOuter.x - leftOuter.x) * canvas.width;
+            const dyOuter = (rightOuter.y - leftOuter.y) * canvas.height;
+            const dzOuter = (rightOuter.z - leftOuter.z) * canvas.width;
+            const rawEyeDistance = Math.sqrt(dxOuter * dxOuter + dyOuter * dyOuter + dzOuter * dzOuter);
 
-          // 3D Cheek-to-Cheek Distance (represents the physical width of the face)
-          const dxCheek = (rightCheek.x - leftCheek.x) * canvas.width;
-          const dyCheek = (rightCheek.y - leftCheek.y) * canvas.height;
-          const dzCheek = (rightCheek.z - leftCheek.z) * canvas.width;
-          const rawFaceWidth = Math.sqrt(dxCheek * dxCheek + dyCheek * dyCheek + dzCheek * dzCheek);
+            // 3D Cheek-to-Cheek Distance (represents the physical width of the face)
+            const dxCheek = (rightCheek.x - leftCheek.x) * canvas.width;
+            const dyCheek = (rightCheek.y - leftCheek.y) * canvas.height;
+            const dzCheek = (rightCheek.z - leftCheek.z) * canvas.width;
+            const rawFaceWidth = Math.sqrt(dxCheek * dxCheek + dyCheek * dyCheek + dzCheek * dzCheek);
 
-          // Roll (Z-rotation)
-          const rawAngle = Math.atan2(dyOuter, dxOuter);
+            // Roll (Z-rotation)
+            const rawAngle = Math.atan2(dyOuter, dxOuter);
 
-          // Yaw (Y-rotation)
-          const rawYaw = Math.atan2(dzCheek, dxCheek);
+            // Yaw (Y-rotation)
+            const rawYaw = Math.atan2(dzCheek, dxCheek);
 
-          // Pitch (X-rotation)
-          const dyFace = (chin.y - forehead.y) * canvas.height;
-          const dzFace = (chin.z - forehead.z) * canvas.width;
-          const rawPitch = Math.atan2(dzFace, dyFace);
+            // Pitch (X-rotation)
+            const dyFace = (chin.y - forehead.y) * canvas.height;
+            const dzFace = (chin.z - forehead.z) * canvas.width;
+            const rawPitch = Math.atan2(dzFace, dyFace);
 
-          const s = smoothedRef.current;
-          if (!s.initialized) {
-            s.eyeCenterX = eyeCenterX;
-            s.eyeCenterY = eyeCenterY;
-            s.angle = rawAngle;
-            s.eyeDistance = rawEyeDistance;
-            s.faceWidth = rawFaceWidth;
-            s.yaw = rawYaw;
-            s.pitch = rawPitch;
-            s.initialized = true;
-          } else {
-            const a = SMOOTHING_FACTOR;
-            s.eyeCenterX += (eyeCenterX - s.eyeCenterX) * a;
-            s.eyeCenterY += (eyeCenterY - s.eyeCenterY) * a;
-            s.eyeDistance += (rawEyeDistance - s.eyeDistance) * a;
-            s.faceWidth += (rawFaceWidth - s.faceWidth) * a;
-            s.yaw += (rawYaw - s.yaw) * a;
-            s.pitch += (rawPitch - s.pitch) * a;
+            const s = smoothedRef.current;
+            if (!s.initialized) {
+              s.eyeCenterX = eyeCenterX;
+              s.eyeCenterY = eyeCenterY;
+              s.angle = rawAngle;
+              s.eyeDistance = rawEyeDistance;
+              s.faceWidth = rawFaceWidth;
+              s.yaw = rawYaw;
+              s.pitch = rawPitch;
+              s.initialized = true;
+            } else {
+              const a = SMOOTHING_FACTOR;
+              s.eyeCenterX += (eyeCenterX - s.eyeCenterX) * a;
+              s.eyeCenterY += (eyeCenterY - s.eyeCenterY) * a;
+              s.eyeDistance += (rawEyeDistance - s.eyeDistance) * a;
+              s.faceWidth += (rawFaceWidth - s.faceWidth) * a;
+              s.yaw += (rawYaw - s.yaw) * a;
+              s.pitch += (rawPitch - s.pitch) * a;
 
-            let angleDiff = rawAngle - s.angle;
-            while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
-            while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
-            s.angle += angleDiff * a;
+              let angleDiff = rawAngle - s.angle;
+              while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+              while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+              s.angle += angleDiff * a;
+            }
           }
-        }
-      } else {
-        missCounterRef.current += 1;
+        } else {
+          missCounterRef.current += 1;
 
-        if (missCounterRef.current > MISS_TOLERANCE) {
-          setFaceVisible((prev) => (prev ? false : prev));
-          smoothedRef.current.initialized = false;
-        }
-        if (missCounterRef.current > SEARCHING_DEBOUNCE) {
-          setSearching((prev) => (prev ? prev : true));
+          if (missCounterRef.current > MISS_TOLERANCE) {
+            setFaceVisible((prev) => (prev ? false : prev));
+            smoothedRef.current.initialized = false;
+          }
+          if (missCounterRef.current > SEARCHING_DEBOUNCE) {
+            setSearching((prev) => (prev ? prev : true));
+          }
         }
       }
 
