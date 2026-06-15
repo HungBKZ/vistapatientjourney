@@ -57,7 +57,7 @@ export default function KnowledgePage() {
         tag: 'Eye Science',
         description: t('knowledge.visualSimulation.description'),
         image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310518/625361590_122119516413062997_1303514405670367212_n_wzuecd.jpg',
-        href: 'https://vista-camera-eyes.vercel.app/eye-simulation.html',
+        href: '/eye-simulation',
         accent: 'sky',
       },
       {

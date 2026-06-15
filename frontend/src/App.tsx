@@ -21,15 +21,16 @@ import RouteSeo from './seo/RouteSeo';
 import AnalyticsTracker from './analytics/AnalyticsTracker';
 import VirtualTryOnPage from './pages/VirtualTryOnPage';
 import ColorBlindTestPage from './pages/ColorBlindTestPage';
+import EyeSimulationPage from './pages/EyeSimulationPage';
 
 function AppShell() {
   const location = useLocation();
-  const isTryOnPage = location.pathname === '/virtual-try-on';
+  const isImmersivePage = location.pathname === '/virtual-try-on' || location.pathname === '/eye-simulation';
 
   return (
     <div className="min-h-screen flex flex-col">
-      {!isTryOnPage && <Header />}
-      <main className={isTryOnPage ? 'flex-grow h-screen' : 'flex-grow md:pb-0 pt-0'}>
+      {!isImmersivePage && <Header />}
+      <main className={isImmersivePage ? 'flex-grow h-screen' : 'flex-grow md:pb-0 pt-0'}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/booking" element={<BookingPage />} />
@@ -45,14 +46,15 @@ function AppShell() {
           <Route path="/kien-thuc/:clusterSlug/:articleSlug" element={<ArticlePage />} />
           <Route path="/virtual-try-on" element={<VirtualTryOnPage />} />
           <Route path="/color-blind-test" element={<ColorBlindTestPage />} />
+          <Route path="/eye-simulation" element={<EyeSimulationPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
       </main>
-      {!isTryOnPage && <Footer />}
-      {!isTryOnPage && <MobileNavBar />}
-      {!isTryOnPage && <VistaChatbot />}
+      {!isImmersivePage && <Footer />}
+      {!isImmersivePage && <MobileNavBar />}
+      {!isImmersivePage && <VistaChatbot />}
     </div>
   );
 }
