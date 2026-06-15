@@ -373,30 +373,30 @@ export default function EyeSimulationPage() {
   }, []);
 
   // Tính độ mờ dựa trên loại tật khúc xạ và khoảng cách mặt
+  // d ở đây là khoảng cách vật lý thực tế: nhỏ là GẦN, lớn là XA
   const getRefractiveBlur = (condition: EyeConditionKey, d: number) => {
     const minBlur = 0;
     const maxBlur = 18; // CSS px blur
     
     if (condition === 'myopia') {
-      if (d <= 0.22) return minBlur;
-      if (d >= 0.42) return maxBlur;
-      return minBlur + ((d - 0.22) / (0.42 - 0.22)) * (maxBlur - minBlur);
+      // Cận thị: Nhìn gần rõ (d nhỏ ➔ rõ), nhìn xa mờ (d lớn ➔ mờ)
+      if (d <= 0.20) return minBlur;
+      if (d >= 0.38) return maxBlur;
+      return minBlur + ((d - 0.20) / (0.38 - 0.20)) * (maxBlur - minBlur);
     }
     
     if (condition === 'hyperopia') {
+      // Viễn thị: Nhìn gần mờ (d nhỏ ➔ mờ), nhìn xa rõ (d lớn ➔ rõ)
+      if (d <= 0.20) return maxBlur;
       if (d >= 0.38) return minBlur;
-      if (d <= 0.18) return maxBlur;
-      return minBlur + ((0.38 - d) / (0.38 - 0.18)) * (maxBlur - minBlur);
+      return maxBlur - ((d - 0.20) / (0.38 - 0.20)) * (maxBlur - minBlur);
     }
     
     if (condition === 'presbyopia') {
-      if (d >= 0.22 && d <= 0.35) {
-        const peak = 0.28;
-        const distFromPeak = Math.abs(d - peak);
-        const blurRatio = 1 - (distFromPeak / (0.35 - peak));
-        return Math.max(0, blurRatio) * 12;
-      }
-      return minBlur;
+      // Lão thị: Nhìn gần mờ (d nhỏ ➔ mờ), nhìn xa rõ (d lớn ➔ rõ)
+      if (d <= 0.20) return 14;
+      if (d >= 0.35) return minBlur;
+      return 14 - ((d - 0.20) / (0.35 - 0.20)) * (14 - minBlur);
     }
 
     return minBlur;
@@ -459,6 +459,7 @@ export default function EyeSimulationPage() {
 
       let currentDist = manualDistance;
       let faceFound = false;
+      let physicalCameraDist = 0.25;
 
       if (!useSampleMode && videoElement && faceLandmarker) {
         if (videoElement.currentTime !== lastVideoTime) {
@@ -483,7 +484,9 @@ export default function EyeSimulationPage() {
         }
         
         if (detectedDistance !== null) {
-          currentDist = detectedDistance;
+          // Quy đổi kích thước mặt sang khoảng cách vật lý: mặt lớn = gần (trị số nhỏ), mặt nhỏ = xa (trị số lớn)
+          physicalCameraDist = Math.max(0.12, Math.min(0.48, 0.60 - detectedDistance));
+          currentDist = physicalCameraDist;
         }
       } else {
         setFaceDetected(false);
@@ -720,7 +723,7 @@ export default function EyeSimulationPage() {
             <div className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping" />
             <span>
               {detectedDistance !== null 
-                ? `${getTranslation('cameraLabel')}: ${(detectedDistance * 100).toFixed(0)}cm (${detectedDistance < 0.24 ? getTranslation('veryCloseLabel') : detectedDistance < 0.36 ? getTranslation('normalLabel') : getTranslation('farLabel')})`
+                ? `${getTranslation('cameraLabel')}: ${(Math.max(0.12, Math.min(0.48, 0.60 - detectedDistance)) * 100).toFixed(0)}cm (${(0.60 - detectedDistance) < 0.25 ? getTranslation('veryCloseLabel') : (0.60 - detectedDistance) > 0.38 ? getTranslation('farLabel') : getTranslation('normalLabel')})`
                 : `${getTranslation('manualLabel')}: ${(manualDistance * 100).toFixed(0)}cm`
               }
             </span>
