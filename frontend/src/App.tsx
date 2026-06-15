@@ -19,14 +19,16 @@ import ClusterPage from './pages/ClusterPage';
 import ArticlePage from './pages/ArticlePage';
 import RouteSeo from './seo/RouteSeo';
 import AnalyticsTracker from './analytics/AnalyticsTracker';
+import VirtualTryOnPage from './pages/VirtualTryOnPage';
 
 function AppShell() {
   const location = useLocation();
+  const isTryOnPage = location.pathname === '/virtual-try-on';
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className={'flex-grow md:pb-0 pt-0'}>
+      {!isTryOnPage && <Header />}
+      <main className={isTryOnPage ? 'flex-grow h-screen' : 'flex-grow md:pb-0 pt-0'}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/booking" element={<BookingPage />} />
@@ -40,14 +42,15 @@ function AppShell() {
           <Route path="/kien-thuc" element={<KnowledgeHubPage />} />
           <Route path="/kien-thuc/:clusterSlug" element={<ClusterPage />} />
           <Route path="/kien-thuc/:clusterSlug/:articleSlug" element={<ArticlePage />} />
+          <Route path="/virtual-try-on" element={<VirtualTryOnPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
       </main>
-      <Footer />
-      <MobileNavBar />
-      <VistaChatbot />
+      {!isTryOnPage && <Footer />}
+      {!isTryOnPage && <MobileNavBar />}
+      {!isTryOnPage && <VistaChatbot />}
     </div>
   );
 }

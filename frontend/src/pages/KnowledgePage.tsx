@@ -48,7 +48,7 @@ export default function KnowledgePage() {
         tag: 'AR Technology',
         description: t('knowledge.virtualTryOn.description'),
         image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770310445/VDZ08622_maluun.jpg',
-        href: 'https://vista-camera-eyes.vercel.app/',
+        href: '/virtual-try-on',
         accent: 'violet',
       },
       {
@@ -200,12 +200,9 @@ export default function KnowledgePage() {
             );
 
             return (
-              <motion.a
-                layout
+              <Link
                 key={exp.title}
-                href={exp.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                to={exp.href}
                 className="relative block w-full overflow-hidden rounded-2xl cursor-pointer select-none border border-slate-200/60 shadow-[0_4px_20px_-4px_rgba(148,163,184,0.15)] bg-slate-100 transition-all duration-500 group focus-visible:ring-2 focus-visible:ring-sky-500 focus:outline-none"
                 style={{
                   height: isActive ? '320px' : '250px',
@@ -225,7 +222,7 @@ export default function KnowledgePage() {
                 tabIndex={0}
               >
                 {renderContent()}
-              </motion.a>
+              </Link>
             );
           })}
         </section>
@@ -248,17 +245,15 @@ export default function KnowledgePage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto flex-shrink-0 relative z-10">
-              <a
-                href="https://vista-camera-eyes.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/virtual-try-on"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-sky-600 text-white text-sm font-bold transition-all duration-300 hover:bg-sky-700 active:scale-[0.98] w-full sm:w-auto shadow-md shadow-sky-600/20"
               >
                 {t('knowledge.bottomCta')}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </a>
+              </Link>
               <Link
                 to="/"
                 className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-bold text-slate-700 hover:text-slate-900 border border-slate-200 bg-white/50 hover:bg-white transition-all duration-200 w-full sm:w-auto text-center shadow-sm"
