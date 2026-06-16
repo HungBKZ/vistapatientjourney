@@ -82,6 +82,7 @@ const translations = {
       knowledge: 'Mắt ảo',
       explore: 'Kiến thức',
       journey: 'Hành trình',
+      diagnosis: 'Chẩn đoán',
       quiz: 'Quiz',
     },
     home: {
@@ -93,7 +94,6 @@ const translations = {
         subtitle2: 'được thấu hiểu',
         description: 'Giải pháp trải nghiệm thị giác tích hợp AI giúp bạn hiểu rõ hơn về sức khỏe đôi mắt của mình',
         cta: 'Trải nghiệm ngay',
-        learnMore: 'Tìm hiểu thêm',
       },
       whyChoose: {
         badge: 'Về chúng tôi',
@@ -213,6 +213,32 @@ const translations = {
         cta: 'Trải nghiệm ngay',
         knowledge: 'Kiến thức mắt',
         home: 'Trang chủ',
+      },
+    },
+    diagnosis: {
+      badge: 'AI phát hiện bệnh võng mạc đái tháo đường',
+      title: 'Phát hiện sớm',
+      titleLine2: 'Bảo vệ thị lực',
+      description:
+        'Công nghệ AI hỗ trợ phát hiện, chẩn đoán và phân loại bệnh võng mạc đái tháo đường từ ảnh đáy mắt.',
+      tryDemo: 'Dùng thử (Phiên bản thử nghiệm)',
+
+      features: {
+        detection: {
+          title: 'Phát Hiện Sớm',
+          description:
+            'Tự động phát hiện các bất thường võng mạc từ ảnh đáy mắt, giúp can thiệp kịp thời và nâng cao hiệu quả điều trị.',
+        },
+        diagnosis: {
+          title: 'Chẩn Đoán Bằng AI',
+          description:
+            'Mô hình học sâu phân tích các tổn thương võng mạc và cung cấp hỗ trợ chẩn đoán chính xác cho nhân viên y tế.',
+        },
+        classification: {
+          title: 'Phân Loại Mức Độ Bệnh',
+          description:
+            'Phân loại mức độ bệnh võng mạc đái tháo đường nhằm hỗ trợ xây dựng phác đồ điều trị và theo dõi lâu dài.',
+        },
       },
     },
     explore: {
@@ -394,6 +420,7 @@ const translations = {
       knowledge: 'Virtual Eye',
       explore: 'Knowledge',
       journey: 'Journey',
+      diagnosis: 'Diagnosis',
       quiz: 'Quiz',
     },
     home: {
@@ -525,6 +552,32 @@ const translations = {
         cta: 'Try Now',
         knowledge: 'Eye Knowledge',
         home: 'Home',
+      },
+    },
+    diagnosis: {
+      badge: 'AI-Powered Diabetic Retinopathy Detection',
+      title: 'Early Detection',
+      titleLine2: 'Better Vision',
+      description:
+        'Advanced AI technology for diabetic retinopathy detection, diagnosis, and classification from retinal fundus images.',
+      tryDemo: 'Try Demo (Beta Version)',
+
+      features: {
+        detection: {
+          title: 'Early Detection',
+          description:
+            'Automatically identify retinal abnormalities from fundus images, enabling earlier intervention and improved patient outcomes.',
+        },
+        diagnosis: {
+          title: 'AI Diagnosis',
+          description:
+            'Deep learning models analyze retinal lesions and provide accurate diagnostic support for healthcare professionals.',
+        },
+        classification: {
+          title: 'Disease Classification',
+          description:
+            'Classify diabetic retinopathy severity levels to support treatment planning and long-term monitoring.',
+        },
       },
     },
     explore: {
@@ -706,6 +759,7 @@ const translations = {
       knowledge: 'ភ្នែកនិម្មិត',
       explore: 'ចំណេះដឹង',
       journey: 'ដំណើររបស់យើង',
+      diagnosis: 'វិនិច្ឆ័យ',
       quiz: 'សំណួរ',
     },
     home: {
@@ -837,6 +891,33 @@ const translations = {
         cta: 'សាកល្បងឥឡូវ',
         knowledge: 'ចំណេះដឹងភ្នែក',
         home: 'ទំព័រដើម',
+      },
+    },
+    diagnosis: {
+      badge: 'ការរកឃើញជំងឺភ្នែកទឹកនោមផ្អែមដោយ AI',
+      title: 'រកឃើញឆាប់រហ័ស',
+      titleLine2: 'ការពារចក្ខុវិស័យ',
+      description:
+        'បច្ចេកវិទ្យា AI សម្រាប់រកឃើញ វិនិច្ឆ័យ និងចាត់ថ្នាក់ជំងឺភ្នែកទឹកនោមផ្អែមពីរូបភាពបាតភ្នែក។',
+      tryDemo: 'សាកល្បង (កំណែសាកល្បង)',
+      learnMore: 'ស្វែងយល់បន្ថែម',
+
+      features: {
+        detection: {
+          title: 'ការរកឃើញឆាប់រហ័ស',
+          description:
+            'រកឃើញភាពមិនប្រក្រតីនៃរីទីណាដោយស្វ័យប្រវត្តិពីរូបភាពបាតភ្នែក ដើម្បីជួយអន្តរាគមន៍បានទាន់ពេលវេលា និងបង្កើនប្រសិទ្ធភាពនៃការព្យាបាល។',
+        },
+        diagnosis: {
+          title: 'ការវិនិច្ឆ័យដោយ AI',
+          description:
+            'ម៉ូដែល Deep Learning វិភាគស្នាមរបួសលើរីទីណា និងផ្តល់ការគាំទ្រក្នុងការវិនិច្ឆ័យយ៉ាងត្រឹមត្រូវសម្រាប់បុគ្គលិកសុខាភិបាល។',
+        },
+        classification: {
+          title: 'ការចាត់ថ្នាក់កម្រិតជំងឺ',
+          description:
+            'ចាត់ថ្នាក់កម្រិតធ្ងន់ធ្ងរនៃជំងឺទឹកនោមផ្អែមប៉ះពាល់ដល់រីទីណា ដើម្បីគាំទ្រការរៀបចំផែនការព្យាបាល និងការតាមដានរយៈពេលវែង។',
+        },
       },
     },
     explore: {

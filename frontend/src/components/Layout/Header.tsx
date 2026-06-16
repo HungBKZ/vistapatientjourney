@@ -16,6 +16,7 @@ export default function Header() {
     { href: '/explore', label: t('nav.explore') || 'Explore' },
     { href: '/knowledge', label: t('nav.knowledge') || 'Knowledge' },
     { href: '/journey', label: t('nav.journey') || 'Journey' },
+    { href: '/diagnosis', label: t('nav.diagnosis') || 'Diagnosis' },
   ], [t]); // Thêm t vào dependency array để re-render khi ngôn ngữ thay đổi
 
   useEffect(() => {
