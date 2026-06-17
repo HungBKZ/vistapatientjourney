@@ -1,5 +1,8 @@
 import { useState } from "react";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import { useLanguage } from "../contexts/LanguageContext";
+import { isTokenValid } from "@/utils/auth";
 
 export default function LandingPage() {
     const { t } = useLanguage();
@@ -9,36 +12,57 @@ export default function LandingPage() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
+    // Xử lý khi click "Dùng thử"
+    const handleTryDemo = () => {
+        if (isTokenValid()) {
+            // Có token và còn hạn => Chuyển luôn tới trang sử dụng
+            window.location.href = "/diagnosis-service";
+        } else {
+            // Chưa có token hoặc hết hạn => Xóa token cũ (nếu có) và Mở Modal login
+            Cookies.remove("token");
+            setIsOpen(true);
+        }
+    };
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-
         setLoading(true);
 
         try {
-            const res = await fetch("https://your-api-endpoint.com/login", {
+            const res = await fetch("http://103.72.98.153:80/auth/testing", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
+                body: JSON.stringify({ email, password }),
             });
 
             if (!res.ok) {
                 throw new Error("Login failed");
             }
+            console.log("1")
+            // Xử lý dữ liệu trả về
+            const data = await res.text();
+            console.log("2")
 
-            const data = await res.json();
+            // Giả sử API trả về object có chứa key token: { token: "eyJhbG..." }
+            // Nếu API trả về chuỗi thuần túy (plain text), dùng: const tokenStr = await res.text();
+            const tokenStr = data.token || data;
 
-            // ví dụ: lưu token
-            localStorage.setItem("token", data.token);
+            console.log("wiuefhwueifh")
+            console.log(tokenStr)
 
-            // redirect sau login
-            window.location.href = "/dashboard";
+            // Phân tích token để lấy hạn sử dụng (exp) cài đặt cho Cookie
+            const decoded: any = jwtDecode(tokenStr);
+            const expires = new Date(decoded.exp * 1000); // Chuyển từ giây sang mili-giây
+
+            // Lưu token vào cookie, set thời gian sống đúng bằng token
+            Cookies.set("token", tokenStr, { expires });
+
+            // redirect sau khi login thành công
+            window.location.href = "/diagnosis-service";
         } catch (err) {
-            alert("Login failed!");
+            alert("Đăng nhập thất bại. Vui lòng kiểm tra lại!");
         } finally {
             setLoading(false);
         }
@@ -50,26 +74,23 @@ export default function LandingPage() {
             {isOpen && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-                    onClick={() => setIsOpen(false)}   // click ngoài => đóng modal
+                    onClick={() => setIsOpen(false)}
                 >
                     <div
                         className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
-                        onClick={(e) => e.stopPropagation()} // click trong modal => không đóng
+                        onClick={(e) => e.stopPropagation()}
                     >
-                        <h2 className="mb-4 text-xl font-bold text-slate-800">
-                            Login
-                        </h2>
+                        <h2 className="mb-4 text-xl font-bold text-slate-800">Login</h2>
 
                         <form onSubmit={handleLogin} className="space-y-4">
                             <input
-                                type="email"
+                                // type="email" ============================================ tạm bỏ type Email
                                 placeholder="Email"
                                 className="w-full rounded-lg border p-3"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
-
                             <input
                                 type="password"
                                 placeholder="Password"
@@ -78,16 +99,14 @@ export default function LandingPage() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
-
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full rounded-lg bg-cyan-600 p-3 font-semibold text-white hover:bg-cyan-700"
+                                className="w-full rounded-lg bg-cyan-600 p-3 font-semibold text-white hover:bg-cyan-700 disabled:opacity-50"
                             >
                                 {loading ? "Logging in..." : "Login"}
                             </button>
                         </form>
-
                         <button
                             onClick={() => setIsOpen(false)}
                             className="mt-3 w-full text-sm text-gray-500"
@@ -99,141 +118,27 @@ export default function LandingPage() {
             )}
             <section className="relative min-h-screen overflow-hidden">
                 {/* Background Image */}
-                <img
-                    src="/eye.jpg"
-                    alt="Retinal Image"
-                    className="
-            absolute inset-0
-            h-full w-full
-            object-cover
-
-            object-[72%_center]
-            sm:object-[70%_center]
-            md:object-[72%_center]
-            lg:object-[75%_center]
-            xl:object-[72%_center]
-            "
-                />
+                <img src="/eye.jpg" alt="Retinal Image" className="absolute inset-0 h-full w-full object-cover object-[72%_center] sm:object-[70%_center] md:object-[72%_center] lg:object-[75%_center] xl:object-[72%_center]" />
 
                 {/* Overlay */}
-                <div
-                    className="
-            absolute inset-0
+                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/50 md:from-white/95 md:via-white/85 md:to-cyan-100/20" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-48 w-48 sm:h-64 sm:w-64 lg:h-80 lg:w-80 rounded-full bg-cyan-300/20 blur-3xl" />
 
-            bg-gradient-to-r
-            from-white
-            via-white/95
-            to-white/50
-
-            md:from-white/95
-            md:via-white/85
-            md:to-cyan-100/20
-            "
-                />
-
-                {/* Glow Effect */}
-                <div
-                    className="
-            absolute
-            left-0
-            top-1/2
-            -translate-y-1/2
-
-            h-48 w-48
-            sm:h-64 sm:w-64
-            lg:h-80 lg:w-80
-
-            rounded-full
-            bg-cyan-300/20
-            blur-3xl
-            "
-                />
-
-                {/* Content */}
-                <div
-                    className="
-            relative z-10
-            mx-auto
-            flex
-            min-h-screen
-            max-w-7xl
-            items-center
-
-            px-5
-            sm:px-8
-            lg:px-12
-            "
-                >
+                <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center px-5 sm:px-8 lg:px-12">
                     <div className="max-w-xl lg:max-w-2xl">
                         {/* Badge */}
-                        <span
-                            className="
-                inline-flex
-                rounded-full
-                border border-cyan-200
-                bg-white/80
-                px-3 py-2
-                sm:px-4
-
-                text-xs
-                sm:text-sm
-
-                font-medium
-                text-cyan-700
-                backdrop-blur
-                "
-                        >
-                            {t("diagnosis.badge")}
-                        </span>
-
-                        {/* Title */}
-                        <h1
-                            className="
-                mt-5
-                font-bold
-                leading-tight
-                text-slate-900
-
-                text-4xl
-                sm:text-5xl
-                md:text-6xl
-                lg:text-7xl
-                "
-                        >
-                            {t("diagnosis.title")}
-                            <br />
-                            {t("diagnosis.titleLine2")}
+                        <span className="inline-flex rounded-full border border-cyan-200 bg-white/80 px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-cyan-700 backdrop-blur">{t("diagnosis.badge")}</span>
+                        <h1 className="mt-5 font-bold leading-tight text-slate-900 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+                            {t("diagnosis.title")}<br />{t("diagnosis.titleLine2")}
                         </h1>
-
-                        {/* Description */}
-                        <p
-                            className="
-                mt-5
-                max-w-lg
-
-                text-base
-                sm:text-lg
-
-                leading-relaxed
-                text-slate-600
-                "
-                        >
+                        <p className="mt-5 max-w-lg text-base sm:text-lg leading-relaxed text-slate-600">
                             {t("diagnosis.description")}
                         </p>
 
-                        {/* Buttons */}
-                        <div
-                            className="
-                mt-8
-                flex
-                flex-col
-                gap-3
-
-                sm:flex-row
-                "
-                        >
+                        {/* Nút "Dùng thử" sử dụng logic mới */}
+                        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                             <button
-                                onClick={() => setIsOpen(true)}
+                                onClick={handleTryDemo} // Đã thay đổi ở đây
                                 className="rounded-xl bg-cyan-600 px-6 py-3 font-semibold text-white shadow-lg hover:bg-cyan-700"
                             >
                                 {t("diagnosis.tryDemo")}

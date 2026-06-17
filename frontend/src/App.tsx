@@ -9,6 +9,7 @@ import KnowledgePage from './pages/KnowledgePage';
 import ExplorePage from './pages/ExplorePage';
 import JourneyPage from './pages/JourneyPage';
 import DiagnosisPage from './pages/DiagnosisPage';
+import DiagnosisService from './pages/DiagnosisService';
 import QuizPage from './pages/QuizPage';
 import PodcastPage from './pages/PodcastPage';
 import VideoPage from './VideoPage.jsx';
@@ -46,6 +47,7 @@ function AppShell() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/journey" element={<JourneyPage />} />
           <Route path="/diagnosis" element={<DiagnosisPage />} />
+          <Route path="/diagnosis-service" element={<DiagnosisService />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/podcast" element={<PodcastPage />} />
           <Route path="/video" element={<VideoPage />} />
