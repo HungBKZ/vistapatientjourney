@@ -29,7 +29,7 @@ export default function LandingPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("https://103.72.98.153/auth/testing", {
+            const res = await fetch("https://103.72.98.153:443/auth/testing", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
