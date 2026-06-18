@@ -76,7 +76,7 @@ export default function ImageDiagnosis() {
         console.warn('Không tìm thấy token trong cookie!');
       }
 
-      const response = await fetch('http://103.72.98.153:80/diagnosis', {
+      const response = await fetch('https://103.72.98.153:80/diagnosis', {
         method: 'POST',
         body: formData,
         headers: headers, 
