@@ -462,7 +462,7 @@ export default function ExplorePage() {
         title: t('explore.quiz.title'),
         subtitle: t('explore.quiz.subtitle'),
         description: t('explore.quiz.description'),
-        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313620/VDZ08714_cxcixk.jpg',
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1781695496/quiz_sotal1.jpg',
         href: '/quiz',
         accent: 'violet',
         label: 'Interactive',
@@ -472,7 +472,7 @@ export default function ExplorePage() {
         title: t('explore.podcast.title'),
         subtitle: t('explore.podcast.subtitle'),
         description: t('explore.podcast.description'),
-        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313896/images_5_f9s2t4.jpg',
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1781695496/podcast_tyy7z5.jpg',
         href: '/podcast',
         accent: 'sky',
         label: 'Audio',
@@ -482,7 +482,7 @@ export default function ExplorePage() {
         title: t('explore.video.title'),
         subtitle: t('explore.video.subtitle'),
         description: t('explore.video.description'),
-        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770313972/VDZ08640_rtfyh2.jpg',
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1781695496/video_ynyjpk.jpg',
         href: '/video',
         accent: 'emerald',
         label: 'Media',
@@ -492,7 +492,7 @@ export default function ExplorePage() {
         title: t('explore.blinkFlight.title'),
         subtitle: t('explore.blinkFlight.subtitle'),
         description: t('explore.blinkFlight.description'),
-        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1781522493/istockphoto-1279191954-1024x1024_zg5nxn.jpg',
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1781695497/blinkfly_qmpvq4.jpg',
         href: '/explore/blink-flight',
         accent: 'violet',
         label: 'Interactive Game',
@@ -502,7 +502,7 @@ export default function ExplorePage() {
         title: t('explore.eyeNinja.title'),
         subtitle: t('explore.eyeNinja.subtitle'),
         description: t('explore.eyeNinja.description'),
-        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1781522493/eyeninja_qtavvc.jpg',
+        image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1781695497/eyeninja_lejzki.jpg',
         href: '/explore/eye-ninja',
         accent: 'sky',
         label: 'Ocular Motility',
@@ -549,7 +549,7 @@ export default function ExplorePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            style={{ marginBottom: 'clamp(32px, 5vw, 56px)' }}
+            style={{ marginBottom: 'clamp(5px, 1vw, 15px)' }}
           >
             {/* Eyebrow label */}
             <div style={{
