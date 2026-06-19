@@ -70,7 +70,7 @@ export default function ImageDiagnosis() {
         console.warn('Không tìm thấy token trong cookie!');
       }
 
-      const response = await fetch('https://103.72.98.153:443/diagnosis', {
+      const response = await fetch('https://api.vistapatientjourney.vn/diagnosis', {
         method: 'POST',
         body: formData,
         headers: headers, 
