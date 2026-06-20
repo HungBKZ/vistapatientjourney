@@ -9,7 +9,7 @@ const LESION_LEGEND = [
   { id: 'IRMA', label: 'Vi mạch nội võng mạc (IRMA)', color: 'rgb(57, 255, 20)' },
   { id: 'Microaneurysms', label: 'Vi phình mạch (Microaneurysms)', color: 'rgb(255, 0, 255)' },
   { id: 'Neovascularization', label: 'Tân mạch (Neovascularization)', color: 'rgb(148, 0, 255)' },
-  { id: 'SoftExudate', label: 'Xuất tiết mềm (Soft Exudate)', color: 'rgb(255, 255, 255)' },
+  { id: 'SoftExudate', label: 'Xuất tiết mềm/bông (Soft Exudate)', color: 'rgb(255, 255, 255)' },
 ];
 
 // Hàm helper để lấy giá trị cookie theo tên
