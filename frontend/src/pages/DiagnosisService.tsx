@@ -21,6 +21,7 @@ const getCookie = (name: string): string | null => {
   return null;
 };
 
+
 export default function ImageDiagnosis() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -35,6 +36,10 @@ export default function ImageDiagnosis() {
   const [error, setError] = useState<string | null>(null);
   
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  
+  // THÊM MỚI: Trạng thái kiểm tra hết hạn phiên đăng nhập
+  const [isSessionExpired, setIsSessionExpired] = useState<boolean>(false); 
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Biến kiểm tra xem quá trình chẩn đoán đã bắt đầu hay chưa
@@ -48,7 +53,7 @@ export default function ImageDiagnosis() {
   }, [previewUrl, resultUrl]);
 
   useEffect(() => {
-    if (isFullScreen) {
+    if (isFullScreen || isSessionExpired) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -56,7 +61,7 @@ export default function ImageDiagnosis() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isFullScreen]);
+  }, [isFullScreen, isSessionExpired]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -101,7 +106,10 @@ export default function ImageDiagnosis() {
     })
       .then(async (res) => {
         if (!res.ok) {
-          if (res.status === 401) throw new Error('Phiên đăng nhập đã hết hạn.');
+          if (res.status === 401) {
+            setIsSessionExpired(true); // Kích hoạt modal
+            throw new Error('Phiên đăng nhập đã hết hạn.');
+          }
           throw new Error('Lỗi xử lý ảnh.');
         }
         const imageBlob = await res.blob();
@@ -109,7 +117,9 @@ export default function ImageDiagnosis() {
       })
       .catch((err) => {
         console.error(err);
-        setError(prev => prev ? `${prev} | Lỗi tải ảnh` : 'Lỗi tải ảnh lâm sàng.');
+        if (err.message !== 'Phiên đăng nhập đã hết hạn.') {
+          setError(prev => prev ? `${prev} | Lỗi tải ảnh` : 'Lỗi tải ảnh lâm sàng.');
+        }
       })
       .finally(() => {
         setIsImageLoading(false);
@@ -122,13 +132,21 @@ export default function ImageDiagnosis() {
       headers: headers, 
     })
       .then(async (res) => {
-        if (!res.ok) throw new Error('Lỗi tạo báo cáo.');
+        if (!res.ok) {
+           if (res.status === 401) {
+             setIsSessionExpired(true); // Kích hoạt modal
+             throw new Error('Phiên đăng nhập đã hết hạn.');
+           }
+           throw new Error('Lỗi tạo báo cáo.');
+        }
         const data = await res.json();
         setReportText(data.text);
       })
       .catch((err) => {
         console.error(err);
-        setReportText("Không thể tải kết quả phân tích văn bản do lỗi máy chủ.");
+        if (err.message !== 'Phiên đăng nhập đã hết hạn.') {
+          setReportText("Không thể tải kết quả phân tích văn bản do lỗi máy chủ.");
+        }
       })
       .finally(() => {
         setIsTextLoading(false);
@@ -221,7 +239,6 @@ export default function ImageDiagnosis() {
                 </div>
                 
                 {isImageLoading ? (
-                  // Đang tải ảnh
                   <div className="flex-grow flex items-center justify-center p-4">
                     <svg className="animate-spin h-10 w-10 text-teal-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -229,12 +246,10 @@ export default function ImageDiagnosis() {
                     </svg>
                   </div>
                 ) : resultUrl ? (
-                  // Tải xong ảnh
                   <div className="flex-grow flex items-center justify-center p-4 cursor-zoom-in" onClick={() => setIsFullScreen(true)}>
                     <img src={resultUrl} className="max-w-full max-h-full object-contain animate-in fade-in duration-500" alt="Result from AI" />
                   </div>
                 ) : (
-                  // Lỗi ảnh
                   <div className="flex-grow flex items-center justify-center p-4 text-slate-500 text-sm">
                     Không thể hiển thị hình ảnh chẩn đoán.
                   </div>
@@ -278,7 +293,6 @@ export default function ImageDiagnosis() {
                 
                 <div className="text-slate-600 space-y-4 text-sm leading-relaxed">
                   {isTextLoading ? (
-                    // Đang tải text
                     <div className="flex items-center gap-3 text-teal-600 py-4 animate-pulse">
                        <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -287,7 +301,6 @@ export default function ImageDiagnosis() {
                       <span className="font-medium">Đang tạo báo cáo y khoa chi tiết...</span>
                     </div>
                   ) : (
-                    // Tải xong text
                     <>
                       <p>
                         <strong className="text-slate-800">1. Phân tích chi tiết từ AI:</strong><br />
@@ -337,6 +350,35 @@ export default function ImageDiagnosis() {
             <div className="flex-grow flex items-center justify-center p-4">
                 <img src={resultUrl} className="max-w-full max-h-full object-contain shadow-2xl animate-in zoom-in-95 duration-300 rounded-sm" alt="Result Full Screen" onClick={(e) => e.stopPropagation()} />
             </div>
+        </div>
+      )}
+
+      {/* ================= MODAL HẾT PHIÊN ĐĂNG NHẬP ================= */}
+      {isSessionExpired && (
+        <div 
+          className="fixed inset-0 z-[9999] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-300"
+          // Click vào bất kỳ đâu trên màn hình cũng sẽ kích hoạt chuyển trang
+          onClick={() => window.location.href = 'https://vistapatientjourney.vn'}
+        >
+          <div 
+            className="bg-white rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl flex flex-col items-center text-center animate-in zoom-in-95 duration-300"
+            // Không sử dụng e.stopPropagation() ở đây để sự kiện click truyền ngược (bubble up) lên thẻ div cha và kích hoạt redirect kể cả khi bấm vào nội dung bên trong
+          >
+            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-5 border border-red-100">
+              <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Phiên đăng nhập hết hạn</h3>
+            <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+              Thời gian truy cập của bạn đã kết thúc để đảm bảo bảo mật. Nhấn vào bất kỳ đâu để quay lại trang chủ và đăng nhập lại.
+            </p>
+            <button 
+              className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 px-4 rounded-md transition-colors"
+            >
+              Quay về trang chủ
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -235,7 +235,7 @@ const translations = {
             'Hiển thị bản đồ nhiệt trực quan cho thấy các vùng ảnh có ảnh hưởng lớn đến dự đoán của AI, hỗ trợ kiểm chứng và tăng tính minh bạch của kết quả.',
         },
         classification: {
-          title: 'Phân Tích Với Ngôn Ngữ Tự Nhiên',
+          title: 'XAI Với Ngôn Ngữ Tự Nhiên',
           description:
             'Tự động tạo báo cáo mô tả bằng ngôn ngữ tự nhiên, diễn giải các phát hiện từ ảnh đáy mắt theo cách dễ hiểu và hỗ trợ quyết định lâm sàng.',
         },
