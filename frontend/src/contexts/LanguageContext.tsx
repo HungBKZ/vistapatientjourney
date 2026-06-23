@@ -40,7 +40,7 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   const t = (key: string): string => {
     const keys = key.split('.');
     let value: any = translations[language];
-    
+
     for (const k of keys) {
       if (value && typeof value === 'object') {
         value = value[k];
@@ -48,14 +48,14 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
         return key;
       }
     }
-    
+
     return typeof value === 'string' ? value : key;
   };
 
   const tArray = (key: string): string[] => {
     const keys = key.split('.');
     let value: any = translations[language];
-    
+
     for (const k of keys) {
       if (value && typeof value === 'object') {
         value = value[k];
@@ -63,7 +63,7 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
         return [];
       }
     }
-    
+
     return Array.isArray(value) ? value : [];
   };
 
@@ -225,19 +225,19 @@ const translations = {
 
       features: {
         detection: {
-          title: 'Phát Hiện Sớm',
+          title: 'Khoanh Vùng Tổn Thương',
           description:
-            'Tự động phát hiện các bất thường võng mạc từ ảnh đáy mắt, giúp can thiệp kịp thời và nâng cao hiệu quả điều trị.',
+            'Tự động xác định và đánh dấu các vùng tổn thương trên ảnh đáy mắt, giúp bác sĩ nhanh chóng nhận diện các khu vực bất thường cần được đánh giá.',
         },
         diagnosis: {
-          title: 'Chẩn Đoán Bằng AI',
+          title: 'XAI Với Heatmap',
           description:
-            'Mô hình học sâu phân tích các tổn thương võng mạc và cung cấp hỗ trợ chẩn đoán chính xác cho nhân viên y tế.',
+            'Hiển thị bản đồ nhiệt trực quan cho thấy các vùng ảnh có ảnh hưởng lớn đến dự đoán của AI, hỗ trợ kiểm chứng và tăng tính minh bạch của kết quả.',
         },
         classification: {
-          title: 'Phân Loại Mức Độ Bệnh',
+          title: 'Phân Tích Với Ngôn Ngữ Tự Nhiên',
           description:
-            'Phân loại mức độ bệnh võng mạc đái tháo đường nhằm hỗ trợ xây dựng phác đồ điều trị và theo dõi lâu dài.',
+            'Tự động tạo báo cáo mô tả bằng ngôn ngữ tự nhiên, diễn giải các phát hiện từ ảnh đáy mắt theo cách dễ hiểu và hỗ trợ quyết định lâm sàng.',
         },
       },
     },
@@ -564,19 +564,19 @@ const translations = {
 
       features: {
         detection: {
-          title: 'Early Detection',
+          title: 'Lesion Localization',
           description:
-            'Automatically identify retinal abnormalities from fundus images, enabling earlier intervention and improved patient outcomes.',
+            'Automatically identifies and highlights lesion regions in retinal fundus images, helping clinicians quickly locate abnormalities that require further evaluation.',
         },
         diagnosis: {
-          title: 'AI Diagnosis',
+          title: 'XAI with Heatmap',
           description:
-            'Deep learning models analyze retinal lesions and provide accurate diagnostic support for healthcare professionals.',
+            'Provides intuitive heatmaps showing the image regions that most influence AI predictions, supporting result verification and improving transparency.',
         },
         classification: {
-          title: 'Disease Classification',
+          title: 'Natural Language Analysis',
           description:
-            'Classify diabetic retinopathy severity levels to support treatment planning and long-term monitoring.',
+            'Automatically generates reports in natural language, explaining retinal findings in an easy-to-understand manner and supporting clinical decision-making.',
         },
       },
     },
@@ -904,19 +904,19 @@ const translations = {
 
       features: {
         detection: {
-          title: 'ការរកឃើញឆាប់រហ័ស',
+          title: 'កំណត់ទីតាំងដំបៅ',
           description:
-            'រកឃើញភាពមិនប្រក្រតីនៃរីទីណាដោយស្វ័យប្រវត្តិពីរូបភាពបាតភ្នែក ដើម្បីជួយអន្តរាគមន៍បានទាន់ពេលវេលា និងបង្កើនប្រសិទ្ធភាពនៃការព្យាបាល។',
+            'កំណត់ និងបង្ហាញតំបន់ដំបៅនៅលើរូបភាពបាតភ្នែកដោយស្វ័យប្រវត្តិ ដើម្បីជួយបុគ្គលិកសុខាភិបាលស្វែងរកភាពមិនប្រក្រតីបានយ៉ាងឆាប់រហ័ស។',
         },
         diagnosis: {
-          title: 'ការវិនិច្ឆ័យដោយ AI',
+          title: 'XAI ជាមួយ Heatmap',
           description:
-            'ម៉ូដែល Deep Learning វិភាគស្នាមរបួសលើរីទីណា និងផ្តល់ការគាំទ្រក្នុងការវិនិច្ឆ័យយ៉ាងត្រឹមត្រូវសម្រាប់បុគ្គលិកសុខាភិបាល។',
+            'បង្ហាញផែនទីកម្ដៅ (Heatmap) ដែលបង្ហាញតំបន់រូបភាពមានឥទ្ធិពលខ្លាំងលើការព្យាករណ៍របស់ AI ដើម្បីគាំទ្រការផ្ទៀងផ្ទាត់លទ្ធផល និងបង្កើនតម្លាភាព។',
         },
         classification: {
-          title: 'ការចាត់ថ្នាក់កម្រិតជំងឺ',
+          title: 'ការវិភាគដោយភាសាធម្មជាតិ',
           description:
-            'ចាត់ថ្នាក់កម្រិតធ្ងន់ធ្ងរនៃជំងឺទឹកនោមផ្អែមប៉ះពាល់ដល់រីទីណា ដើម្បីគាំទ្រការរៀបចំផែនការព្យាបាល និងការតាមដានរយៈពេលវែង។',
+            'បង្កើតរបាយការណ៍ជាភាសាធម្មជាតិដោយស្វ័យប្រវត្តិ ដើម្បីពន្យល់ពីការរកឃើញនៅលើរូបភាពបាតភ្នែក និងគាំទ្រការសម្រេចចិត្តផ្នែកវេជ្ជសាស្ត្រ។',
         },
       },
     },

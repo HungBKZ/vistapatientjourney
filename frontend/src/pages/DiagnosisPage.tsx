@@ -184,7 +184,7 @@ export default function LandingPage() {
                         {/* Card 2 */}
                         <div className="rounded-3xl bg-white/80 p-5 shadow-lg backdrop-blur-sm">
                             <img
-                                src="/feature-2.jpg"
+                                src="/feature-2.png"
                                 alt="Diagnosis"
                                 className="mb-5 h-64 w-full rounded-2xl object-cover"
                             />
@@ -201,7 +201,7 @@ export default function LandingPage() {
                         {/* Card 3 */}
                         <div className="rounded-3xl bg-white/80 p-5 shadow-lg backdrop-blur-sm">
                             <img
-                                src="/feature-3.png"
+                                src="/feature-3.jpg"
                                 alt="Classification"
                                 className="mb-5 h-64 w-full rounded-2xl object-cover"
                             />
