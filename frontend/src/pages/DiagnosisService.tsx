@@ -154,7 +154,7 @@ export default function ImageDiagnosis() {
   };
 
   return (
-    <div className="my-[80px] mb-[180px] min-h-screen bg-slate-50 p-4 md:p-6 lg:p-8 font-sans text-slate-800 flex items-center justify-center">
+    <div className="my-[80px] mb-[280px] min-h-screen bg-slate-50 p-4 md:p-6 lg:p-8 font-sans text-slate-800 flex items-center justify-center">
       <div className="w-full max-w-[1800px] h-full lg:h-[calc(100vh-4rem)] grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* ================= CỘT TRÁI: UPLOAD & PREVIEW ================= */}
