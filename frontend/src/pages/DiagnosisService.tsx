@@ -140,7 +140,7 @@ export default function ImageDiagnosis() {
            throw new Error('Lỗi tạo báo cáo.');
         }
         const data = await res.json();
-        setReportText(data.text);
+        setReportText(data.report);
       })
       .catch((err) => {
         console.error(err);
