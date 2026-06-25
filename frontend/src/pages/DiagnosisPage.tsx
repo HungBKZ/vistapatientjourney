@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useLanguage } from "../contexts/LanguageContext";
 import { isTokenValid } from "@/utils/auth";
 
 export default function LandingPage() {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
 
     const [isOpen, setIsOpen] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const toggleMute = () => {
+        if (videoRef.current) {
+            videoRef.current.muted = !videoRef.current.muted;
+            setIsMuted(videoRef.current.muted);
+        }
+    };
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -45,9 +54,15 @@ export default function LandingPage() {
             const data = await res.text();
             console.log("2")
 
-            // Giả sử API trả về object có chứa key token: { token: "eyJhbG..." }
-            // Nếu API trả về chuỗi thuần túy (plain text), dùng: const tokenStr = await res.text();
-            const tokenStr = data.token || data;
+            let tokenStr = data;
+            try {
+                const parsed = JSON.parse(data);
+                if (parsed && typeof parsed === "object" && parsed.token) {
+                    tokenStr = parsed.token;
+                }
+            } catch (e) {
+                // data không phải là JSON, giữ nguyên tokenStr là plain text
+            }
 
             console.log("wiuefhwueifh")
             console.log(tokenStr)
@@ -147,6 +162,91 @@ export default function LandingPage() {
                     </div>
                 </div>
             </section>
+
+            {/* ===== VIDEO DEMO SECTION ===== */}
+            <section className="relative bg-slate-900 py-20 overflow-hidden">
+                {/* Background decorative glows */}
+                <div className="absolute top-1/4 left-1/4 -translate-y-1/2 h-96 w-96 rounded-full bg-cyan-500/10 blur-[100px] pointer-events-none" />
+                <div className="absolute bottom-1/4 right-1/4 translate-y-1/2 h-96 w-96 rounded-full bg-blue-500/10 blur-[100px] pointer-events-none" />
+
+                <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+                    {/* Header */}
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <span className="inline-flex rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold text-cyan-400 tracking-wider uppercase mb-4">
+                            Interactive Demo
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                            {language === "vi"
+                                ? "Xem Trải Nghiệm Demo Hệ Thống"
+                                : language === "km"
+                                    ? "វីដេអូបង្ហាញពីប្រព័ន្ធ"
+                                    : "System Demo Experience"}
+                        </h2>
+                        <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                            {language === "vi"
+                                ? "Khám phá cách thức trí tuệ nhân tạo hỗ trợ các chuyên gia y tế chẩn đoán, khoanh vùng tổn thương võng mạc và lập báo cáo chi tiết."
+                                : language === "km"
+                                    ? "ស្វែងយល់ពីរបៀបដែល AI ជួយវិនិច្ឆ័យជំងឺភ្នែក ដៅតំបន់ដែលខូចខាត និងបង្កើតរបាយការណ៍លម្អិត។"
+                                    : "Explore how our AI model assists healthcare professionals in detecting lesions, segmenting affected areas, and generating comprehensive reports."}
+                        </p>
+                    </div>
+
+                    {/* Desktop/Tablet Device Mockup */}
+                    <div className="relative mx-auto max-w-4xl">
+                        {/* Glowing backdrop border effect */}
+                        <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 opacity-30 blur-lg transition duration-1000 group-hover:opacity-100 pointer-events-none shadow-[0_0_50px_rgba(6,182,212,0.15)]" />
+
+                        {/* The Mockup Box */}
+                        <div className="relative overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-950/80 shadow-2xl backdrop-blur-xl">
+                            {/* Browser/System Bar */}
+                            <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900/60 px-4 py-3">
+                                <div className="flex space-x-2">
+                                    <div className="h-3.5 w-3.5 rounded-full bg-red-500/80" />
+                                    <div className="h-3.5 w-3.5 rounded-full bg-yellow-500/80" />
+                                    <div className="h-3.5 w-3.5 rounded-full bg-green-500/80" />
+                                </div>
+                                <div className="hidden sm:block text-xs font-mono text-slate-500 bg-slate-950/50 px-6 py-1 rounded-md border border-slate-800/40">
+                                    https://vistapatientjourney.vn/diagnosis-demo
+                                </div>
+                                <div className="w-12" /> {/* Spacer */}
+                            </div>
+
+                            {/* Video Display Container */}
+                            <div className="relative aspect-video w-full bg-black">
+                                <video
+                                    ref={videoRef}
+                                    className="h-full w-full object-cover"
+                                    src="https://res.cloudinary.com/dvucotc8z/video/upload/v1782282656/0624_iu2dl0.mp4"
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                />
+
+                                {/* Glassmorphic Controls Bar */}
+                                <div className="absolute bottom-4 right-4 flex items-center gap-3 rounded-xl bg-slate-900/85 p-2.5 text-white backdrop-blur-md border border-slate-700/50 shadow-lg">
+                                    <button
+                                        onClick={toggleMute}
+                                        className="flex items-center justify-center p-2 rounded-lg bg-cyan-600/30 hover:bg-cyan-600 text-cyan-300 hover:text-white transition duration-200"
+                                        title={isMuted ? "Unmute" : "Mute"}
+                                    >
+                                        {isMuted ? (
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6L4.5 9H1.5v6h3l4.5 3.75V5.25z" />
+                                            </svg>
+                                        ) : (
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28-5.3v15.88a.75.75 0 01-1.28-.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section className="relative min-h-screen w-full">
                 <div
                     className="
