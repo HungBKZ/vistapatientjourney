@@ -402,6 +402,16 @@ export default function EyeSimulationPage() {
     return minBlur;
   };
 
+  // Quy đổi kích thước mặt từ camera (rawDist từ ~0.08 đến ~0.24) sang khoảng cách vật lý giả lập (0.48m về 0.12m)
+  const getSimulatedDistance = (rawDist: number | null): number => {
+    if (rawDist === null) return manualDistance;
+    const minRaw = 0.08; // Xa
+    const maxRaw = 0.24; // Gần (thoải mái, không cần dí sát mặt)
+    const clampedRaw = Math.max(minRaw, Math.min(maxRaw, rawDist));
+    const t = (clampedRaw - minRaw) / (maxRaw - minRaw);
+    return 0.48 - t * (0.48 - 0.12);
+  };
+
   // Vòng lặp vẽ chính (chạy 60 FPS)
   useEffect(() => {
     let animationId: number;
@@ -484,8 +494,7 @@ export default function EyeSimulationPage() {
         }
         
         if (detectedDistance !== null) {
-          // Quy đổi kích thước mặt sang khoảng cách vật lý: mặt lớn = gần (trị số nhỏ), mặt nhỏ = xa (trị số lớn)
-          physicalCameraDist = Math.max(0.12, Math.min(0.48, 0.60 - detectedDistance));
+          physicalCameraDist = getSimulatedDistance(smoothedDistanceRef.current);
           currentDist = physicalCameraDist;
         }
       } else {
@@ -723,7 +732,7 @@ export default function EyeSimulationPage() {
             <div className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping" />
             <span>
               {detectedDistance !== null 
-                ? `${getTranslation('cameraLabel')}: ${(Math.max(0.12, Math.min(0.48, 0.60 - detectedDistance)) * 100).toFixed(0)}cm (${(0.60 - detectedDistance) < 0.25 ? getTranslation('veryCloseLabel') : (0.60 - detectedDistance) > 0.38 ? getTranslation('farLabel') : getTranslation('normalLabel')})`
+                ? `${getTranslation('cameraLabel')}: ${(getSimulatedDistance(detectedDistance) * 100).toFixed(0)}cm (${getSimulatedDistance(detectedDistance) < 0.22 ? getTranslation('veryCloseLabel') : getSimulatedDistance(detectedDistance) > 0.38 ? getTranslation('farLabel') : getTranslation('normalLabel')})`
                 : `${getTranslation('manualLabel')}: ${(manualDistance * 100).toFixed(0)}cm`
               }
             </span>
@@ -847,14 +856,14 @@ export default function EyeSimulationPage() {
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-semibold text-slate-400">
                 <span>{getTranslation('simulatedDistance')}</span>
-                <span className="text-white font-mono">{(manualDistance * 100).toFixed(0)}cm</span>
+                <span className="text-white font-mono">{((detectedDistance !== null ? getSimulatedDistance(detectedDistance) : manualDistance) * 100).toFixed(0)}cm</span>
               </div>
               <input
                 type="range"
                 min="0.12"
                 max="0.48"
                 step="0.01"
-                value={detectedDistance !== null ? detectedDistance : manualDistance}
+                value={detectedDistance !== null ? getSimulatedDistance(detectedDistance) : manualDistance}
                 disabled={detectedDistance !== null}
                 onChange={(e) => setManualDistance(parseFloat(e.target.value))}
                 className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500 disabled:opacity-50"
