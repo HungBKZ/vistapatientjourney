@@ -3,27 +3,27 @@ import { motion, Variants } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const IMAGES = {
-  hero: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/626784497_122119516335062997_710351683700892706_n_wsoxsy.jpg',
-  eyeExam: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124345/FPT00743.png_gaci6n.jpg',
-  equipment: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124263/IMG_3524_ozyraw.jpg',
-  clinic: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124263/IMG_3542_mpzbid.jpg',
-  patient: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124262/IMG_6789_aqpunj.jpg',
+  hero: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1770316668/626784497_122119516335062997_710351683700892706_n_wsoxsy.jpg',
+  eyeExam: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784124345/FPT00743.png_gaci6n.jpg',
+  equipment: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784124263/IMG_3524_ozyraw.jpg',
+  clinic: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784124263/IMG_3542_mpzbid.jpg',
+  patient: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784124262/IMG_6789_aqpunj.jpg',
 };
 
 const VISTA_TEAM = [
-  { name: 'Nguyễn Hữu Lượng', major: 'Digital Marketing', title: 'CEO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712466/z7442634880142_d1779c60ccfa68bc2b718ba79d8d3ba8_s5iju9.jpg' },
-  { name: 'Cao Tấn Lộc', major: 'Digital Marketing', title: 'CFO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712466/z7442634925500_413fc3f62c978bfaf62aa66199e81a31_tohe3n.jpg' },
-  { name: 'Phan Thành Hưng', major: 'Kỹ thuật phần mềm', title: 'CMO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712464/z7442634833477_2286a80cd4f6393795e49ddfffd71623_mawixx.jpg' },
-  { name: 'Bùi Trung Kiên', major: 'Kỹ thuật phần mềm', title: 'CTO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712462/z7442634788388_7d5938f76594d416c83fb6de684724c6_u7ndnr.jpg' },
-  { name: 'Lê Lý Đức', major: 'Ngôn ngữ Anh', title: 'COO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712462/z7442634742484_b0208a6d8ad19b123814f6aab2254929_c7cubq.jpg' },
-  { name: 'Đoàn Hoài Ánh Dương', major: 'Thiết kế mỹ thuật', title: 'CCO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712464/z7442634696050_e53b234f0d72a1ffa7f25cb0b7fd9907_m2rqag.jpg' },
+  { name: 'Nguyễn Hữu Lượng', major: 'Digital Marketing', title: 'CEO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712466/z7442634880142_d1779c60ccfa68bc2b718ba79d8d3ba8_s5iju9.jpg' },
+  { name: 'Cao Tấn Lộc', major: 'Digital Marketing', title: 'CFO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712466/z7442634925500_413fc3f62c978bfaf62aa66199e81a31_tohe3n.jpg' },
+  { name: 'Phan Thành Hưng', major: 'Kỹ thuật phần mềm', title: 'CMO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712464/z7442634833477_2286a80cd4f6393795e49ddfffd71623_mawixx.jpg' },
+  { name: 'Bùi Trung Kiên', major: 'Kỹ thuật phần mềm', title: 'CTO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712462/z7442634788388_7d5938f76594d416c83fb6de684724c6_u7ndnr.jpg' },
+  { name: 'Lê Lý Đức', major: 'Ngôn ngữ Anh', title: 'COO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712462/z7442634742484_b0208a6d8ad19b123814f6aab2254929_c7cubq.jpg' },
+  { name: 'Đoàn Hoài Ánh Dương', major: 'Thiết kế mỹ thuật', title: 'CCO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712464/z7442634696050_e53b234f0d72a1ffa7f25cb0b7fd9907_m2rqag.jpg' },
 ] as const;
 
 const ADVISORS = [
-  { name: 'BS.CKI Tôn Quang Anh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784122935/BS.CKI_T%C3%B4n_Quang_Anh_buj3rg.jpg' },
-  { name: 'BS.CKII Nguyễn Hữu Đức', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784122485/BS.CKII_Nguy%E1%BB%85n_H%E1%BB%AFu_%C4%90%E1%BB%A9c_jnqbpp.png' },
-  { name: 'BSNT. Trần Thị Khánh Linh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784122484/BSNT._Tr%E1%BA%A7n_Th%E1%BB%8B_Kh%C3%A1nh_Linh_g02sei.png' },
-  { name: 'BS.CKII Trần Bá Kiền', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784122482/BS.CKII_Tr%E1%BA%A7n_B%C3%A1_Ki%E1%BB%81n_nvqsem.jpg' },
+  { name: 'BS.CKI Tôn Quang Anh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122935/BS.CKI_T%C3%B4n_Quang_Anh_buj3rg.jpg' },
+  { name: 'BS.CKII Nguyễn Hữu Đức', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122485/BS.CKII_Nguy%E1%BB%85n_H%E1%BB%AFu_%C4%90%E1%BB%A9c_jnqbpp.png' },
+  { name: 'BSNT. Trần Thị Khánh Linh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122484/BSNT._Tr%E1%BA%A7n_Th%E1%BB%8B_Kh%C3%A1nh_Linh_g02sei.png' },
+  { name: 'BS.CKII Trần Bá Kiền', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122482/BS.CKII_Tr%E1%BA%A7n_B%C3%A1_Ki%E1%BB%81n_nvqsem.jpg' },
 ] as const;
 
 const containerVariants: Variants = {

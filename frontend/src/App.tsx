@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
@@ -7,9 +8,7 @@ import BookingPage from './pages/BookingPage';
 import ServicesPage from './pages/ServicesPage';
 import KnowledgePage from './pages/KnowledgePage';
 import ExplorePage from './pages/ExplorePage';
-import JourneyPage from './pages/JourneyPage';
 import DiagnosisPage from './pages/DiagnosisPage';
-import DiagnosisService from './pages/DiagnosisService';
 import QuizPage from './pages/QuizPage';
 import PodcastPage from './pages/PodcastPage';
 import VideoPage from './VideoPage.jsx';
@@ -21,11 +20,24 @@ import ClusterPage from './pages/ClusterPage';
 import ArticlePage from './pages/ArticlePage';
 import RouteSeo from './seo/RouteSeo';
 import AnalyticsTracker from './analytics/AnalyticsTracker';
-import VirtualTryOnPage from './pages/VirtualTryOnPage';
 import ColorBlindTestPage from './pages/ColorBlindTestPage';
-import EyeSimulationPage from './pages/EyeSimulationPage';
-import BlinkGamePage from './pages/BlinkGamePage';
-import EyeNinjaPage from './pages/EyeNinjaPage';
+
+// Heavy modules loaded lazily to optimize initial bundle size & Core Web Vitals
+const JourneyPage = lazy(() => import('./pages/JourneyPage'));
+const DiagnosisService = lazy(() => import('./pages/DiagnosisService'));
+const VirtualTryOnPage = lazy(() => import('./pages/VirtualTryOnPage'));
+const EyeSimulationPage = lazy(() => import('./pages/EyeSimulationPage'));
+const BlinkGamePage = lazy(() => import('./pages/BlinkGamePage'));
+const EyeNinjaPage = lazy(() => import('./pages/EyeNinjaPage'));
+
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-slate-950">
+    <div className="flex flex-col items-center gap-3">
+      <div className="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin" />
+      <span className="text-slate-400 text-xs font-semibold tracking-wider uppercase animate-pulse">VISTA Loading...</span>
+    </div>
+  </div>
+);
 
 function AppShell() {
   const location = useLocation();
@@ -39,30 +51,32 @@ function AppShell() {
     <div className="min-h-screen flex flex-col">
       {!isImmersivePage && <Header />}
       <main className={isImmersivePage ? 'flex-grow h-screen' : 'flex-grow md:pb-0 pt-0'}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/booking" element={<BookingPage />} />
-          {/* <Route path="/services" element={<ServicesPage />} /> */}
-          <Route path="/knowledge" element={<KnowledgePage />} />
-          <Route path="/explore" element={<ExplorePage />} />
-          <Route path="/journey" element={<JourneyPage />} />
-          <Route path="/diagnosis" element={<DiagnosisPage />} />
-          <Route path="/diagnosis-service" element={<DiagnosisService />} />
-          <Route path="/quiz" element={<QuizPage />} />
-          <Route path="/podcast" element={<PodcastPage />} />
-          <Route path="/video" element={<VideoPage />} />
-          <Route path="/kien-thuc" element={<KnowledgeHubPage />} />
-          <Route path="/kien-thuc/:clusterSlug" element={<ClusterPage />} />
-          <Route path="/kien-thuc/:clusterSlug/:articleSlug" element={<ArticlePage />} />
-          <Route path="/virtual-try-on" element={<VirtualTryOnPage />} />
-          <Route path="/color-blind-test" element={<ColorBlindTestPage />} />
-          <Route path="/eye-simulation" element={<EyeSimulationPage />} />
-          <Route path="/explore/blink-flight" element={<BlinkGamePage />} />
-          <Route path="/explore/eye-ninja" element={<EyeNinjaPage />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-          <Route path="*" element={<HomePage />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/booking" element={<BookingPage />} />
+            {/* <Route path="/services" element={<ServicesPage />} /> */}
+            <Route path="/knowledge" element={<KnowledgePage />} />
+            <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/journey" element={<JourneyPage />} />
+            <Route path="/diagnosis" element={<DiagnosisPage />} />
+            <Route path="/diagnosis-service" element={<DiagnosisService />} />
+            <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/podcast" element={<PodcastPage />} />
+            <Route path="/video" element={<VideoPage />} />
+            <Route path="/kien-thuc" element={<KnowledgeHubPage />} />
+            <Route path="/kien-thuc/:clusterSlug" element={<ClusterPage />} />
+            <Route path="/kien-thuc/:clusterSlug/:articleSlug" element={<ArticlePage />} />
+            <Route path="/virtual-try-on" element={<VirtualTryOnPage />} />
+            <Route path="/color-blind-test" element={<ColorBlindTestPage />} />
+            <Route path="/eye-simulation" element={<EyeSimulationPage />} />
+            <Route path="/explore/blink-flight" element={<BlinkGamePage />} />
+            <Route path="/explore/eye-ninja" element={<EyeNinjaPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+            <Route path="*" element={<HomePage />} />
+          </Routes>
+        </Suspense>
       </main>
       {!isImmersivePage && <Footer />}
       {!isImmersivePage && <MobileNavBar />}
