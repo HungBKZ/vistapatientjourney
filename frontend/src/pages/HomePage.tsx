@@ -4,19 +4,26 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const IMAGES = {
   hero: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1770316668/626784497_122119516335062997_710351683700892706_n_wsoxsy.jpg',
-  eyeExam: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/b_cvek81.jpg',
-  equipment: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/d_cuvmbv.jpg',
-  clinic: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712371/Screenshot_2026-01-18_115905_oj9yww.png',
-  patient: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768710759/a_xnxud3.jpg',
+  eyeExam: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124345/FPT00743.png_gaci6n.jpg',
+  equipment: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124263/IMG_3524_ozyraw.jpg',
+  clinic: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124263/IMG_3542_mpzbid.jpg',
+  patient: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124262/IMG_6789_aqpunj.jpg',
 };
 
 const VISTA_TEAM = [
-  { name: 'Nguyễn Hữu Lượng', major: 'Truyền thông kỹ thuật số', title: 'CEO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712466/z7442634880142_d1779c60ccfa68bc2b718ba79d8d3ba8_s5iju9.jpg' },
-  { name: 'Cao Tấn Lộc', major: 'Truyền thông kỹ thuật số', title: 'CFO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712466/z7442634925500_413fc3f62c978bfaf62aa66199e81a31_tohe3n.jpg' },
+  { name: 'Nguyễn Hữu Lượng', major: 'Digital Marketing', title: 'CEO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712466/z7442634880142_d1779c60ccfa68bc2b718ba79d8d3ba8_s5iju9.jpg' },
+  { name: 'Cao Tấn Lộc', major: 'Digital Marketing', title: 'CFO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712466/z7442634925500_413fc3f62c978bfaf62aa66199e81a31_tohe3n.jpg' },
   { name: 'Phan Thành Hưng', major: 'Kỹ thuật phần mềm', title: 'CMO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712464/z7442634833477_2286a80cd4f6393795e49ddfffd71623_mawixx.jpg' },
   { name: 'Bùi Trung Kiên', major: 'Kỹ thuật phần mềm', title: 'CTO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712462/z7442634788388_7d5938f76594d416c83fb6de684724c6_u7ndnr.jpg' },
   { name: 'Lê Lý Đức', major: 'Ngôn ngữ Anh', title: 'COO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712462/z7442634742484_b0208a6d8ad19b123814f6aab2254929_c7cubq.jpg' },
   { name: 'Đoàn Hoài Ánh Dương', major: 'Thiết kế mỹ thuật', title: 'CCO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1768712464/z7442634696050_e53b234f0d72a1ffa7f25cb0b7fd9907_m2rqag.jpg' },
+] as const;
+
+const ADVISORS = [
+  { name: 'BS.CKI Tôn Quang Anh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784122935/BS.CKI_T%C3%B4n_Quang_Anh_buj3rg.jpg' },
+  { name: 'BS.CKII Nguyễn Hữu Đức', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784122485/BS.CKII_Nguy%E1%BB%85n_H%E1%BB%AFu_%C4%90%E1%BB%A9c_jnqbpp.png' },
+  { name: 'BSNT. Trần Thị Khánh Linh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784122484/BSNT._Tr%E1%BA%A7n_Th%E1%BB%8B_Kh%C3%A1nh_Linh_g02sei.png' },
+  { name: 'BS.CKII Trần Bá Kiền', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784122482/BS.CKII_Tr%E1%BA%A7n_B%C3%A1_Ki%E1%BB%81n_nvqsem.jpg' },
 ] as const;
 
 const containerVariants: Variants = {
@@ -222,6 +229,58 @@ export default function HomePage() {
                       <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-xs font-black uppercase tracking-wider border border-blue-500/20 shadow-sm">{member.title}</span>
                     </div>
                     <p className="text-slate-400 text-sm font-semibold tracking-wide">{member.major}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 🚀 3.5. Advisors Section */}
+      <section className="relative py-24 md:py-36 overflow-hidden bg-slate-950">
+        <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full z-10">
+          <div className="text-center mb-20 space-y-3">
+            <p className="text-blue-400 font-bold tracking-widest uppercase text-xs sm:text-sm bg-white/5 w-fit px-4 py-1.5 rounded-full mx-auto backdrop-blur-sm border border-white/10">{t('home.advisors.badge')}</p>
+            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">{t('home.advisors.title')}</h2>
+          </div>
+
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8"
+          >
+            {ADVISORS.map((advisor) => (
+              <motion.div
+                key={advisor.name}
+                variants={itemVariants}
+                whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                className="group relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/40 hover:shadow-[0_20px_50px_rgba(30,41,59,0.7)] transition-all duration-300"
+              >
+                <div className="h-24 bg-gradient-to-br from-blue-600/20 via-sky-500/10 to-purple-600/20 group-hover:from-blue-600/30 group-hover:to-purple-600/30 transition-colors duration-500" />
+                
+                <div className="px-6 pb-8 text-center relative">
+                  <div className="flex justify-center -mt-12">
+                    <div className="w-24 h-24 rounded-full ring-4 ring-slate-950 shadow-xl overflow-hidden bg-slate-800 relative">
+                      <motion.img 
+                        whileHover={{ scale: 1.1, rotate: 3 }}
+                        transition={{ type: 'spring', stiffness: 200 }}
+                        src={advisor.image} 
+                        alt={advisor.name} 
+                        className="w-full h-full object-cover object-top origin-bottom" 
+                        loading="lazy" 
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="mt-5 space-y-2">
+                    <div className="flex items-center justify-center gap-2 flex-wrap">
+                      <h3 className="font-extrabold text-lg text-white tracking-tight group-hover:text-blue-400 transition-colors duration-300">{advisor.name}</h3>
+                    </div>
+                    <p className="text-slate-400 text-sm font-semibold tracking-wide">{advisor.title}</p>
                   </div>
                 </div>
               </motion.div>
