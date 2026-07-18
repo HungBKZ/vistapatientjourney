@@ -8,323 +8,172 @@ interface IshiharaPlate {
   id: number;
   correctAnswer: string;
   type: 'demonstration' | 'transformation' | 'hidden';
+  image: string;
   description: string;
-  bgColors: string[];
-  numColors: string[];
 }
 
 const ishiharaPlates: IshiharaPlate[] = [
-  { 
-    id: 1, 
-    correctAnswer: '12',
-    type: 'demonstration',
-    description: 'Plate demo - Tất cả mọi người đều đọc được số 12',
-    bgColors: ['#7CB342', '#8BC34A', '#9CCC65', '#689F38', '#7CB342', '#AED581'], 
-    numColors: ['#E53935', '#F44336', '#EF5350', '#D32F2F', '#C62828', '#FF5252'], 
+  {
+    id: 1,
+    correctAnswer: '7',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376215/Screenshot_2026-07-18_190017_r3bsnz.png',
+    description: 'Người bình thường đọc: 7',
   },
-  { 
-    id: 2, 
+  {
+    id: 2,
+    correctAnswer: '2',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376215/Screenshot_2026-07-18_185958_mum3fn.png',
+    description: 'Người bình thường đọc: 2',
+  },
+  {
+    id: 3,
+    correctAnswer: '7',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376215/Screenshot_2026-07-18_190008_lpzlyy.png',
+    description: 'Người bình thường đọc: 7',
+  },
+  {
+    id: 4,
+    correctAnswer: '5',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376215/Screenshot_2026-07-18_190023_ukfblz.png',
+    description: 'Người bình thường đọc: 5',
+  },
+  {
+    id: 5,
     correctAnswer: '8',
     type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376214/Screenshot_2026-07-18_190035_y2nssk.png',
     description: 'Người bình thường đọc: 8',
-    bgColors: ['#66BB6A', '#81C784', '#A5D6A7', '#4CAF50', '#43A047', '#C8E6C9'],
-    numColors: ['#FF7043', '#FF8A65', '#FFAB91', '#F4511E', '#E64A19', '#FF5722'],
   },
-  { 
-    id: 3, 
+  {
+    id: 6,
+    correctAnswer: '4',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376214/Screenshot_2026-07-18_190029_qwrqla.png',
+    description: 'Người bình thường đọc: 4',
+  },
+  {
+    id: 7,
+    correctAnswer: '2',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376214/Screenshot_2026-07-18_190043_zkx1dm.png',
+    description: 'Người bình thường đọc: 2',
+  },
+  {
+    id: 8,
     correctAnswer: '6',
     type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376214/Screenshot_2026-07-18_190049_hn916c.png',
     description: 'Người bình thường đọc: 6',
-    bgColors: ['#9CCC65', '#AED581', '#C5E1A5', '#8BC34A', '#7CB342', '#DCEDC8'],
-    numColors: ['#FF5722', '#FF7043', '#FF8A65', '#F4511E', '#E64A19', '#BF360C'],
   },
-  { 
-    id: 4, 
-    correctAnswer: '29',
-    type: 'transformation', 
-    description: 'Người bình thường đọc: 29',
-    bgColors: ['#AED581', '#C5E1A5', '#DCEDC8', '#9CCC65', '#8BC34A', '#E8F5E9'],
-    numColors: ['#EF6C00', '#F57C00', '#FF9800', '#E65100', '#FB8C00', '#FFA726'],
-  },
-  { 
-    id: 5, 
-    correctAnswer: '57',
-    type: 'transformation',
-    description: 'Người bình thường đọc: 57',
-    bgColors: ['#689F38', '#7CB342', '#8BC34A', '#558B2F', '#33691E', '#9CCC65'],
-    numColors: ['#FFB300', '#FFC107', '#FFCA28', '#FFA000', '#FF8F00', '#FFD54F'],
-  },
-  { 
-    id: 6, 
-    correctAnswer: '5',
-    type: 'transformation',
-    description: 'Người bình thường đọc: 5',
-    bgColors: ['#81C784', '#A5D6A7', '#C8E6C9', '#66BB6A', '#4CAF50', '#E8F5E9'],
-    numColors: ['#E91E63', '#EC407A', '#F06292', '#D81B60', '#C2185B', '#F48FB1'],
-  },
-  { 
-    id: 7, 
-    correctAnswer: '3',
-    type: 'transformation',
-    description: 'Người bình thường đọc: 3',
-    bgColors: ['#C5E1A5', '#DCEDC8', '#E8F5E9', '#AED581', '#9CCC65', '#F1F8E9'],
-    numColors: ['#D32F2F', '#E53935', '#F44336', '#C62828', '#B71C1C', '#EF5350'],
-  },
-  { 
-    id: 8, 
-    correctAnswer: '15',
-    type: 'transformation',
-    description: 'Người bình thường đọc: 15',
-    bgColors: ['#AFB42B', '#C0CA33', '#CDDC39', '#9E9D24', '#827717', '#D4E157'],
-    numColors: ['#FF5252', '#FF1744', '#F44336', '#D50000', '#E53935', '#FF8A80'],
-  },
-  { 
-    id: 9, 
-    correctAnswer: '74',
-    type: 'transformation',
-    description: 'Người bình thường đọc: 74',
-    bgColors: ['#7CB342', '#8BC34A', '#9CCC65', '#689F38', '#558B2F', '#AED581'],
-    numColors: ['#FF6F00', '#FF8F00', '#FFA000', '#E65100', '#FFB300', '#FFCA28'],
-  },
-  { 
-    id: 10, 
+  {
+    id: 9,
     correctAnswer: '2',
     type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376214/Screenshot_2026-07-18_190055_wcx6r1.png',
     description: 'Người bình thường đọc: 2',
-    bgColors: ['#4CAF50', '#66BB6A', '#81C784', '#43A047', '#388E3C', '#A5D6A7'],
-    numColors: ['#D50000', '#FF1744', '#F44336', '#B71C1C', '#C62828', '#E53935'],
   },
-  { 
-    id: 11, 
-    correctAnswer: '97',
-    type: 'transformation',
-    description: 'Người bình thường đọc: 97',
-    bgColors: ['#DCEDC8', '#E8F5E9', '#F1F8E9', '#C5E1A5', '#AED581', '#FAFAFA'],
-    numColors: ['#AD1457', '#C2185B', '#D81B60', '#880E4F', '#E91E63', '#EC407A'],
-  },
-  { 
-    id: 12, 
-    correctAnswer: '45',
-    type: 'transformation',
-    description: 'Người bình thường đọc: 45',
-    bgColors: ['#8BC34A', '#9CCC65', '#AED581', '#7CB342', '#689F38', '#C5E1A5'],
-    numColors: ['#E65100', '#EF6C00', '#F57C00', '#BF360C', '#FF9800', '#FF5722'],
-  },
-  { 
-    id: 13, 
+  {
+    id: 10,
     correctAnswer: '2',
-    type: 'hidden',
-    description: 'Người mù màu nhìn thấy: 2 (Người bình thường không thấy số)',
-    bgColors: ['#26A69A', '#4DB6AC', '#80CBC4', '#009688', '#00897B', '#B2DFDB'],
-    numColors: ['#FF8A65', '#FFAB91', '#FFCCBC', '#FF7043', '#FF5722', '#FBE9E7'],
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376214/Screenshot_2026-07-18_190101_ta6tia.png',
+    description: 'Người bình thường đọc: 2',
   },
-  { 
-    id: 14, 
+  {
+    id: 11,
+    correctAnswer: '7',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376213/Screenshot_2026-07-18_190111_ac9ft3.png',
+    description: 'Người bình thường đọc: 7',
+  },
+  {
+    id: 12,
+    correctAnswer: '6',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376214/Screenshot_2026-07-18_190106_aml94z.png',
+    description: 'Người bình thường đọc: 6',
+  },
+  {
+    id: 13,
+    correctAnswer: '8',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376213/Screenshot_2026-07-18_190117_grhgba.png',
+    description: 'Người bình thường đọc: 8',
+  },
+  {
+    id: 14,
+    correctAnswer: '6',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376213/Screenshot_2026-07-18_190149_iqrhtp.png',
+    description: 'Người bình thường đọc: 6',
+  },
+  {
+    id: 15,
+    correctAnswer: '6',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376213/Screenshot_2026-07-18_190122_plnmft.png',
+    description: 'Người bình thường đọc: 6',
+  },
+  {
+    id: 16,
     correctAnswer: '5',
-    type: 'hidden',
-    description: 'Người mù màu nhìn thấy: 5 (Người bình thường không thấy số)',
-    bgColors: ['#AB47BC', '#BA68C8', '#CE93D8', '#9C27B0', '#8E24AA', '#E1BEE7'],
-    numColors: ['#7986CB', '#9FA8DA', '#C5CAE9', '#5C6BC0', '#3F51B5', '#E8EAF6'],
-  },
-  { 
-    id: 15, 
-    correctAnswer: '16',
-    type: 'hidden',
-    description: 'Người mù màu nhìn thấy: 16 (Người bình thường không thấy số)',
-    bgColors: ['#FFCC80', '#FFE0B2', '#FFF3E0', '#FFB74D', '#FFA726', '#FFECB3'],
-    numColors: ['#A5D6A7', '#C8E6C9', '#E8F5E9', '#81C784', '#66BB6A', '#DCEDC8'],
-  },
-  { 
-    id: 16, 
-    correctAnswer: '42',
-    type: 'hidden', 
-    description: 'Người mù màu nhìn thấy: 42 (Người bình thường không thấy số)',
-    bgColors: ['#EF9A9A', '#FFCDD2', '#FFEBEE', '#E57373', '#EF5350', '#FCE4EC'],
-    numColors: ['#80DEEA', '#B2EBF2', '#E0F7FA', '#4DD0E1', '#26C6DA', '#E0F2F1'],
-  },
-  { 
-    id: 17, 
-    correctAnswer: '73',
     type: 'transformation',
-    description: 'Người bình thường đọc: 73',
-    bgColors: ['#66BB6A', '#81C784', '#A5D6A7', '#4CAF50', '#43A047', '#C8E6C9'],
-    numColors: ['#FF5722', '#FF7043', '#FF8A65', '#F4511E', '#E64A19', '#FFAB91'],
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376213/Screenshot_2026-07-18_185934_rhakux.png',
+    description: 'Người bình thường đọc: 5',
   },
-  { 
-    id: 18, 
-    correctAnswer: '26',
+  {
+    id: 17,
+    correctAnswer: '2',
     type: 'transformation',
-    description: 'Người bình thường đọc: 26',
-    bgColors: ['#AED581', '#C5E1A5', '#DCEDC8', '#9CCC65', '#8BC34A', '#E8F5E9'],
-    numColors: ['#D84315', '#E64A19', '#F4511E', '#BF360C', '#FF5722', '#FF7043'],
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376213/Screenshot_2026-07-18_190145_gxawtm.png',
+    description: 'Người bình thường đọc: 2',
+  },
+  {
+    id: 18,
+    correctAnswer: '6',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376213/Screenshot_2026-07-18_190128_yj1mjs.png',
+    description: 'Người bình thường đọc: 6',
+  },
+  {
+    id: 19,
+    correctAnswer: '8',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376212/Screenshot_2026-07-18_190139_stuwif.png',
+    description: 'Người bình thường đọc: 8',
+  },
+  {
+    id: 20,
+    correctAnswer: '4',
+    type: 'transformation',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784376212/Screenshot_2026-07-18_185946_zoog0i.png',
+    description: 'Người bình thường đọc: 4',
   },
 ];
 
-// Vẽ từng segment của nét chữ số
-const getDigitPath = (digit: string, cx: number, cy: number, size: number) => {
-  const h = size;
-  const w = size * 0.6;
-  const t = size * 0.18; // Độ dày nét vẽ
-
-  const segments: Record<string, string[]> = {
-    '0': ['top', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight', 'bottom'],
-    '1': ['topRight', 'bottomRight'],
-    '2': ['top', 'topRight', 'middle', 'bottomLeft', 'bottom'],
-    '3': ['top', 'topRight', 'middle', 'bottomRight', 'bottom'],
-    '4': ['topLeft', 'topRight', 'middle', 'bottomRight'],
-    '5': ['top', 'topLeft', 'middle', 'bottomRight', 'bottom'],
-    '6': ['top', 'topLeft', 'middle', 'bottomLeft', 'bottomRight', 'bottom'],
-    '7': ['top', 'topRight', 'bottomRight'],
-    '8': ['top', 'topLeft', 'topRight', 'middle', 'bottomLeft', 'bottomRight', 'bottom'],
-    '9': ['top', 'topLeft', 'topRight', 'middle', 'bottomRight', 'bottom'],
-  };
-
-  const activeSegments = segments[digit] || [];
-  const rects: { x: number; y: number; w: number; h: number }[] = [];
-
-  activeSegments.forEach((seg) => {
-    switch (seg) {
-      case 'top':
-        rects.push({ x: cx - w / 2, y: cy - h / 2, w: w, h: t });
-        break;
-      case 'middle':
-        rects.push({ x: cx - w / 2, y: cy - t / 2, w: w, h: t });
-        break;
-      case 'bottom':
-        rects.push({ x: cx - w / 2, y: cy + h / 2 - t, w: w, h: t });
-        break;
-      case 'topLeft':
-        rects.push({ x: cx - w / 2, y: cy - h / 2, w: t, h: h / 2 + t / 2 });
-        break;
-      case 'bottomLeft':
-        rects.push({ x: cx - w / 2, y: cy - t / 2, w: t, h: h / 2 + t / 2 });
-        break;
-      case 'topRight':
-        rects.push({ x: cx + w / 2 - t, y: cy - h / 2, w: t, h: h / 2 + t / 2 });
-        break;
-      case 'bottomRight':
-        rects.push({ x: cx + w / 2 - t, y: cy - t / 2, w: t, h: h / 2 + t / 2 });
-        break;
-    }
-  });
-
-  return rects;
-};
-
-const createNumberPath = (numberStr: string, centerX: number, centerY: number, fontSize: number) => {
-  const paths: { x: number; y: number; w: number; h: number }[] = [];
-  const digits = numberStr.split('');
-  const digitWidth = fontSize * 0.7;
-  const totalWidth = digits.length * digitWidth;
-  let startX = centerX - totalWidth / 2;
-
-  digits.forEach((digit) => {
-    const digitPath = getDigitPath(digit, startX + digitWidth / 2, centerY, fontSize);
-    paths.push(...digitPath);
-    startX += digitWidth;
-  });
-
-  return paths;
-};
-
-const isPointInNumberPath = (px: number, py: number, rects: { x: number; y: number; w: number; h: number }[]) => {
-  for (const rect of rects) {
-    if (px >= rect.x && px <= rect.x + rect.w && py >= rect.y && py <= rect.y + rect.h) {
-      return true;
-    }
-  }
-  return false;
-};
-
-// Hàm vẽ đĩa Ishihara trên Canvas
-const drawIshiharaPlate = (canvas: HTMLCanvasElement, plate: IshiharaPlate) => {
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  const size = canvas.width;
-  const centerX = size / 2;
-  const centerY = size / 2;
-  const radius = size / 2 - 5;
-
-  ctx.clearRect(0, 0, size, size);
-
-  // Background off-white chuyên dụng
-  ctx.fillStyle = '#f5f5f0';
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-  ctx.fill();
-
-  const dots: { x: number; y: number; radius: number; color: string }[] = [];
-  const minDotRadius = size * 0.012;
-  const maxDotRadius = size * 0.028;
-  const padding = 1.2;
-
-  const numberPath = createNumberPath(plate.correctAnswer, centerX, centerY, size * 0.5);
-
-  let attempts = 0;
-  const maxAttempts = 3500;
-
-  while (attempts < maxAttempts) {
-    attempts++;
-
-    const angle = Math.random() * Math.PI * 2;
-    const r = Math.random() * (radius - maxDotRadius);
-    const x = centerX + Math.cos(angle) * r;
-    const y = centerY + Math.sin(angle) * r;
-
-    const dotRadius = minDotRadius + Math.random() * (maxDotRadius - minDotRadius);
-
-    const distFromCenter = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-    if (distFromCenter + dotRadius > radius) continue;
-
-    let overlapping = false;
-    for (const dot of dots) {
-      const dist = Math.sqrt((x - dot.x) ** 2 + (y - dot.y) ** 2);
-      if (dist < dot.radius + dotRadius + padding) {
-        overlapping = true;
-        break;
-      }
-    }
-    if (overlapping) continue;
-
-    const isOnNumber = isPointInNumberPath(x, y, numberPath);
-
-    let color: string;
-    if (isOnNumber) {
-      color = plate.numColors[Math.floor(Math.random() * plate.numColors.length)];
-    } else {
-      color = plate.bgColors[Math.floor(Math.random() * plate.bgColors.length)];
-    }
-
-    dots.push({ x, y, radius: dotRadius, color });
-  }
-
-  dots.forEach((dot) => {
-    ctx.fillStyle = dot.color;
-    ctx.beginPath();
-    ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
-    ctx.fill();
-  });
-};
-
 // Component vẽ Thumbnail đĩa Ishihara trong kết quả
-const PlateThumbnail: React.FC<{ plate: IshiharaPlate; size?: number }> = ({ plate, size = 60 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      canvas.width = size;
-      canvas.height = size;
-      drawIshiharaPlate(canvas, plate);
-    }
-  }, [plate, size]);
-
-  return <canvas ref={canvasRef} className="rounded-full shadow-inner bg-[#f5f5f0] border border-slate-200/50" />;
+const PlateThumbnail: React.FC<{ plate: IshiharaPlate; size?: number }> = ({ plate, size = 72 }) => {
+  return (
+    <div 
+      className="rounded-full overflow-hidden border border-slate-700/50 shadow-md flex items-center justify-center shrink-0 bg-slate-950"
+      style={{ width: size, height: size }}
+    >
+      <img 
+        src={plate.image} 
+        alt={`Plate ${plate.id}`} 
+        className="w-full h-full object-cover rounded-full select-none"
+      />
+    </div>
+  );
 };
 
 export default function ColorBlindTestPage() {
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [gameState, setGameState] = useState<'intro' | 'testing' | 'result'>('intro');
   const [currentPlateIndex, setCurrentPlateIndex] = useState(0);
@@ -477,16 +326,6 @@ export default function ColorBlindTestPage() {
     return () => clearInterval(interval);
   }, [gameState, currentPlateIndex, handleSkip]);
 
-  // Vẽ đĩa kiểm tra khi chuyển câu hỏi
-  useEffect(() => {
-    if (gameState === 'testing' && canvasRef.current) {
-      const canvas = canvasRef.current;
-      canvas.width = 320;
-      canvas.height = 320;
-      drawIshiharaPlate(canvas, ishiharaPlates[currentPlateIndex]);
-    }
-  }, [gameState, currentPlateIndex]);
-
   const progress = ishiharaPlates.length > 0 ? ((currentPlateIndex + 1) / ishiharaPlates.length) * 100 : 0;
 
   return (
@@ -589,13 +428,15 @@ export default function ColorBlindTestPage() {
                 />
               </div>
 
-              {/* Canvas đĩa mù màu */}
-              <div className="relative p-6 sm:p-8 bg-slate-50 rounded-3xl border border-slate-200 shadow-inner flex justify-center items-center w-full max-w-[360px] aspect-square mx-auto">
-                <canvas 
-                  ref={canvasRef} 
-                  className="w-full h-full rounded-full shadow-[0_12px_40px_rgb(0,0,0,0.06)] bg-white"
-                  style={{ maxWidth: '320px', maxHeight: '320px' }}
-                />
+              {/* Ảnh đĩa mù màu */}
+              <div className="relative p-4 sm:p-6 bg-slate-900 rounded-3xl border border-slate-800 shadow-inner flex justify-center items-center w-full max-w-[360px] aspect-square mx-auto">
+                <div className="w-full h-full rounded-full overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.5)] bg-slate-950 border-4 border-slate-800 flex items-center justify-center">
+                  <img 
+                    src={ishiharaPlates[currentPlateIndex].image} 
+                    alt={`Ishihara Plate ${currentPlateIndex + 1}`}
+                    className="w-full h-full object-cover rounded-full select-none"
+                  />
+                </div>
               </div>
               
               <p className="mt-8 text-sm text-slate-400 font-bold text-center italic">
