@@ -16,14 +16,18 @@ const VISTA_TEAM = [
   { name: 'Phan Thành Hưng', major: 'Kỹ thuật phần mềm', title: 'CMO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712464/z7442634833477_2286a80cd4f6393795e49ddfffd71623_mawixx.jpg' },
   { name: 'Bùi Trung Kiên', major: 'Kỹ thuật phần mềm', title: 'CTO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712462/z7442634788388_7d5938f76594d416c83fb6de684724c6_u7ndnr.jpg' },
   { name: 'Lê Lý Đức', major: 'Ngôn ngữ Anh', title: 'COO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712462/z7442634742484_b0208a6d8ad19b123814f6aab2254929_c7cubq.jpg' },
-  { name: 'Đoàn Hoài Ánh Dương', major: 'Thiết kế mỹ thuật', title: 'CCO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712464/z7442634696050_e53b234f0d72a1ffa7f25cb0b7fd9907_m2rqag.jpg' },
+  { name: 'Đoàn Hoài Ánh Dương', major: 'Thiết kế mỹ thuật số', title: 'CCO', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1768712464/z7442634696050_e53b234f0d72a1ffa7f25cb0b7fd9907_m2rqag.jpg' },
 ] as const;
 
 const ADVISORS = [
-  { name: 'BS.CKI Tôn Quang Anh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122935/BS.CKI_T%C3%B4n_Quang_Anh_buj3rg.jpg' },
-  { name: 'BS.CKII Nguyễn Hữu Đức', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122485/BS.CKII_Nguy%E1%BB%85n_H%E1%BB%AFu_%C4%90%E1%BB%A9c_jnqbpp.png' },
-  { name: 'BSNT. Trần Thị Khánh Linh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122484/BSNT._Tr%E1%BA%A7n_Th%E1%BB%8B_Kh%C3%A1nh_Linh_g02sei.png' },
   { name: 'BS.CKII Trần Bá Kiền', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122482/BS.CKII_Tr%E1%BA%A7n_B%C3%A1_Ki%E1%BB%81n_nvqsem.jpg' },
+  { name: 'BSNT. Trần Thị Khánh Linh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374480/1784182257352_254186820795534410_254186820795534410_424e527efe083078c86edb7fde03db5c_jkhukb.jpg' },
+  { name: 'BS.CKII Nguyễn Hữu Đức', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122485/BS.CKII_Nguy%E1%BB%85n_H%E1%BB%AFu_%C4%90%E1%BB%A9c_jnqbpp.png' },
+  { name: 'BS.CKI Tôn Quang Anh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122935/BS.CKI_T%C3%B4n_Quang_Anh_buj3rg.jpg' },
+  { name: 'THS.BS Mai Ngọc Ánh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374708/THS.BS_MAI_NG%E1%BB%8CC_%C3%81NH_qh1jdv.jpg' },
+  { name: 'BSCKI Lê Thị Bích Huệ', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784375367/copy_of_bscki_l_th_bch_hu_jbryty.jpg' },
+  { name: 'BSCKI Lâm Đức Thiện', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784375276/copy_of_bscki_lm_c_thin-photoroom_tyyxlj.png' },
+  { name: 'BSCK1 Lâm Thị Ngọc Bích', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374802/BSCK1_L%C3%82M_TH%E1%BB%8A_NG%E1%BB%8CC_B%C3%8DCH-Photoroom_csycup.png' },
 ] as const;
 
 const containerVariants: Variants = {
@@ -207,11 +211,11 @@ export default function HomePage() {
                 whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 className="group relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/40 hover:shadow-[0_20px_50px_rgba(30,41,59,0.7)] transition-all duration-300"
               >
-                <div className="h-24 bg-gradient-to-br from-blue-600/20 via-sky-500/10 to-purple-600/20 group-hover:from-blue-600/30 group-hover:to-purple-600/30 transition-colors duration-500" />
+                <div className="h-36 bg-gradient-to-br from-blue-600/20 via-sky-500/10 to-purple-600/20 group-hover:from-blue-600/30 group-hover:to-purple-600/30 transition-colors duration-500" />
                 
                 <div className="px-6 pb-8 text-center relative">
-                  <div className="flex justify-center -mt-12">
-                    <div className="w-24 h-24 rounded-full ring-4 ring-slate-900 shadow-xl overflow-hidden bg-slate-800 relative">
+                  <div className="flex justify-center -mt-20">
+                    <div className="w-40 h-40 rounded-full ring-4 ring-slate-900 shadow-xl overflow-hidden bg-slate-800 relative">
                       <motion.img 
                         whileHover={{ scale: 1.1, rotate: 3 }}
                         transition={{ type: 'spring', stiffness: 200 }}
@@ -260,11 +264,11 @@ export default function HomePage() {
                 whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 className="group relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/40 hover:shadow-[0_20px_50px_rgba(30,41,59,0.7)] transition-all duration-300"
               >
-                <div className="h-24 bg-gradient-to-br from-blue-600/20 via-sky-500/10 to-purple-600/20 group-hover:from-blue-600/30 group-hover:to-purple-600/30 transition-colors duration-500" />
+                <div className="h-36 bg-gradient-to-br from-blue-600/20 via-sky-500/10 to-purple-600/20 group-hover:from-blue-600/30 group-hover:to-purple-600/30 transition-colors duration-500" />
                 
                 <div className="px-6 pb-8 text-center relative">
-                  <div className="flex justify-center -mt-12">
-                    <div className="w-24 h-24 rounded-full ring-4 ring-slate-950 shadow-xl overflow-hidden bg-slate-800 relative">
+                  <div className="flex justify-center -mt-20">
+                    <div className="w-40 h-40 rounded-full ring-4 ring-slate-950 shadow-xl overflow-hidden bg-slate-800 relative">
                       <motion.img 
                         whileHover={{ scale: 1.1, rotate: 3 }}
                         transition={{ type: 'spring', stiffness: 200 }}

@@ -501,8 +501,6 @@ export default function JourneyPage() {
       description: t('journey.milestone7.description'),
       images: [
         'https://res.cloudinary.com/dvucotc8z/image/upload/v1784124345/FPT00743.png_gaci6n.jpg',
-        'https://res.cloudinary.com/dvucotc8z/image/upload/v1784129435/688232135_1419613496873842_4753354787435096925_n_scqarv.jpg',
-        'https://res.cloudinary.com/dvucotc8z/image/upload/v1784129435/690980621_1419611756874016_5962062050288266924_n_uvifam.jpg',
         'https://res.cloudinary.com/dvucotc8z/image/upload/v1784129435/689474996_1419613753540483_5527129327759233458_n_pg3x3g.jpg',
         'https://res.cloudinary.com/dvucotc8z/image/upload/v1784129435/690632900_1419612540207271_7984645979845752170_n_eqxnc9.jpg',
         'https://res.cloudinary.com/dvucotc8z/image/upload/v1784129435/689477130_1419613160207209_4853915006737053083_n_sis3kh.jpg',

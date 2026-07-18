@@ -3,6 +3,8 @@ import { motion as Motion, AnimatePresence } from 'framer-motion'
 import Fuse from 'fuse.js'
 import { useLanguage } from './contexts/LanguageContext'
 
+import waveHello from './assets/gif/wave-hello.gif'
+
 import faqData from './fallback/faq.json'
 
 // API configuration - Azure endpoint
@@ -228,8 +230,8 @@ const VistaChatbot = () => {
             {/* Header */}
             <div className="px-5 py-4 bg-blue-600/90 backdrop-blur-sm flex items-center justify-between shadow-sm z-10">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl shadow-inner border border-white/20">
-                  👁️
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl shadow-inner border border-white/20 overflow-hidden">
+                  <img src={waveHello} alt="AI" className="w-8 h-8 object-contain" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-white tracking-wide">{t('chatbot.title')}</h3>
@@ -323,38 +325,83 @@ const VistaChatbot = () => {
         )}
       </AnimatePresence>
 
-      {/* Floating Button */}
-      <Motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={toggleChat}
-        className="w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl shadow-blue-600/30 flex items-center justify-center text-2xl relative"
-        aria-label={t('chatbot.openChat')}
-      >
-        <Motion.span
-          animate={isOpen ? { rotate: 90, scale: 0 } : { rotate: 0, scale: 1 }}
-          transition={{ duration: 0.2 }}
-          className="absolute"
-        >
-          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-          </svg>
-        </Motion.span>
-        
-        <Motion.span
-          animate={isOpen ? { rotate: 0, scale: 1 } : { rotate: -90, scale: 0 }}
-          transition={{ duration: 0.2 }}
-          className="absolute"
-        >
-          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </Motion.span>
+      {/* Floating Button - Premium Design */}
+      <div className="relative flex flex-col items-end gap-2">
+        {/* Speech bubble tooltip - hiện khi chat đang đóng */}
+        <AnimatePresence>
+          {!isOpen && (
+            <Motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.9 }}
+              transition={{ duration: 0.3, delay: 1 }}
+              className="relative bg-white rounded-2xl px-5 py-3 shadow-lg border border-blue-100"
+            >
+              <p className="text-base font-semibold text-gray-700 whitespace-nowrap">
+                {language === 'vi' ? '✨ Astra đây! Bạn cần giúp gì nè? 💬' : '✨ Astra here! Need any help? 💬'}
+              </p>
+              {/* Speech bubble arrow */}
+              <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white border-b border-r border-blue-100 rotate-45" />
+            </Motion.div>
+          )}
+        </AnimatePresence>
 
-        {!isOpen && (
-          <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-red-500 border-2 border-white rounded-full"></span>
-        )}
-      </Motion.button>
+        <div className="relative">
+          {/* Outer glow rings - chỉ hiện khi chat đang đóng */}
+          {!isOpen && (
+            <>
+              <span className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-600 opacity-25 blur-md animate-pulse" />
+              <span className="absolute -inset-1 rounded-full bg-gradient-to-tr from-blue-400 to-cyan-300 opacity-20 animate-ping" style={{ animationDuration: '2s' }} />
+            </>
+          )}
+
+          <Motion.button
+            whileHover={{ scale: 1.12 }}
+            whileTap={{ scale: 0.88 }}
+            animate={!isOpen ? { y: [0, -6, 0] } : { y: 0 }}
+            transition={!isOpen
+              ? { y: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' }, scale: { duration: 0.2 } }
+              : { duration: 0.2 }
+            }
+            onClick={toggleChat}
+            className="relative w-24 h-24 rounded-full flex items-center justify-center overflow-hidden cursor-pointer"
+            style={{
+              background: 'linear-gradient(135deg, #3b82f6, #06b6d4, #8b5cf6)',
+              padding: '3px',
+            }}
+            aria-label={t('chatbot.openChat')}
+          >
+            {/* Inner circle */}
+            <span className="absolute inset-[3px] rounded-full bg-white z-0" />
+
+            <Motion.span
+              animate={isOpen ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              className="absolute inset-0 flex items-center justify-center z-10"
+            >
+              <img src={waveHello} alt="Chat Icon" className="w-[86px] h-[86px] object-cover rounded-full" />
+            </Motion.span>
+            
+            <Motion.span
+              animate={isOpen ? { rotate: 0, scale: 1, opacity: 1 } : { rotate: -90, scale: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              className="absolute z-10 text-blue-600"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </Motion.span>
+
+            {/* Notification dot */}
+            {!isOpen && (
+              <span className="absolute top-0 right-0 z-20 flex h-4 w-4">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white" />
+              </span>
+            )}
+          </Motion.button>
+        </div>
+      </div>
     </div>
   )
 }
