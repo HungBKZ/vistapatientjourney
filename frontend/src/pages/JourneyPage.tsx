@@ -696,8 +696,47 @@ export default function JourneyPage() {
 
         /* Mobile layout fix */
         @media (max-width: 768px) {
-          .vj-text-col { order: 1 !important; }
-          .vj-gallery-col { order: 2 !important; }
+          .vj-hero {
+            min-height: auto !important;
+            padding-top: 116px !important;
+            padding-bottom: 108px !important;
+          }
+          .vj-hero-copy {
+            padding: 0 16px !important;
+          }
+          .vj-left-strip {
+            display: none !important;
+          }
+          .vj-progress-dots {
+            gap: 8px !important;
+            flex-wrap: wrap !important;
+          }
+          .vj-progress-dots > div {
+            width: 28px !important;
+          }
+          .vj-milestone-grid {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+            padding: 0 16px !important;
+          }
+          .vj-text-col,
+          .vj-gallery-col {
+            order: 0 !important;
+          }
+          .vj-gallery-shell {
+            padding: 10px !important;
+          }
+          .vj-gallery-core {
+            padding: 14px !important;
+          }
+          .vj-gallery-grid {
+            gap: 10px !important;
+          }
+          .vj-cta {
+            width: 100% !important;
+            max-width: 280px !important;
+            justify-content: center !important;
+          }
         }
 
         /* Lightbox thumbnail active ring */
@@ -714,7 +753,7 @@ export default function JourneyPage() {
         <StickyProgressNav milestones={MILESTONES} activeIdx={activeIdx} />
 
         {/* ══════════════ HERO ══════════════ */}
-        <section style={{
+        <section className="vj-hero" style={{
           position: 'relative',
           minHeight: '100dvh',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -781,7 +820,7 @@ export default function JourneyPage() {
           ))}
 
           {/* Left data strip */}
-          <div style={{
+          <div className="vj-left-strip" style={{
             position: 'absolute', left: 20, top: '50%',
             transform: 'translateY(-50%)',
             fontFamily: "'Inter', monospace", fontSize: 9,
@@ -799,7 +838,7 @@ export default function JourneyPage() {
           </div>
 
           {/* Hero content */}
-          <div style={{
+          <div className="vj-hero-copy" style={{
             position: 'relative', zIndex: 2,
             textAlign: 'center', padding: '0 24px', maxWidth: 780,
           }}>
@@ -874,6 +913,7 @@ export default function JourneyPage() {
 
             {/* Progress dots */}
             <motion.div
+              className="vj-progress-dots"
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.75 }}
               style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 36 }}
@@ -905,6 +945,7 @@ export default function JourneyPage() {
 
             {/* CTA */}
             <motion.button
+              className="vj-cta"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ duration: 0.65, delay: 0.9 }}
               onClick={() => document.getElementById('ms-0')?.scrollIntoView({ behavior: 'smooth' })}
@@ -1009,7 +1050,7 @@ export default function JourneyPage() {
                 background: `linear-gradient(90deg, transparent, ${ac.hex}28, ${ac.hex}60, ${ac.hex}28, transparent)`,
               }} />
 
-              <div style={{
+              <div className="vj-milestone-grid" style={{
                 maxWidth: 1300, margin: '0 auto',
                 padding: '0 clamp(24px, 5vw, 88px)',
                 width: '100%',
@@ -1158,7 +1199,7 @@ export default function JourneyPage() {
                   style={{ order: isEven ? 2 : 1 }}
                 >
                   {/* Outer Bezel Shell */}
-                  <div style={{
+                  <div className="vj-gallery-shell" style={{
                     background: 'rgba(37, 99, 235, 0.015)',
                     border: '1px solid rgba(37, 99, 235, 0.06)',
                     borderRadius: 32,
@@ -1167,7 +1208,7 @@ export default function JourneyPage() {
                     position: 'relative',
                   }}>
                     {/* Inner Core Enclosure */}
-                    <div style={{
+                    <div className="vj-gallery-core" style={{
                       background: C.white,
                       border: '1px solid rgba(0, 0, 0, 0.05)',
                       borderRadius: 22,
@@ -1203,7 +1244,7 @@ export default function JourneyPage() {
                       </div>
 
                       {/* Photo grid */}
-                      <div style={{ display: 'grid', gridTemplateColumns: imgCols, gap: 16 }}>
+                      <div className="vj-gallery-grid" style={{ display: 'grid', gridTemplateColumns: imgCols, gap: 16 }}>
                         {ms.images.map((img, i) => (
                           <PhotoCard key={i} src={img} alt={`${ms.title} ${i + 1}`}
                             onClick={() => setLb({ ms: idx, img: i })}

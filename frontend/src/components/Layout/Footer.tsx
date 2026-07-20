@@ -13,9 +13,9 @@ export default function Footer() {
               <img src={LOGO_URL} alt="VISTA" className="w-10 h-10 rounded-lg object-cover" />
               <span className="text-xl font-bold">VISTA</span>
             </Link>
-            {/* <p className="text-gray-400 text-sm mb-4">
-              Trung tâm nhãn khoa uy tín với đội ngũ bác sĩ chuyên nghiệp.
-            </p> */}
+            <p className="text-gray-400 text-sm mb-4 max-w-xs leading-relaxed">
+              VISTA giúp cộng đồng hiểu rõ hơn về sức khỏe mắt thông qua AI, kiến thức chuyên môn và hành trình chăm sóc bệnh nhân rõ ràng, dễ tiếp cận.
+            </p>
             {/* Social Links */}
             <div className="flex gap-3">
               <a 
@@ -48,26 +48,26 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Trung tam kien thuc</h4>
+            <h4 className="font-semibold mb-4">Khám phá</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
+                <Link to="/knowledge" className="hover:text-white transition-colors">
+                  Trải nghiệm mắt ảo
+                </Link>
+              </li>
+              <li>
+                <Link to="/explore" className="hover:text-white transition-colors">
+                  Khám phá AI & tương tác
+                </Link>
+              </li>
+              <li>
+                <Link to="/journey" className="hover:text-white transition-colors">
+                  Hành trình phát triển VISTA
+                </Link>
+              </li>
+              <li>
                 <Link to="/kien-thuc" className="hover:text-white transition-colors">
-                  Hub kien thuc suc khoe mat
-                </Link>
-              </li>
-              <li>
-                <Link to="/kien-thuc/tat-khuc-xa" className="hover:text-white transition-colors">
-                  Cluster: Tat khuc xa
-                </Link>
-              </li>
-              <li>
-                <Link to="/kien-thuc/benh-ly-pho-bien" className="hover:text-white transition-colors">
-                  Cluster: Benh ly pho bien
-                </Link>
-              </li>
-              <li>
-                <Link to="/kien-thuc/cham-soc-mat-man-hinh" className="hover:text-white transition-colors">
-                  Cluster: Cham soc mat man hinh
+                  Kho tri thức mắt
                 </Link>
               </li>
             </ul>

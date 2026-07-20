@@ -112,6 +112,14 @@ const translations = {
       advisors: {
         badge: 'Cố vấn',
         title: 'Cố vấn chuyên môn dự án',
+        advisorRole: 'Cố vấn chuyên môn',
+        strategicMentorsLabel: 'Cố vấn chiến lược',
+        businessMentorRole: 'Business Mentor',
+        businessMentorDescription: 'Giám đốc Vận hành (G.COO), Tập đoàn Y khoa VISI',
+        academicSupervisorRole: 'Academic Supervisor',
+        academicSupervisorDescription: 'Chủ nhiệm Bộ môn Khởi nghiệp',
+        technicalMentorRole: 'Technical Mentor',
+        technicalMentorDescription: 'Giảng viên Bộ môn Kỹ thuật Phần mềm',
       },
       features: {
         badge: 'TẠI SAO CHỌN VISTA?',
@@ -509,6 +517,14 @@ const translations = {
       advisors: {
         badge: 'Advisors',
         title: 'Project Advisors',
+        advisorRole: 'Project Advisor',
+        strategicMentorsLabel: 'Strategic Mentors',
+        businessMentorRole: 'Business Mentor',
+        businessMentorDescription: 'Chief Operating Officer (G.COO), VISI Medical Group',
+        academicSupervisorRole: 'Academic Supervisor',
+        academicSupervisorDescription: 'Head of Entrepreneurship Department',
+        technicalMentorRole: 'Technical Mentor',
+        technicalMentorDescription: 'Lecturer, Software Engineering Department',
       },
       features: {
         badge: 'WHY CHOOSE VISTA?',
@@ -906,6 +922,14 @@ const translations = {
       advisors: {
         badge: 'អ្នកប្រឹក្សាយោបល់',
         title: 'អ្នកប្រឹក្សាយោបល់គម្រោង',
+        advisorRole: 'អ្នកប្រឹក្សាយោបល់',
+        strategicMentorsLabel: 'អ្នកប្រឹក្សាយោបល់យុទ្ធសាស្ត្រ',
+        businessMentorRole: 'Business Mentor',
+        businessMentorDescription: 'អ្នកគ្រប់គ្រងប្រតិបត្តិការ (G.COO), VISI Medical Group',
+        academicSupervisorRole: 'Academic Supervisor',
+        academicSupervisorDescription: 'ប្រធាននាយកដ្ឋានជំនួញសកល',
+        technicalMentorRole: 'Technical Mentor',
+        technicalMentorDescription: 'បុគ្គលិកបង្រៀន មន្ទីរបច្ចេកវិទ្យា Software Engineering',
       },
       features: {
         badge: 'ហេតុអ្វីបានជាជ្រើសរើស VISTA?',

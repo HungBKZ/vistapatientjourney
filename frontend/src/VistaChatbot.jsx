@@ -215,7 +215,7 @@ const VistaChatbot = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 max-md:bottom-20 max-md:right-4 font-sans">
+    <div className="fixed bottom-6 right-4 z-40 flex flex-col items-end gap-3 max-md:bottom-20 max-md:right-3 font-sans">
       <AnimatePresence>
         {isOpen && (
           <Motion.div
@@ -225,7 +225,7 @@ const VistaChatbot = () => {
             exit={{ opacity: 0, y: 15, scale: 0.95 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             // Container trong suốt với hiệu ứng kính mờ nhẹ (glassmorphism)
-            className="w-[340px] sm:w-[380px] h-[600px] max-h-[80vh] bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl border border-white/60 flex flex-col overflow-hidden"
+            className="w-[calc(100vw-1rem)] max-w-[380px] sm:w-[380px] h-[78vh] max-h-[600px] bg-white/55 backdrop-blur-xl rounded-[1.25rem] shadow-[0_20px_80px_-28px_rgba(15,23,42,0.45)] border border-white/70 flex flex-col overflow-hidden max-md:w-[calc(100vw-0.75rem)] max-md:max-w-none"
           >
             {/* Header */}
             <div className="px-5 py-4 bg-blue-600/90 backdrop-blur-sm flex items-center justify-between shadow-sm z-10">
@@ -243,11 +243,11 @@ const VistaChatbot = () => {
               </div>
               <button
                 onClick={toggleChat}
-                className="p-2 rounded-full text-white/80 hover:text-white hover:bg-white/20 transition-colors"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white/90 shadow-sm backdrop-blur-sm transition-all hover:bg-white/25 hover:text-white"
                 aria-label={t('chatbot.close')}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
@@ -356,15 +356,15 @@ const VistaChatbot = () => {
           )}
 
           <Motion.button
-            whileHover={{ scale: 1.12 }}
-            whileTap={{ scale: 0.88 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.92 }}
             animate={!isOpen ? { y: [0, -6, 0] } : { y: 0 }}
             transition={!isOpen
               ? { y: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' }, scale: { duration: 0.2 } }
               : { duration: 0.2 }
             }
             onClick={toggleChat}
-            className="relative w-24 h-24 rounded-full flex items-center justify-center overflow-hidden cursor-pointer"
+            className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center overflow-hidden cursor-pointer shadow-[0_14px_45px_-18px_rgba(37,99,235,0.75)]"
             style={{
               background: 'linear-gradient(135deg, #3b82f6, #06b6d4, #8b5cf6)',
               padding: '3px',
@@ -379,16 +379,16 @@ const VistaChatbot = () => {
               transition={{ duration: 0.25, ease: 'easeInOut' }}
               className="absolute inset-0 flex items-center justify-center z-10"
             >
-              <img src={waveHello} alt="Chat Icon" className="w-[86px] h-[86px] object-cover rounded-full" />
+              <img src={waveHello} alt="Chat Icon" className="w-[72px] h-[72px] sm:w-[86px] sm:h-[86px] object-cover rounded-full" />
             </Motion.span>
             
             <Motion.span
               animate={isOpen ? { rotate: 0, scale: 1, opacity: 1 } : { rotate: -90, scale: 0, opacity: 0 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="absolute z-10 text-blue-600"
+              className="absolute z-10 rounded-full bg-white/95 p-2 shadow-lg text-blue-600"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </Motion.span>
 

@@ -71,14 +71,35 @@ const VISTA_TEAM = [
 ] as const;
 
 const ADVISORS = [
-  { name: 'BS.CKII Trần Bá Kiền', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122482/BS.CKII_Tr%E1%BA%A7n_B%C3%A1_Ki%E1%BB%81n_nvqsem.jpg' },
-  { name: 'BSNT. Trần Thị Khánh Linh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374480/1784182257352_254186820795534410_254186820795534410_424e527efe083078c86edb7fde03db5c_jkhukb.jpg' },
-  { name: 'BS.CKII Nguyễn Hữu Đức', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122485/BS.CKII_Nguy%E1%BB%85n_H%E1%BB%AFu_%C4%90%E1%BB%A9c_jnqbpp.png' },
-  { name: 'BS.CKI Tôn Quang Anh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122935/BS.CKI_T%C3%B4n_Quang_Anh_buj3rg.jpg' },
-  { name: 'THS.BS Mai Ngọc Ánh', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374708/THS.BS_MAI_NG%E1%BB%8CC_%C3%81NH_qh1jdv.jpg' },
-  { name: 'BS.CKI Lê Thị Bích Huệ', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784375367/copy_of_bscki_l_th_bch_hu_jbryty.jpg' },
-  { name: 'BS.CKI Lâm Đức Thiện', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784375276/copy_of_bscki_lm_c_thin-photoroom_tyyxlj.png' },
-  { name: 'BS.CKI Lâm Thị Ngọc Bích', title: 'Cố vấn chuyên môn', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374802/BSCK1_L%C3%82M_TH%E1%BB%8A_NG%E1%BB%8CC_B%C3%8DCH-Photoroom_csycup.png' },
+  { name: 'BS.CKII Trần Bá Kiền', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122482/BS.CKII_Tr%E1%BA%A7n_B%C3%A1_Ki%E1%BB%81n_nvqsem.jpg' },
+  { name: 'BSNT. Trần Thị Khánh Linh', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374480/1784182257352_254186820795534410_254186820795534410_424e527efe083078c86edb7fde03db5c_jkhukb.jpg' },
+  { name: 'BS.CKII Nguyễn Hữu Đức', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122485/BS.CKII_Nguy%E1%BB%85n_H%E1%BB%AFu_%C4%90%E1%BB%A9c_jnqbpp.png' },
+  { name: 'BS.CKI Tôn Quang Anh', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/q_auto,f_auto/v1784122935/BS.CKI_T%C3%B4n_Quang_Anh_buj3rg.jpg' },
+  { name: 'THS.BS Mai Ngọc Ánh', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374708/THS.BS_MAI_NG%E1%BB%8CC_%C3%81NH_qh1jdv.jpg' },
+  { name: 'BS.CKI Lê Thị Bích Huệ', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784375367/copy_of_bscki_l_th_bch_hu_jbryty.jpg' },
+  { name: 'BS.CKI Lâm Đức Thiện', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784375276/copy_of_bscki_lm_c_thin-photoroom_tyyxlj.png' },
+  { name: 'BS.CKI Lâm Thị Ngọc Bích', image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784374802/BSCK1_L%C3%82M_TH%E1%BB%8A_NG%E1%BB%8CC_B%C3%8DCH-Photoroom_csycup.png' },
+] as const;
+
+const STRATEGIC_ADVISORS = [
+  {
+    name: 'ThS. Nguyễn Tiến Đức',
+    roleKey: 'home.advisors.businessMentorRole',
+    descriptionKey: 'home.advisors.businessMentorDescription',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784524875/1784449599875_254186820795534410_254186820795534410_588231181097d1512060a1ddebc424bf_cqimxl.jpg',
+  },
+  {
+    name: 'TS. Nguyễn Trọng Luân',
+    roleKey: 'home.advisors.academicSupervisorRole',
+    descriptionKey: 'home.advisors.academicSupervisorDescription',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784524875/1784449599836_254186820795534410_254186820795534410_4759a404f7ba913ee5e81e69da7e0e2f_pxazog.jpg',
+  },
+  {
+    name: 'ThS. Võ Hoàng Tú',
+    roleKey: 'home.advisors.technicalMentorRole',
+    descriptionKey: 'home.advisors.technicalMentorDescription',
+    image: 'https://res.cloudinary.com/dvucotc8z/image/upload/v1784524874/1784449599915_254186820795534410_254186820795534410_3e80e1d9de6e6993287211f3dcda4733_zta0tt.jpg',
+  },
 ] as const;
 
 // --- Premium Animation Variants ---
@@ -433,7 +454,64 @@ export default function HomePage() {
                       {/* Info block */}
                       <div className="mt-4 space-y-1.5">
                         <h3 className="font-extrabold text-base md:text-lg text-white/95 tracking-tight group-hover:text-sky-300 transition-colors duration-500 leading-snug">{advisor.name}</h3>
-                        <p className="text-zinc-500 text-xs font-medium tracking-wider uppercase">{advisor.title}</p>
+                        <p className="text-zinc-500 text-xs font-medium tracking-wider uppercase">{t('home.advisors.advisorRole')}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <div className="mt-14 md:mt-16 text-center">
+            <span className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-[11px] uppercase tracking-[0.2em] font-semibold text-cyan-300 bg-cyan-500/10 border border-cyan-500/15 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              {t('home.advisors.strategicMentorsLabel')}
+            </span>
+          </div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
+          >
+            {STRATEGIC_ADVISORS.map((mentor) => (
+              <motion.div
+                key={mentor.name}
+                variants={advisorCardVariants}
+                whileHover={{ y: -8, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
+                className="group relative"
+              >
+                <div className="rounded-[1.75rem] bg-white/[0.03] p-1.5 ring-1 ring-white/[0.05] hover:ring-cyan-500/20 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
+                  <div className="relative rounded-[calc(1.75rem-0.375rem)] bg-gradient-to-b from-white/[0.05] to-white/[0.015] overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]">
+                    <div className="h-28 md:h-32 bg-gradient-to-br from-cyan-600/12 via-sky-500/6 to-indigo-600/12 group-hover:from-cyan-500/22 group-hover:via-sky-400/12 group-hover:to-indigo-500/22 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] relative overflow-hidden">
+                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(34,211,238,0.12),transparent_70%)] group-hover:opacity-100 opacity-0 transition-opacity duration-700" />
+                    </div>
+
+                    <div className="px-4 pb-7 text-center relative">
+                      <div className="flex justify-center -mt-16">
+                        <div className="avatar-glow-ring rounded-full p-[3px] relative z-0">
+                          <div className="rounded-full p-0.5 bg-gradient-to-b from-white/15 to-white/[0.04]">
+                            <div className="w-32 h-32 md:w-36 md:h-36 rounded-full overflow-hidden bg-zinc-900 shadow-[0_16px_35px_-10px_rgba(0,0,0,0.5)]">
+                              <motion.img
+                                whileHover={{ scale: 1.08 }}
+                                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                                src={mentor.image}
+                                alt={mentor.name}
+                                className="w-full h-full object-cover object-top"
+                                loading="lazy"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 space-y-1.5">
+                        <h3 className="font-extrabold text-base md:text-lg text-white/95 tracking-tight group-hover:text-cyan-300 transition-colors duration-500 leading-snug">{mentor.name}</h3>
+                        <p className="text-cyan-300 text-[11px] font-semibold tracking-[0.18em] uppercase">{t(mentor.roleKey)}</p>
+                        <p className="text-zinc-500 text-xs font-medium leading-relaxed">{t(mentor.descriptionKey)}</p>
                       </div>
                     </div>
                   </div>
